@@ -19,7 +19,7 @@ const APP_SEGMENTS = new Set([
 // Pages that belong to the public site (first path segment).
 const SITE_SEGMENTS = new Set([
   "privacy", "terms", "cookies", "refunds", "accessibility", "subprocessors",
-  "security", "company", "contact", "for",
+  "security", "company", "contact", "for", "docs", "status",
 ]);
 
 function segmentOf(pathname: string): string {

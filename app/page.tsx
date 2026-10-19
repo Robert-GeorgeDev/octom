@@ -64,7 +64,7 @@ function Lines({ text }: { text: string }) {
 }
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const year = new Date().getFullYear();
   const [h1a, h1b] = t("landing.title").split("\n");
 
@@ -376,6 +376,8 @@ export default function Home() {
               <a href="#product">{t("lp.nav.product")}</a>
               <a href="#pricing">{t("land.nav.pricing")}</a>
               <a href="#faq">{t("land.nav.faq")}</a>
+              <Link href="/docs">{lang === "ro" ? "Documentație" : "Documentation"}</Link>
+              <Link href="/status">Status</Link>
             </div>
             <div>
               <b>{t("site.footer.legal")}</b>

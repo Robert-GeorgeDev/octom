@@ -21,7 +21,7 @@ describe("public site host", () => {
   });
 
   it("keeps the public pages, the API and static files", () => {
-    for (const path of ["/", "/privacy", "/terms", "/contact", "/for/freelancers", "/api/contact", "/api/stripe/webhook", "/sitemap.xml", "/.well-known/security.txt"]) {
+    for (const path of ["/", "/privacy", "/terms", "/contact", "/for/freelancers", "/docs", "/status", "/api/health", "/api/contact", "/api/stripe/webhook", "/sitemap.xml", "/.well-known/security.txt"]) {
       expect(redirectTarget("www.octom.eu", path)).toBeNull();
     }
   });
