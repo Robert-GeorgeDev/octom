@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Plus, Users, Database, CreditCard, UserCircle, UserPlus, LayoutGrid, Sparkles } from "lucide-react";
 import Logo from "@/components/logo";
+import Mascot from "@/components/mascot";
 import LanguageSwitcher from "@/components/language-switcher";
 import SignOutButton from "@/components/sign-out-button";
 import AccountMenu from "@/components/account-menu";
@@ -42,12 +43,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#EEF1F6]">
       <PlanRedirect />
       {/* Tablet + desktop sidebar: icon rail at md, full at lg */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-20 flex-col border-r border-line/60 bg-white/80 p-3 backdrop-blur-xl md:flex lg:w-64 lg:p-5">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-20 flex-col border-r border-line bg-white p-3 md:flex lg:w-64 lg:p-5">
         <Link href="/dashboard" aria-label={BRAND} className="flex h-10 items-center justify-center lg:justify-start">
-          <span className="lg:hidden text-xl font-bold text-brand">t</span>
+          <Mascot className="h-9 w-9 lg:hidden" />
           <span className="hidden lg:inline"><Logo /></span>
         </Link>
 
@@ -62,7 +63,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 aria-label={label}
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-[44px] items-center justify-center gap-3 rounded-xl px-3 text-sm font-semibold transition duration-200 lg:justify-start lg:px-4 ${
-                  active ? "bg-ink text-white shadow-soft" : "text-slate-600 hover:bg-slate-100 hover:text-ink"
+                  active ? "bg-slate-100 text-ink" : "text-slate-600 hover:bg-slate-50 hover:text-ink"
                 }`}
               >
                 <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
@@ -88,7 +89,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Phone top bar */}
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line/60 bg-white/80 px-4 py-3 backdrop-blur-xl md:hidden">
+      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-white px-4 py-3 md:hidden">
         <Link href="/dashboard" aria-label={BRAND}><Logo /></Link>
         <div className="flex items-center gap-3">
           <Link href="/assistant" aria-label={t("nav.assistant")} className="grid h-11 w-11 place-items-center rounded-xl text-slate-600">
@@ -111,7 +112,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Phone bottom bar */}
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-line/60 bg-white/90 backdrop-blur-xl md:hidden" aria-label="Main">
+      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white md:hidden" aria-label="Main">
         <div className="mx-auto grid max-w-md grid-cols-5 items-end px-2 pb-2 pt-1">
           {tab("/dashboard", t("nav.dashboard"), LayoutDashboard)}
           {tab("/contacts", t("nav.contacts"), Users)}
