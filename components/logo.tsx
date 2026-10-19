@@ -1,11 +1,29 @@
-export function Logo({ className = "", light = false }: { className?: string; light?: boolean }) {
+import Mascot from "@/components/mascot";
+
+/**
+ * Octom wordmark: rounded letters (Nunito), solid colours, no gradients.
+ * "octom" in ink, ".one" in brand violet. The accessible name stays "OCTOM One".
+ */
+export function Logo({
+  className = "",
+  light = false,
+  mark = true,
+}: {
+  className?: string;
+  light?: boolean;
+  mark?: boolean;
+}) {
   return (
     <span
-      className={`inline-flex items-baseline gap-1.5 font-bold tracking-tight text-xl leading-none select-none ${className}`}
+      className={`inline-flex items-center gap-2 text-2xl font-black leading-none select-none ${className}`}
+      style={{ fontFamily: "var(--font-nunito), var(--font-inter), system-ui, sans-serif" }}
       aria-label="OCTOM One"
     >
-      <span aria-hidden="true" className={light ? "text-white" : "text-ink"}>octom</span>
-      <span aria-hidden="true" className={light ? "text-indigo-300" : "text-brand"}>One</span>
+      {mark && <Mascot className="h-8 w-8 shrink-0" />}
+      <span aria-hidden="true" className="inline-flex items-baseline">
+        <span className={light ? "text-white" : "text-ink"}>octom</span>
+        <span className={light ? "text-indigo-300" : "text-brand"}>.one</span>
+      </span>
     </span>
   );
 }

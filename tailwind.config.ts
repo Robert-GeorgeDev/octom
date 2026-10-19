@@ -6,13 +6,13 @@ const config: Config = {
     extend: {
       colors: {
         lavender: "#F5F3FF",
-        navy: "#0B1F3A",
+        navy: "#0B1026",
         brand: { DEFAULT: "#4F46E5", dark: "#4338CA", soft: "#EEF2FF", accent: "#6366F1" },
         cta: { DEFAULT: "#4F46E5", dark: "#4338CA" },
-        ink: "#111827",
+        ink: "#0B1026",
         muted: "#6B7280",
-        surface: "#FAFAF9",
-        line: "#E7E7E5",
+        surface: "#F8FAFC",
+        line: "#E2E8F0",
         overdue: "#D92D3A",
         today: "#C47A00",
         done: "#16805C",

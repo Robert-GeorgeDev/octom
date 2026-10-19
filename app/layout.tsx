@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, siteConfigured } from "@/lib/site";
 import { AuthProvider } from "@/components/auth-provider";
@@ -7,6 +7,8 @@ import { LanguageProvider } from "@/components/language-provider";
 import Consent from "@/components/consent";
 
 const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
+// Rounded letters for the wordmark only.
+const nunito = Nunito({ subsets: ["latin", "latin-ext"], weight: ["900"], variable: "--font-nunito" });
 
 export const metadata: Metadata = {
   metadataBase: siteConfigured ? new URL(SITE_URL) : undefined,
@@ -58,7 +60,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${inter.variable} ${nunito.variable} font-sans`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
