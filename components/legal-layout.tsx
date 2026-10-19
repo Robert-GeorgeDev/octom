@@ -78,6 +78,8 @@ export default function LegalLayout({
             <AnpcSal className="mt-4" />
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <Link href="/docs" className="hover:text-ink">{ro ? "Documentație" : "Documentation"}</Link>
+            <Link href="/status" className="hover:text-ink">Status</Link>
             <Link href="/privacy" className="hover:text-ink">{ro ? "Confidențialitate" : "Privacy"}</Link>
             <Link href="/terms" className="hover:text-ink">{ro ? "Termeni" : "Terms"}</Link>
             <Link href="/cookies" className="hover:text-ink">Cookies</Link>
