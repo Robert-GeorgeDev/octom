@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { AlertCircle, Clock, Sparkles, Trophy, Users } from "lucide-react";
+import { AlertCircle, ArrowRight, Clock, Plus, Sparkles, Trophy, Users } from "lucide-react";
 import RequireAuth from "@/components/require-auth";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import PlanUsage from "@/components/plan-usage";
@@ -14,6 +14,12 @@ import { supabase } from "@/lib/supabase";
 import { todayISO } from "@/lib/dates";
 import type { Key } from "@/lib/dictionaries";
 import type { FollowUp } from "@/types/followup";
+import { STATUSES, type Status } from "@/types/contact";
+
+type PipeCard = { id: string; first_name: string; last_name: string; company: string; status: Status };
+
+// Pipeline preview on the dashboard: Lost is left to the full pipeline page.
+const PIPE_STATUSES = STATUSES.filter((s) => s !== "Lost");
 
 const groupLabel: Record<Group, Key> = {
   overdue: "group.overdue",
@@ -49,6 +55,7 @@ function DashboardView() {
     });
   }, [orgId]);
   const [wonCount, setWonCount] = useState<number | null>(null);
+  const [pipe, setPipe] = useState<PipeCard[] | null>(null);
 
   useEffect(() => {
     if (!orgId) return;
@@ -71,6 +78,15 @@ function DashboardView() {
       .gte("won_at", monthStart)
       .then(({ count }) => {
         if (!cancelled) setWonCount(count ?? 0);
+      });
+    supabase
+      .from("contacts")
+      .select("id, first_name, last_name, company, status")
+      .eq("organization_id", orgId)
+      .order("updated_at", { ascending: false })
+      .limit(200)
+      .then(({ data }) => {
+        if (!cancelled) setPipe((data ?? []) as PipeCard[]);
       });
     return () => {
       cancelled = true;
@@ -95,13 +111,11 @@ function DashboardView() {
   const greeting =
     hour < 12 ? t("dash.morning") : hour < 18 ? t("dash.afternoon") : t("dash.evening");
 
-  const primary = [
+  const kpis = [
     { label: t("dash.overdue"), value: groups.overdue.length, Icon: AlertCircle, tone: "bg-red-50 text-overdue", num: "text-overdue" },
-    { label: t("dash.dueToday"), value: groups.today.length, Icon: Clock, tone: "bg-amber-50 text-amber-700", num: "text-amber-700" },
-  ];
-  const secondary = [
-    { label: t("dash.openLeads"), value: openLeads, Icon: Users },
-    { label: t("dash.wonThisMonth"), value: wonCount, Icon: Trophy },
+    { label: t("dash.dueToday"), value: groups.today.length, Icon: Clock, tone: "bg-amber-50 text-amber-700", num: "text-ink" },
+    { label: t("dash.openLeads"), value: openLeads, Icon: Users, tone: "bg-indigo-50 text-brand", num: "text-ink" },
+    { label: t("dash.wonThisMonth"), value: wonCount, Icon: Trophy, tone: "bg-emerald-50 text-done", num: "text-ink" },
   ];
 
   const urgent = groups.overdue.length + groups.today.length;
@@ -117,139 +131,159 @@ function DashboardView() {
   const firstName = fullName.trim().split(/\s+/)[0] ?? "";
 
   return (
-    <main className="mx-auto max-w-6xl px-5 pb-10 pt-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <main className="mx-auto max-w-[1280px] px-5 pb-12 pt-6 md:px-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-semibold tracking-tight">{firstName ? `${greeting}, ${firstName}.` : greeting}</h1>
-          <p className="mt-2 text-lg text-slate-500">{followUps === null ? t("dash.subtitle") : summary}</p>
-
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{firstName ? `${greeting}, ${firstName}.` : greeting}</h1>
+          <p className="mt-1.5 text-base text-slate-500">{followUps === null ? t("dash.subtitle") : summary}</p>
+        </div>
+        <div className="flex items-center gap-3">
           {teamSize > 1 && (
-            <div role="group" className="mt-4 inline-flex rounded-lg border border-line bg-white p-1 text-sm font-semibold">
+            <div role="group" className="inline-flex rounded-xl border border-line bg-white p-1 text-sm font-semibold">
               {(["mine", "all"] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => setScope(s)}
                   aria-pressed={scope === s}
-                  className={`min-h-[40px] rounded-md px-4 ${scope === s ? "bg-ink text-white" : "text-slate-600"}`}
+                  className={`min-h-[36px] rounded-lg px-4 ${scope === s ? "bg-ink text-white" : "text-slate-600"}`}
                 >
                   {s === "mine" ? t("dash.mine") : t("dash.all")}
                 </button>
               ))}
             </div>
           )}
-          {orgId && <PlanUsage orgId={orgId} />}
+          <Link href="/followups/new" className="btn-dark hidden px-5 sm:inline-flex">
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            {t("nav.addFollowUp")}
+          </Link>
+        </div>
+      </div>
 
-          {error && (
-            <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
-              {t("dash.loadError")}
-            </p>
-          )}
+      {orgId && <PlanUsage orgId={orgId} />}
 
-          {followUps === null && !error && (
-            <p className="mt-8 text-slate-600">{t("common.loading")}</p>
-          )}
+      {error && (
+        <p role="alert" className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
+          {t("dash.loadError")}
+        </p>
+      )}
 
-          {followUps !== null && (
-            <>
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                {primary.map(({ label, value, Icon, tone, num }) => (
-                  <div key={label} className="card flex items-center gap-4 p-5">
-                    <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${tone}`}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <div>
-                      <p className={`text-4xl font-semibold leading-none tracking-tight ${num}`}>{value}</p>
-                      <p className="mt-1 text-sm text-slate-500">{label}</p>
-                    </div>
-                  </div>
-                ))}
+      {followUps === null && !error && <p className="mt-8 text-slate-600">{t("common.loading")}</p>}
+
+      {followUps !== null && (
+        <>
+          <div className="mt-6 grid grid-cols-2 divide-line rounded-3xl border border-line bg-white shadow-soft lg:grid-cols-4 lg:divide-x">
+            {kpis.map(({ label, value, Icon, tone, num }) => (
+              <div key={label} className="flex items-center gap-4 p-5 lg:p-6">
+                <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${tone}`}>
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm text-slate-500">{label}</p>
+                  <p className={`mt-0.5 text-3xl font-bold leading-none tracking-tight ${num}`}>{value ?? "–"}</p>
+                </div>
               </div>
-              <p className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-slate-500">
-                {secondary.map(({ label, value, Icon }) => (
-                  <span key={label} className="inline-flex items-center gap-2">
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                    <span className="font-semibold text-slate-700">{value ?? "–"}</span> {label}
-                  </span>
-                ))}
-              </p>
+            ))}
+          </div>
 
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="min-w-0 rounded-3xl border border-line bg-white p-5 shadow-soft sm:p-6">
               {open.length === 0 && (
-                <div className="mt-10 rounded-2xl border border-dashed border-line bg-white/70 p-10 text-center">
+                <div className="rounded-2xl border border-dashed border-line bg-surface p-10 text-center">
                   <p className="text-lg font-semibold">{t("dash.emptyTitle")}</p>
                   <p className="mt-1 text-slate-600">{t("dash.emptyText")}</p>
-                  <Link
-                    href="/followups/new"
-                    className="mt-5 btn-brand mt-5 px-6"
-                  >
+                  <Link href="/followups/new" className="btn-brand mt-5 px-6">
                     {t("nav.addFollowUp")}
                   </Link>
                 </div>
               )}
 
               {open.length > 0 && groups.today.length === 0 && (
-                <p className="mt-6 text-sm text-slate-600">{t("dash.nothingToday")}</p>
+                <p className="mb-4 text-sm text-slate-600">{t("dash.nothingToday")}</p>
               )}
 
               {order.map((g) => {
                 const list = groups[g];
                 if (list.length === 0) return null;
                 return (
-                  <section key={g} className="mt-8">
-                    <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+                  <section key={g} className="mt-6 first:mt-0">
+                    <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-500">
                       {t(groupLabel[g])}
-                      <span className={`rounded-full px-2 py-0.5 text-xs ${badge[g]}`}>
-                        {list.length}
-                      </span>
+                      <span className={`rounded-full px-2 py-0.5 text-xs ${badge[g]}`}>{list.length}</span>
                     </h2>
-                    <div className="space-y-3">
+                    <div className="space-y-2.5">
                       {list.map((item) => (
-                        <FollowUpCard
-                          key={item.id}
-                          item={item}
-                          group={g}
-                          onChanged={reload}
-                        />
+                        <FollowUpCard key={item.id} item={item} group={g} onChanged={reload} />
                       ))}
                     </div>
                   </section>
                 );
               })}
-            </>
-          )}
-        </div>
+            </div>
 
-        <aside className="hidden lg:sticky lg:top-8 lg:block lg:self-start">
-          <div className="card p-6">
-            <h2 className="font-semibold">{t("dash.schedule")}</h2>
-            {groups.today.length === 0 ? (
-              <p className="mt-3 text-sm text-slate-600">{t("dash.scheduleEmpty")}</p>
-            ) : (
-              <ul className="mt-4 space-y-3">
-                {groups.today.map((f) => (
-                  <li key={f.id} className="flex gap-3 border-l-4 border-brand-accent pl-3">
-                    <span className="w-16 shrink-0 text-xs font-semibold text-slate-600">
-                      {f.due_time || t("dash.anytime")}
-                    </span>
-                    <span className="min-w-0 truncate text-sm font-medium">
-                      {f.contact_name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+              <div className="rounded-3xl border border-line bg-white p-6 shadow-soft">
+                <h2 className="font-semibold">{t("dash.schedule")}</h2>
+                {groups.today.length === 0 ? (
+                  <p className="mt-3 text-sm text-slate-600">{t("dash.scheduleEmpty")}</p>
+                ) : (
+                  <ul className="mt-4 space-y-3">
+                    {groups.today.map((f) => (
+                      <li key={f.id} className="flex gap-3 border-l-4 border-brand-accent pl-3">
+                        <span className="w-16 shrink-0 text-xs font-semibold text-slate-600">
+                          {f.due_time || t("dash.anytime")}
+                        </span>
+                        <span className="min-w-0 truncate text-sm font-medium">{f.contact_name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <Link
+                href="/assistant"
+                className="block rounded-3xl bg-ink p-6 text-white shadow-lift transition hover:bg-slate-800"
+              >
+                <span className="flex items-center gap-2 font-semibold">
+                  <Sparkles className="h-4 w-4 text-indigo-300" aria-hidden="true" />
+                  {t("chat.title")}
+                </span>
+                <span className="mt-2 block text-sm text-slate-300">{t("chat.subtitle")}</span>
+              </Link>
+            </aside>
           </div>
-          <Link
-            href="/assistant"
-            className="mt-4 block rounded-2xl bg-ink p-6 text-white shadow-lift transition hover:bg-slate-800"
-          >
-            <span className="flex items-center gap-2 font-semibold">
-              <Sparkles className="h-4 w-4 text-indigo-300" aria-hidden="true" />
-              {t("chat.title")}
-            </span>
-            <span className="mt-2 block text-sm text-slate-300">{t("chat.subtitle")}</span>
-          </Link>
-        </aside>
-      </div>
+
+          {pipe !== null && pipe.length > 0 && (
+            <section className="mt-6 rounded-3xl border border-line bg-white p-5 shadow-soft sm:p-6" aria-label={t("nav.pipeline")}>
+              <Link href="/pipeline" className="inline-flex items-center gap-2 text-lg font-semibold hover:text-brand">
+                {t("nav.pipeline")}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <div className="mt-4 grid auto-cols-[minmax(200px,1fr)] grid-flow-col gap-3 overflow-x-auto pb-1">
+                {PIPE_STATUSES.map((st) => {
+                  const col = pipe.filter((c) => c.status === st);
+                  return (
+                    <div key={st} className="rounded-2xl bg-surface p-3">
+                      <p className="flex items-center justify-between px-1 text-sm font-semibold">
+                        {t(("status." + st) as Key)}
+                        <span className="text-xs font-semibold text-slate-500">{col.length}</span>
+                      </p>
+                      <ul className="mt-2 space-y-2">
+                        {col.slice(0, 3).map((c) => (
+                          <li key={c.id} className="rounded-xl border border-line bg-white px-3 py-2.5 text-sm">
+                            <Link href={`/contacts/${c.id}`} className="block hover:text-brand">
+                              <span className="block truncate font-semibold">{`${c.first_name} ${c.last_name}`.trim()}</span>
+                              {c.company && <span className="block truncate text-xs text-slate-500">{c.company}</span>}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+        </>
+      )}
     </main>
   );
 }
