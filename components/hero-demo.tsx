@@ -16,7 +16,7 @@ export default function HeroDemo() {
       <div className="win">
         <div className="winbar">
           <span className="dt" /><span className="dt" /><span className="dt" />
-          <span className="url">one.octom.eu/today</span>
+          <span className="url">one.octom.eu/dashboard</span>
         </div>
         <div className="wb">
           <div className="side">

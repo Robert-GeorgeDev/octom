@@ -19,7 +19,7 @@ html { scroll-behavior: smooth; }
 @layer components {
   /* Shared building blocks for the product UI */
   .card {
-    @apply rounded-2xl border border-line/70 bg-white shadow-soft;
+    @apply rounded-2xl border border-line bg-white shadow-soft;
   }
   .btn {
     @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-5 duration-200 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60;

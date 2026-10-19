@@ -2,7 +2,7 @@ import Mascot from "@/components/mascot";
 
 /**
  * Octom wordmark: rounded letters (Nunito), solid colours, no gradients.
- * "octom" in ink, ".one" in brand violet. The accessible name stays "OCTOM One".
+ * "octom" in ink, "One" in brand violet. The accessible name is "OCTOM One".
  */
 export function Logo({
   className = "",
@@ -20,9 +20,9 @@ export function Logo({
       aria-label="OCTOM One"
     >
       {mark && <Mascot className="h-8 w-8 shrink-0" />}
-      <span aria-hidden="true" className="inline-flex items-baseline">
+      <span aria-hidden="true" className="inline-flex items-baseline gap-[0.3em]">
         <span className={light ? "text-white" : "text-ink"}>octom</span>
-        <span className={light ? "text-indigo-300" : "text-brand"}>.one</span>
+        <span className={light ? "text-indigo-300" : "text-brand"}>One</span>
       </span>
     </span>
   );
