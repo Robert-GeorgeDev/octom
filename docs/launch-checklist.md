@@ -25,7 +25,7 @@ Code cannot do these. Tick them off in order. Use Stripe **test mode** until the
 - [ ] Prices on the site (€7.99 and €14.99) match the Stripe prices. Business is per workspace with 5 seats.
 
 ## 4. Errors
-- [ ] After deploying, open `/api/report-error` is public on purpose. Trigger a test error and check a row appears in Supabase > Table Editor > `error_events`, and that it has no names, emails or notes.
+- [ ] After deploying, trigger a test error (the `/api/report-error` endpoint is public on purpose, rate limited) and check a row appears in Supabase > Table Editor > `error_events`, and that it has no names, emails or notes.
 - [ ] Check `CONTACT_TO_EMAIL` is set if you want the alert mail.
 
 ## 5. Phone test
