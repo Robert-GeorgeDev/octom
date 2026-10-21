@@ -3,7 +3,6 @@ export const enLegal = {
   "legal.and": "and",
   "legal.terms": "Terms",
   "legal.privacy": "Privacy Policy",
-  "legal.cookies": "Cookies",
 };
 
 export const roLegal: Record<keyof typeof enLegal, string> = {
@@ -11,5 +10,4 @@ export const roLegal: Record<keyof typeof enLegal, string> = {
   "legal.and": "și",
   "legal.terms": "Termenii",
   "legal.privacy": "Politica de confidențialitate",
-  "legal.cookies": "Cookie-uri",
 };

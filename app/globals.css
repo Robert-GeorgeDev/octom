@@ -30,9 +30,6 @@ html { scroll-behavior: smooth; }
   .btn-brand {
     @apply btn bg-brand text-white hover:bg-brand-dark;
   }
-  .btn-soft {
-    @apply btn border border-line bg-white text-ink hover:bg-slate-50;
-  }
   .pill {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
   }

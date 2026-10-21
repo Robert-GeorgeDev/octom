@@ -155,7 +155,6 @@ export const enLp = {
   "lp.final.title": "Got something to follow up?",
   "lp.final.text": "Start with your first contact. It takes less than a minute.",
   "lp.final.note": "No card · Free during beta",
-  "lp.scroll": "Page progress",
 } as const;
 
 export const roLp: Record<keyof typeof enLp, string> = {
@@ -313,5 +312,4 @@ export const roLp: Record<keyof typeof enLp, string> = {
   "lp.final.title": "Ai ceva de urmărit?",
   "lp.final.text": "Începe cu primul tău contact. Durează mai puțin de un minut.",
   "lp.final.note": "Fără card · Gratuit în perioada beta",
-  "lp.scroll": "Progresul paginii",
 };
