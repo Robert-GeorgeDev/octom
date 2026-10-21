@@ -5,6 +5,7 @@
 - Log in, sign up, forgot and reset password redesigned: dark navy background with a violet-blue light beam, frosted glass card, gradient button, show/hide password. Sign-up is two columns (what you get, with a sample "Today" list) with a plan picker (Free, Pro with 7 days free, Business).
 - Early Feedback banner on the landing page and the contact page: a confirmed bug or an accepted idea earns a free month of Business via a 100% voucher. The contact form repeats the rules.
 - Contact form topics: bug, idea, payment or invoice, account, security, other. `/contact?topic=suggestion` opens the form with a topic chosen.
+- Round social media icons (LinkedIn, Facebook, GitHub, TikTok, YouTube) in the site and legal-page footers. Links are set in `lib/social.ts`; an icon with an empty link is hidden.
 - Failed payments: a paid plan now stays active for 7 days after the first failed payment, with a banner asking the owner to update the card. After that the workspace drops to Free. Run `supabase/billing-grace.sql` before deploying.
 - Pro now starts with a 7-day free trial for a workspace's first subscription, no card needed. If no card is added the trial ends and nothing is charged.
 - Contact form has a category (help, bug, suggestion, other) that shows in the email subject. Its rate limit is now kept in the database, so it holds across servers.

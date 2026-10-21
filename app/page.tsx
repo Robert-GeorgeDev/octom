@@ -14,6 +14,7 @@ import { CookieSettingsButton } from "@/components/consent";
 import AnpcSal from "@/components/anpc-sal";
 import { useLanguage } from "@/components/language-provider";
 import FeedbackBanner from "@/components/feedback-banner";
+import SocialLinks from "@/components/social-links";
 import type { Key } from "@/lib/dictionaries";
 import "./landing.css";
 
@@ -378,6 +379,7 @@ export default function Home() {
           <div>
             <Logo light />
             <p className="ftcopy">© {year} Octom. {t("site.footer.rights")}</p>
+            <SocialLinks variant="dark" className="mt-5" />
             <AnpcSal className="mt-5" />
           </div>
           <div className="ftc">

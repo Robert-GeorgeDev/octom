@@ -1,5 +1,6 @@
 "use client";
 
+import SocialLinks from "@/components/social-links";
 import Link from "next/link";
 import Logo from "@/components/logo";
 import AnpcSal from "@/components/anpc-sal";
@@ -54,6 +55,7 @@ export default function SitePage({
         <div className="mx-auto flex max-w-5xl flex-wrap items-start justify-between gap-4 px-5 py-6 text-sm text-slate-500">
           <div>
             <p>© {new Date().getFullYear()} {LEGAL.name}</p>
+            <SocialLinks className="mt-4" />
             <AnpcSal className="mt-4" />
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
