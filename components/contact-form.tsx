@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/logo";
+import FeedbackBanner from "@/components/feedback-banner";
 import LanguageSwitcher from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { authInput } from "@/components/auth-shell";
@@ -11,7 +12,15 @@ export default function ContactForm() {
   const { t } = useLanguage();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [category, setCategory] = useState("help");
+  const [category, setCategory] = useState("account");
+
+  // Links such as /contact?topic=suggestion open the form with that topic chosen.
+  useEffect(() => {
+    const topic = new URLSearchParams(window.location.search).get("topic");
+    if (topic && ["bug", "suggestion", "billing", "account", "security", "other"].includes(topic)) {
+      setCategory(topic);
+    }
+  }, []);
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState("");
   const [busy, setBusy] = useState(false);
@@ -44,6 +53,8 @@ export default function ContactForm() {
   }
 
   return (
+    <>
+    <FeedbackBanner showButton={false} />
     <main className="mx-auto max-w-xl px-5 py-10">
       <div className="flex items-center justify-between">
         <Link href="/" aria-label="Home">
@@ -94,11 +105,19 @@ export default function ContactForm() {
               onChange={(e) => setCategory(e.target.value)}
               className={authInput}
             >
-              <option value="help">{t("contact.cat.help")}</option>
               <option value="bug">{t("contact.cat.bug")}</option>
               <option value="suggestion">{t("contact.cat.suggestion")}</option>
+              <option value="billing">{t("contact.cat.billing")}</option>
+              <option value="account">{t("contact.cat.account")}</option>
+              <option value="security">{t("contact.cat.security")}</option>
               <option value="other">{t("contact.cat.other")}</option>
             </select>
+            {(category === "bug" || category === "suggestion") && (
+              <p className="mt-2 rounded-xl bg-brand-soft px-3 py-2 text-xs text-brand">{t("contact.rewardNote")}</p>
+            )}
+            {category === "security" && (
+              <p className="mt-2 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-900">{t("contact.securityNote")}</p>
+            )}
           </div>
           <div>
             <label htmlFor="message" className="block text-sm font-medium">{t("contact.message")}</label>
@@ -140,5 +159,6 @@ export default function ContactForm() {
         </form>
       )}
     </main>
+    </>
   );
 }

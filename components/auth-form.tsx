@@ -4,10 +4,21 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import Logo from "@/components/logo";
-import LanguageSwitcher from "@/components/language-switcher";
+import { Eye, EyeOff } from "lucide-react";
+import AuthShell, {
+  AuthBackdrop,
+  AuthTop,
+  AuthTitle,
+  GlassCard,
+  authButton,
+  authError,
+  authInfo,
+  authInputDark,
+  authLabel,
+  authLink,
+} from "@/components/auth-shell";
 import { useLanguage } from "@/components/language-provider";
-import { isPaidPlan, setPendingPlan, type PaidPlan } from "@/lib/pending-plan";
+import { clearPendingPlan, isPaidPlan, setPendingPlan, type PaidPlan } from "@/lib/pending-plan";
 import type { Key } from "@/lib/dictionaries";
 
 function errorKey(code: string | undefined): Key {
@@ -31,9 +42,6 @@ function errorKey(code: string | undefined): Key {
   }
 }
 
-const inputClass =
-  "mt-1 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20";
-
 export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const { t, lang } = useLanguage();
@@ -43,6 +51,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);
   const isSignup = mode === "signup";
   const [chosen, setChosen] = useState<PaidPlan | null>(null);
 
@@ -92,128 +101,199 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
     }
   }
 
-  return (
-    <main className="mx-auto max-w-sm px-5 py-10">
-      <div className="flex items-center justify-between">
-        <Link href="/" aria-label="Home">
-          <Logo />
-        </Link>
-        <LanguageSwitcher />
+  const planNote = chosen === "pro" ? t("billing.trialNote") : chosen === "business" ? t("auth.planChosen").replace("{plan}", t("plans.business")) : t("auth.createSub");
+
+  function pickPlan(next: PaidPlan | null) {
+    setChosen(next);
+    if (next) setPendingPlan(next);
+    else clearPendingPlan();
+  }
+
+  const planOptions: { id: PaidPlan | null; name: Key; desc: Key }[] = [
+    { id: null, name: "plans.free", desc: "auth.plan.free.d" },
+    { id: "pro", name: "plans.pro", desc: "auth.plan.pro.d" },
+    { id: "business", name: "plans.business", desc: "auth.plan.business.d" },
+  ];
+
+  const form = (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="email" className={authLabel}>{t("auth.email")}</label>
+        <input
+          id="email"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="name@company.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={authInputDark}
+        />
       </div>
-
-      <h1 className="mt-10 text-3xl font-bold tracking-tight">
-        {isSignup ? t("auth.createTitle") : t("auth.welcomeBack")}
-      </h1>
-      <p className="mt-2 text-slate-600">
-        {isSignup ? t("auth.createSub") : t("auth.loginSub")}
-      </p>
-
-      {chosen && (
-        <p className="mt-4 rounded-xl bg-brand-soft px-4 py-3 text-sm text-brand">
-          {t("auth.planChosen").replace("{plan}", t(chosen === "pro" ? "plans.pro" : "plans.business"))}
-        </p>
-      )}
-
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium">
-            {t("auth.email")}
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={inputClass}
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium">
-            {t("auth.password")}
-          </label>
+      <div>
+        <label htmlFor="password" className={authLabel}>{t("auth.password")}</label>
+        <div className="relative">
           <input
             id="password"
-            type="password"
+            type={show ? "text" : "password"}
             required
             minLength={8}
             autoComplete={isSignup ? "new-password" : "current-password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={inputClass}
+            className={`${authInputDark} pr-12`}
           />
-          {isSignup && (
-            <p className="mt-1 text-xs text-slate-500">{t("auth.min8")}</p>
-          )}
-          {!isSignup && (
-            <p className="mt-2 text-right text-sm">
-              <Link href="/forgot-password" className="font-semibold text-brand hover:underline">
-                {t("auth.forgot")}
-              </Link>
-            </p>
-          )}
+          <button
+            type="button"
+            onClick={() => setShow((v) => !v)}
+            aria-label={show ? t("auth.hide") : t("auth.show")}
+            aria-pressed={show}
+            className="absolute right-1.5 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-lg text-slate-300 hover:bg-white/10 hover:text-white"
+          >
+            {show ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
+          </button>
         </div>
-
-        {isSignup && (
-          <label className="flex items-start gap-3 text-sm text-slate-600">
-            <input
-              type="checkbox"
-              checked={marketing}
-              onChange={(e) => setMarketing(e.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 rounded border-line accent-brand"
-            />
-            <span>{t("auth.marketing")}</span>
-          </label>
-        )}
-
-        {error && (
-          <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
-            {error}
+        {isSignup && <p className="mt-1.5 text-xs text-slate-400">{t("auth.min8")}</p>}
+        {!isSignup && (
+          <p className="mt-2 text-right text-sm">
+            <Link href="/forgot-password" className={authLink}>{t("auth.forgot")}</Link>
           </p>
         )}
-        {info && (
-          <p role="status" className="rounded-xl bg-brand-soft px-4 py-3 text-sm text-brand">
-            {info}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={busy}
-          className="w-full rounded-xl bg-cta px-6 py-3 font-semibold text-white hover:bg-cta-dark disabled:opacity-60"
-        >
-          {busy
-            ? t("auth.wait")
-            : isSignup
-            ? t("auth.createBtn")
-            : t("auth.loginBtn")}
-        </button>
-      </form>
+      </div>
 
       {isSignup && (
-        <p className="mt-4 text-xs text-slate-500">
-          {t("legal.agree")}{" "}
-          <Link href="/terms" className="font-semibold text-brand">
-            {t("legal.terms")}
-          </Link>{" "}
-          {t("legal.and")}{" "}
-          <Link href="/privacy" className="font-semibold text-brand">
-            {t("legal.privacy")}
-          </Link>
-          .
-        </p>
+        <label className="flex items-start gap-3 text-sm text-slate-300">
+          <input
+            type="checkbox"
+            checked={marketing}
+            onChange={(e) => setMarketing(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-white/30 accent-indigo-500"
+          />
+          <span>{t("auth.marketing")}</span>
+        </label>
       )}
 
-      <p className="mt-6 text-sm text-slate-600">
-        {isSignup ? t("auth.haveAccount") : t("auth.newHere")}{" "}
-        <Link
-          href={isSignup ? "/login" : "/signup"}
-          className="font-semibold text-brand"
-        >
-          {isSignup ? t("auth.loginBtn") : t("auth.createLink")}
-        </Link>
-      </p>
-    </main>
+      {error && <p role="alert" className={authError}>{error}</p>}
+      {info && <p role="status" className={authInfo}>{info}</p>}
+
+      <button type="submit" disabled={busy} className={authButton}>
+        {busy ? t("auth.wait") : isSignup ? t("auth.createBtn") : t("auth.loginBtn")}
+      </button>
+
+      {isSignup && (
+        <p className="text-center text-xs text-slate-400">
+          {t("legal.agree")}{" "}
+          <Link href="/terms" className={authLink}>{t("legal.terms")}</Link>{" "}
+          {t("legal.and")}{" "}
+          <Link href="/privacy" className={authLink}>{t("legal.privacy")}</Link>.
+        </p>
+      )}
+    </form>
+  );
+
+  const switchLink = (
+    <p className="mt-6 text-center text-sm text-slate-300">
+      {isSignup ? t("auth.haveAccount") : t("auth.newHere")}{" "}
+      <Link href={isSignup ? "/login" : "/signup"} className={authLink}>
+        {isSignup ? t("auth.loginBtn") : t("auth.createLink")}
+      </Link>
+    </p>
+  );
+
+  if (!isSignup) {
+    return (
+      <AuthShell>
+        <AuthTitle>{t("auth.welcomeBack")}</AuthTitle>
+        <p className="mb-8 mt-3 text-center text-sm text-slate-300">{t("auth.loginSub")}</p>
+        {form}
+        {switchLink}
+      </AuthShell>
+    );
+  }
+
+  const demo: { name: string; co: string; note: Key; tag: Key; tone: string }[] = [
+    { name: "Maria Ionescu", co: "Studio Nord", note: "lp.demo.r1", tag: "lp.demo.tagToday", tone: "bg-amber-400/20 text-amber-200" },
+    { name: "Andrei Pop", co: "Pop & Co", note: "lp.demo.r2", tag: "lp.demo.tagDue", tone: "bg-amber-400/20 text-amber-200" },
+    { name: "Elena Radu", co: "Radu Design", note: "lp.demo.r3", tag: "lp.demo.tagDone", tone: "bg-emerald-400/20 text-emerald-200" },
+  ];
+
+  return (
+    <AuthBackdrop>
+      <AuthTop />
+      <main className="mx-auto grid w-full max-w-6xl gap-6 px-5 pb-16 pt-8 lg:grid-cols-[1.05fr_1fr] lg:items-stretch lg:pt-10">
+        {/* Left: what you get */}
+        <section className="hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-white/[.06] to-white/[.015] p-9 backdrop-blur-xl lg:flex lg:flex-col">
+          <h2 className="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-4xl font-semibold leading-tight tracking-tight text-transparent">
+            {t("auth.side.title")}
+          </h2>
+          <p className="mt-3 max-w-md text-slate-300">{t("auth.side.sub")}</p>
+
+          <div className="mt-8 rounded-2xl border border-white/10 bg-[#0B1026]/70 p-4 shadow-xl" aria-hidden="true">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-sm font-semibold text-white">{t("auth.side.today")}</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            </div>
+            <ul className="space-y-2">
+              {demo.map((d) => (
+                <li key={d.name} className="flex items-center gap-3 rounded-xl bg-white/[.05] px-3 py-2.5">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#6366F1] to-[#3B82F6] text-xs font-bold text-white">
+                    {d.name.split(" ").map((w) => w[0]).join("")}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-white">{d.name} <span className="font-normal text-slate-400">· {d.co}</span></span>
+                    <span className="block truncate text-xs text-slate-400">{t(d.note)}</span>
+                  </span>
+                  <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${d.tone}`}>{t(d.tag)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <ul className="mt-auto space-y-3 pt-8 text-sm text-slate-200">
+            {(["auth.side.b1", "auth.side.b2", "auth.side.b3"] as Key[]).map((k) => (
+              <li key={k} className="flex items-start gap-3">
+                <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-indigo-400/25 text-[11px] text-indigo-200">✓</span>
+                <span>{t(k)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Right: the form */}
+        <GlassCard className="mx-auto w-full max-w-[520px] lg:max-w-none">
+          <AuthTitle>{t("auth.createTitle")}</AuthTitle>
+
+          <fieldset className="mb-6 mt-6">
+            <legend className="mb-2 text-sm font-medium text-slate-200">{t("auth.plan.title")}</legend>
+            <div role="radiogroup" className="grid grid-cols-3 gap-2">
+              {planOptions.map((o) => {
+                const on = chosen === o.id;
+                return (
+                  <button
+                    key={o.id ?? "free"}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    onClick={() => pickPlan(o.id)}
+                    className={`rounded-2xl border px-3 py-3 text-left transition ${
+                      on
+                        ? "border-indigo-300/70 bg-gradient-to-b from-[#6C6FF5]/40 to-[#3B6FF0]/25 shadow-[0_0_0_3px_rgba(129,140,248,.25)]"
+                        : "border-white/10 bg-white/[.04] hover:bg-white/[.08]"
+                    }`}
+                  >
+                    <span className="block text-sm font-semibold text-white">{t(o.name)}</span>
+                    <span className="mt-0.5 block text-[11px] leading-snug text-slate-300">{t(o.desc)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-xs text-slate-400">{planNote}</p>
+          </fieldset>
+
+          {form}
+          {switchLink}
+        </GlassCard>
+      </main>
+    </AuthBackdrop>
   );
 }

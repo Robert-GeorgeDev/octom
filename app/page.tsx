@@ -13,6 +13,7 @@ import ScrollProgress from "@/components/scroll-progress";
 import { CookieSettingsButton } from "@/components/consent";
 import AnpcSal from "@/components/anpc-sal";
 import { useLanguage } from "@/components/language-provider";
+import FeedbackBanner from "@/components/feedback-banner";
 import type { Key } from "@/lib/dictionaries";
 import "./landing.css";
 
@@ -70,6 +71,7 @@ export default function Home() {
 
   return (
     <div className="lp">
+      <FeedbackBanner />
       <header className="hd">
         <div className="wrap hdin">
           <Link className="brandlink" href="/" aria-label="OCTOM One"><Logo light /></Link>

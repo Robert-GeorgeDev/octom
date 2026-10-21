@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import AuthShell, { authInput } from "@/components/auth-shell";
+import AuthShell, { AuthTitle, authButton, authError, authInfo, authInputDark, authLabel, authLink } from "@/components/auth-shell";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
@@ -38,17 +38,17 @@ export default function ForgotPasswordForm() {
 
   return (
     <AuthShell>
-      <h1 className="mt-10 text-3xl font-semibold tracking-tight">{t("forgot.title")}</h1>
-      <p className="mt-2 text-slate-600">{t("forgot.sub")}</p>
+      <AuthTitle>{t("forgot.title")}</AuthTitle>
+      <p className="mb-6 mt-3 text-center text-sm text-slate-300">{t("forgot.sub")}</p>
 
       {sent ? (
-        <p role="status" className="mt-8 rounded-xl bg-brand-soft px-4 py-3 text-sm text-brand">
+        <p role="status" className={`${authInfo} mt-6`}>
           {t("forgot.sent")}
         </p>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className={authLabel}>
               {t("auth.email")}
             </label>
             <input
@@ -58,22 +58,22 @@ export default function ForgotPasswordForm() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={authInput}
+              className={authInputDark}
             />
           </div>
           {error && (
-            <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
+            <p role="alert" className={authError}>
               {error}
             </p>
           )}
-          <button type="submit" disabled={busy} className="btn-brand w-full py-3">
+          <button type="submit" disabled={busy} className={authButton}>
             {busy ? t("auth.wait") : t("forgot.btn")}
           </button>
         </form>
       )}
 
-      <p className="mt-6 text-sm">
-        <Link href="/login" className="font-semibold text-brand">
+      <p className="mt-6 text-center text-sm">
+        <Link href="/login" className={authLink}>
           {t("forgot.back")}
         </Link>
       </p>
