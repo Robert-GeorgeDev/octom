@@ -12,7 +12,6 @@ export default function HeroDemo() {
   const { t } = useLanguage();
   return (
     <div className="stage" aria-hidden="true">
-      <div className="peek"><Mascot wave /></div>
       <div className="win">
         <div className="winbar">
           <span className="dt" /><span className="dt" /><span className="dt" />
