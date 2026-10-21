@@ -19,4 +19,13 @@ export type Contact = {
   phone: string;
   status: Status;
   notes: string;
+  // Contacts v2 (supabase/contacts-v2.sql). Optional so the app keeps working
+  // until the SQL has been run.
+  website?: string | null;
+  location?: string | null;
+  job_title?: string | null;
+  source?: string | null;
+  tags?: string[] | null;
+  created_at?: string;
+  assigned_to?: string | null;
 };
