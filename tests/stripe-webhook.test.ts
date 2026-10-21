@@ -4,11 +4,17 @@ const state = vi.hoisted(() => ({
   upsert: vi.fn(),
   retrieve: vi.fn(),
   event: null as unknown,
+  existing: null as unknown,
 }));
 
 vi.mock("@/lib/billing", () => ({
   planFromPrice: (id?: string) => (id === "price_pro" ? "pro" : null),
-  adminClient: () => ({ from: () => ({ upsert: state.upsert }) }),
+  adminClient: () => ({
+    from: () => ({
+      upsert: state.upsert,
+      select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: state.existing }) }) }),
+    }),
+  }),
   stripeClient: () => ({
     webhooks: { constructEvent: () => state.event },
     subscriptions: { retrieve: state.retrieve },
@@ -20,6 +26,7 @@ import { POST } from "@/app/api/stripe/webhook/route";
 describe("stripe webhook", () => {
   beforeEach(() => {
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
+    state.existing = null;
     state.upsert.mockReset().mockResolvedValue({ error: null });
     // By default Stripe's current state matches the event.
     state.retrieve.mockReset().mockImplementation(async () => (state.event as { data: { object: unknown } }).data.object);
@@ -76,6 +83,38 @@ describe("stripe webhook", () => {
     expect(state.retrieve).toHaveBeenCalledWith("sub_1");
     const [row] = state.upsert.mock.calls[0];
     expect(row).toMatchObject({ plan: "free", status: "canceled", stripe_subscription_id: null });
+  });
+
+  it("starts a 7-day grace period on the first failed payment", async () => {
+    state.retrieve.mockResolvedValue({
+      id: "sub_1", status: "past_due", customer: "cus_1", metadata: { org_id: "o1" },
+      items: { data: [{ price: { id: "price_pro" } }] },
+    });
+    await POST(new Request("http://localhost/api/stripe/webhook", { method: "POST", headers: { "stripe-signature": "sig" }, body: "{}" }));
+    const [row] = state.upsert.mock.calls[0];
+    expect(row).toMatchObject({ plan: "pro", status: "past_due" });
+    const days = (new Date(row.grace_until).getTime() - Date.now()) / 86_400_000;
+    expect(days).toBeGreaterThan(6.9);
+    expect(days).toBeLessThanOrEqual(7);
+  });
+
+  it("does not extend the grace period on later retries", async () => {
+    state.existing = { status: "past_due", grace_until: "2026-10-25T10:00:00.000Z" };
+    state.retrieve.mockResolvedValue({
+      id: "sub_1", status: "past_due", customer: "cus_1", metadata: { org_id: "o1" },
+      items: { data: [{ price: { id: "price_pro" } }] },
+    });
+    await POST(new Request("http://localhost/api/stripe/webhook", { method: "POST", headers: { "stripe-signature": "sig" }, body: "{}" }));
+    expect(state.upsert.mock.calls[0][0].grace_until).toBe("2026-10-25T10:00:00.000Z");
+  });
+
+  it("gives no grace when Stripe marks the subscription unpaid", async () => {
+    state.retrieve.mockResolvedValue({
+      id: "sub_1", status: "unpaid", customer: "cus_1", metadata: { org_id: "o1" },
+      items: { data: [{ price: { id: "price_pro" } }] },
+    });
+    await POST(new Request("http://localhost/api/stripe/webhook", { method: "POST", headers: { "stripe-signature": "sig" }, body: "{}" }));
+    expect(new Date(state.upsert.mock.calls[0][0].grace_until).getTime()).toBeLessThanOrEqual(Date.now());
   });
 
   it("still rejects unsigned requests", async () => {

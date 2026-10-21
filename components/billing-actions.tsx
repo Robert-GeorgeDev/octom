@@ -17,10 +17,13 @@ export default function BillingButton({
   orgId,
   kind,
   className = "",
+  trial = false,
 }: {
   orgId: string | null;
   kind: Kind;
   className?: string;
+  /** Show the free-trial note (first Pro subscription only). */
+  trial?: boolean;
 }) {
   const { t } = useLanguage();
   const [busy, setBusy] = useState(false);
@@ -78,6 +81,9 @@ export default function BillingButton({
       >
         {busy ? t("billing.redirecting") : t(labels[kind])}
       </button>
+      {kind === "pro" && trial && (
+        <p className="mt-2 text-center text-xs font-semibold text-brand">{t("billing.trialNote")}</p>
+      )}
       {kind !== "manage" && (
         <p className="mt-2 text-center text-xs text-slate-500">
           {t("billing.note")}{" "}

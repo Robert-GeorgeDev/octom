@@ -20,18 +20,35 @@ export type Entitlements = {
   canUpgrade: boolean;
   /** Existing Stripe customers can always reach the billing portal. */
   canManageBilling: boolean;
+  /** A payment failed but the paid plan is kept until `graceUntil`. */
+  paymentIssue: boolean;
+  graceUntil: string | null;
 };
 
-export type SubscriptionRow = { plan?: string | null; status?: string | null } | null | undefined;
+export type SubscriptionRow =
+  | { plan?: string | null; status?: string | null; grace_until?: string | null }
+  | null
+  | undefined;
 
-export function planFromSubscription(sub: SubscriptionRow): Plan {
-  const active = sub?.status === "active" || sub?.status === "trialing";
+/** Days a paid plan is kept after the first failed payment. */
+export const GRACE_DAYS = 7;
+
+/** Free trial length for a first Pro subscription. */
+export const TRIAL_DAYS = 7;
+
+// Must match public.org_plan() in supabase/billing-grace.sql.
+export function planFromSubscription(sub: SubscriptionRow, now: Date = new Date()): Plan {
+  const inGrace =
+    sub?.status === "past_due" &&
+    !!sub.grace_until &&
+    new Date(sub.grace_until).getTime() > now.getTime();
+  const active = sub?.status === "active" || sub?.status === "trialing" || inGrace;
   const p = sub?.plan;
   return active && (p === "pro" || p === "business") ? p : "free";
 }
 
-export function resolveEntitlements(sub: SubscriptionRow): Entitlements {
-  const plan = planFromSubscription(sub);
+export function resolveEntitlements(sub: SubscriptionRow, now: Date = new Date()): Entitlements {
+  const plan = planFromSubscription(sub, now);
   const paid = plan !== "free";
 
   return {
@@ -42,5 +59,7 @@ export function resolveEntitlements(sub: SubscriptionRow): Entitlements {
       : { contacts: FREE_LIMITS.contacts, followUps: FREE_LIMITS.followUps },
     canUpgrade: !paid,
     canManageBilling: paid,
+    paymentIssue: paid && sub?.status === "past_due",
+    graceUntil: paid && sub?.status === "past_due" ? (sub.grace_until ?? null) : null,
   };
 }

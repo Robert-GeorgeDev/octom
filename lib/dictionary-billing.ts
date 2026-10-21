@@ -12,6 +12,10 @@ export const enBilling = {
   "billing.err.generic": "Could not open checkout. Please try again.",
   "billing.success": "Thank you. Your plan will update in a few seconds.",
   "billing.cancelled": "Checkout was canceled. You have not been charged.",
+  "billing.trialNote": "First 7 days free, no card needed. If you add no card, the trial just ends and you are not charged.",
+  "billing.pastDue.title": "Your last payment did not go through",
+  "billing.pastDue.text": "Your plan stays active until {date}. Update your card to keep it.",
+  "billing.pastDue.textNoDate": "Update your card to keep your plan.",
 };
 
 export const roBilling = {
@@ -28,4 +32,8 @@ export const roBilling = {
   "billing.err.generic": "Nu am putut deschide plata. Încearcă din nou.",
   "billing.success": "Mulțumim. Planul tău se va actualiza în câteva secunde.",
   "billing.cancelled": "Plata a fost anulată. Nu ai fost taxat.",
+  "billing.trialNote": "Primele 7 zile sunt gratuite, fără card. Dacă nu adaugi un card, proba se încheie și nu ești taxat.",
+  "billing.pastDue.title": "Ultima plată nu a trecut",
+  "billing.pastDue.text": "Planul tău rămâne activ până pe {date}. Actualizează cardul ca să îl păstrezi.",
+  "billing.pastDue.textNoDate": "Actualizează cardul ca să îți păstrezi planul.",
 };

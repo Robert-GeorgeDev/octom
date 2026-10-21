@@ -126,7 +126,7 @@ function PlansView() {
               ))}
             </ul>
             {id !== "free" && id !== current && e?.canUpgrade && (
-              <BillingButton orgId={orgId} kind={id} className="mt-5" />
+              <BillingButton orgId={orgId} kind={id} className="mt-5" trial={id === "pro" && !!state?.trialEligible} />
             )}
           </article>
         ))}

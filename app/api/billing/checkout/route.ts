@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { TRIAL_DAYS } from "@/lib/entitlements";
 import { adminClient, authorize, originOf, priceFor, stripeClient } from "@/lib/billing";
 
 export async function POST(req: Request) {
@@ -27,6 +28,10 @@ export async function POST(req: Request) {
     if (sub?.stripe_subscription_id && sub.status !== "canceled") {
       return NextResponse.json({ error: "already_subscribed" }, { status: 409 });
     }
+    // One free trial per workspace: only on Pro, and only if it never had a
+    // Stripe customer (an earlier checkout) before. No card needed for the trial;
+    // if none is added by the end, the subscription is canceled, not charged.
+    const trial = plan === "pro" && !sub?.stripe_customer_id;
     const origin = originOf(req);
     const session = await stripeClient().checkout.sessions.create({
       mode: "subscription",
@@ -36,7 +41,18 @@ export async function POST(req: Request) {
         : { customer_email: user.email ?? undefined }),
       client_reference_id: orgId,
       metadata: { org_id: orgId },
-      subscription_data: { metadata: { org_id: orgId } },
+      ...(trial ? { payment_method_collection: "if_required" as const } : {}),
+      subscription_data: {
+        metadata: { org_id: orgId },
+        ...(trial
+          ? {
+              trial_period_days: TRIAL_DAYS,
+              trial_settings: {
+                end_behavior: { missing_payment_method: "cancel" as const },
+              },
+            }
+          : {}),
+      },
       allow_promotion_codes: true,
       success_url: `${origin}/plans?checkout=success`,
       cancel_url: `${origin}/plans?checkout=cancel`,

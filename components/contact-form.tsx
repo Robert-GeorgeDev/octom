@@ -11,6 +11,7 @@ export default function ContactForm() {
   const { t } = useLanguage();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [category, setCategory] = useState("help");
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState("");
   const [busy, setBusy] = useState(false);
@@ -25,7 +26,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message, website }),
+        body: JSON.stringify({ name, email, message, website, category }),
       });
       if (res.ok) {
         setDone(true);
@@ -84,6 +85,20 @@ export default function ContactForm() {
               onChange={(e) => setEmail(e.target.value)}
               className={authInput}
             />
+          </div>
+          <div>
+            <label htmlFor="category" className="block text-sm font-medium">{t("contact.category")}</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className={authInput}
+            >
+              <option value="help">{t("contact.cat.help")}</option>
+              <option value="bug">{t("contact.cat.bug")}</option>
+              <option value="suggestion">{t("contact.cat.suggestion")}</option>
+              <option value="other">{t("contact.cat.other")}</option>
+            </select>
           </div>
           <div>
             <label htmlFor="message" className="block text-sm font-medium">{t("contact.message")}</label>

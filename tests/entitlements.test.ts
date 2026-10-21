@@ -13,12 +13,31 @@ describe("planFromSubscription", () => {
     expect(planFromSubscription(null)).toBe("free");
     expect(planFromSubscription({ plan: "pro", status: "canceled" })).toBe("free");
     expect(planFromSubscription({ plan: "pro", status: "past_due" })).toBe("free");
+    expect(planFromSubscription({ plan: "pro", status: "past_due", grace_until: "2020-01-01T00:00:00Z" })).toBe("free");
     expect(planFromSubscription({ plan: "enterprise", status: "active" })).toBe("free");
   });
 
   it("reads active and trialing paid plans", () => {
     expect(planFromSubscription(activePro)).toBe("pro");
     expect(planFromSubscription(activeBusiness)).toBe("business");
+  });
+});
+
+describe("grace period", () => {
+  const now = new Date("2026-10-21T10:00:00Z");
+  const grace = { plan: "pro", status: "past_due", grace_until: "2026-10-25T10:00:00Z" };
+
+  it("keeps the paid plan until the grace period ends", () => {
+    expect(planFromSubscription(grace, now)).toBe("pro");
+    expect(planFromSubscription(grace, new Date("2026-10-26T00:00:00Z"))).toBe("free");
+  });
+
+  it("flags the payment issue so the app can show a notice", () => {
+    const e = resolveEntitlements(grace, now);
+    expect(e.paymentIssue).toBe(true);
+    expect(e.graceUntil).toBe("2026-10-25T10:00:00Z");
+    expect(e.unlimited).toBe(true);
+    expect(resolveEntitlements(activePro, now).paymentIssue).toBe(false);
   });
 });
 

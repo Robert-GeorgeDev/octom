@@ -13,6 +13,8 @@ Where personal data goes. Built from the code and configuration, not assumptions
 | Plan, subscription status, Stripe customer reference | Checkout, Stripe webhook | Supabase `subscriptions` | Stripe | Billing | Contract; legal obligation | Controller |
 | Card details | Stripe checkout | Stripe only | — | Payment | Contract | Stripe |
 | Email address + email content | Account emails, daily summary, contact replies | Not stored by Octom | Resend (and Supabase Auth mail until SMTP is set to Resend) | Delivery | Contract; consent (marketing) | Controller / processor |
+| Rate-limit counters (hashed IP, count, reset time) | Contact form, error report endpoint | Supabase `rate_limits` | — | Abuse prevention | Legitimate interest | Controller |
+| Error log (scrubbed message, route, stack; no user, contact or note data) | Server and browser errors | Supabase `error_events`, deleted after 30 days; optional alert email via Resend | Resend | Find and fix faults | Legitimate interest | Controller |
 | Contact form message | /contact | Not stored (forwarded by email) | Resend, then the owner's mailbox | Answer the message | Legitimate interest | Controller |
 | Anonymous visit statistics | Browser, only after analytics consent | Vercel Web Analytics | Vercel | Product statistics | Consent | Controller |
 | Invoices, payment records | Stripe | Stripe; Octom accounting | — | Kept after account deletion (accounting law) | Legal obligation | Controller |
