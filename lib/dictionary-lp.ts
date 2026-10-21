@@ -1,6 +1,17 @@
 // Landing page copy (redesign). Demo names and company names inside the
 // product artwork are fictional and are not translated.
 export const enLp = {
+  "lp2.prod.title": "Contact, context, next step.",
+  "lp2.prod.lead": "Octom keeps the person, what you said and what comes next in one place.",
+  "lp2.inc.title": "Also included",
+  "lp2.inc.ai.t": "AI drafts",
+  "lp2.inc.ai.p": "Write or rewrite a follow-up. Octom never sends anything for you.",
+  "lp2.inc.team.t": "Shared workspace",
+  "lp2.inc.team.p": "Invite colleagues and assign follow-ups.",
+  "lp2.inc.csv.t": "CSV import and export",
+  "lp2.inc.csv.p": "Leave your spreadsheet in minutes. Take your data anytime.",
+  "lp2.inc.eu.t": "Your data, in the EU",
+  "lp2.inc.eu.p": "Hosted in the EU. Delete your account whenever you want.",
   "lp.nav.product": "Product",
   "lp.nav.how": "How it works",
   "lp.nav.compare": "Comparison",
@@ -159,6 +170,17 @@ export const enLp = {
 } as const;
 
 export const roLp: Record<keyof typeof enLp, string> = {
+  "lp2.prod.title": "Contact, context, următorul pas.",
+  "lp2.prod.lead": "Octom păstrează într-un singur loc persoana, ce ați discutat și ce urmează.",
+  "lp2.inc.title": "Inclus și",
+  "lp2.inc.ai.t": "Ciorne AI",
+  "lp2.inc.ai.p": "Scrie sau rescrie un follow-up. Octom nu trimite nimic în locul tău.",
+  "lp2.inc.team.t": "Spațiu de lucru comun",
+  "lp2.inc.team.p": "Inviți colegi și atribui follow-up-uri.",
+  "lp2.inc.csv.t": "Import și export CSV",
+  "lp2.inc.csv.p": "Lași tabelul în câteva minute. Îți iei datele oricând.",
+  "lp2.inc.eu.t": "Datele tale, în UE",
+  "lp2.inc.eu.p": "Găzduit în UE. Îți ștergi contul oricând dorești.",
   "lp.nav.product": "Produs",
   "lp.nav.how": "Cum funcționează",
   "lp.nav.compare": "Comparație",

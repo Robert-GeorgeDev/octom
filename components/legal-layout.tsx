@@ -1,5 +1,6 @@
 "use client";
 
+import SocialLinks from "@/components/social-links";
 import Link from "next/link";
 import Logo from "@/components/logo";
 import LegalNav from "@/components/legal-nav";
@@ -75,6 +76,7 @@ export default function LegalLayout({
             <p>
               © {new Date().getFullYear()} {LEGAL.name}
             </p>
+            <SocialLinks className="mt-4" />
             <AnpcSal className="mt-4" />
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
