@@ -24,6 +24,11 @@ export default function AddContactForm({
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<Status>("New");
   const [notes, setNotes] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [website, setWebsite] = useState("");
+  const [location, setLocation] = useState("");
+  const [source, setSource] = useState("");
+  const [more, setMore] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -44,6 +49,12 @@ export default function AddContactForm({
       phone: phone.trim(),
       status,
       notes: notes.trim(),
+      // Only sent when filled in, so adding a contact keeps working
+      // even before supabase/contacts-v2.sql has been run.
+      ...(jobTitle.trim() ? { job_title: jobTitle.trim() } : {}),
+      ...(website.trim() ? { website: website.trim() } : {}),
+      ...(location.trim() ? { location: location.trim() } : {}),
+      ...(source.trim() ? { source: source.trim() } : {}),
     });
     if (failure) {
       setError(
@@ -133,6 +144,36 @@ export default function AddContactForm({
           />
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => setMore((v) => !v)}
+        aria-expanded={more}
+        className="text-sm font-semibold text-brand hover:underline"
+      >
+        {more ? t("crm.fewerDetails") : t("crm.moreDetails")}
+      </button>
+
+      {more && (
+        <div className="grid gap-4 sm:grid-cols-2 [animation:crm-fade_.25s_ease-out]">
+          <div>
+            <label htmlFor="jobTitle" className="block text-sm font-medium">{t("crm.jobTitle")}</label>
+            <input id="jobTitle" maxLength={120} value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="website" className="block text-sm font-medium">{t("crm.website")}</label>
+            <input id="website" maxLength={200} placeholder="example.com" value={website} onChange={(e) => setWebsite(e.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="location" className="block text-sm font-medium">{t("crm.location")}</label>
+            <input id="location" maxLength={200} value={location} onChange={(e) => setLocation(e.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label htmlFor="source" className="block text-sm font-medium">{t("crm.source")}</label>
+            <input id="source" maxLength={120} placeholder={t("crm.sourcePlaceholder")} value={source} onChange={(e) => setSource(e.target.value)} className={inputClass} />
+          </div>
+        </div>
+      )}
 
       <div>
         <label htmlFor="status" className="block text-sm font-medium">

@@ -1,31 +1,40 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Plus, Users, Database, CreditCard, UserCircle, UserPlus, LayoutGrid, Sparkles } from "lucide-react";
+import { LayoutDashboard, Plus, Users, CreditCard, UserCircle, Sparkles } from "lucide-react";
 import Logo from "@/components/logo";
-import Mascot from "@/components/mascot";
+import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
-import SignOutButton from "@/components/sign-out-button";
 import AccountMenu from "@/components/account-menu";
 import PlanRedirect from "@/components/plan-redirect";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
+const STORE = "octom.sidebar";
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
   const { t } = useLanguage();
 
-  const links = [
-    { href: "/dashboard", label: t("nav.dashboard"), Icon: LayoutDashboard },
-    { href: "/contacts", label: t("nav.contacts"), Icon: Users },
-    { href: "/pipeline", label: t("nav.pipeline"), Icon: LayoutGrid },
-    { href: "/assistant", label: t("nav.assistant"), Icon: Sparkles },
-    { href: "/team", label: t("nav.team"), Icon: UserPlus },
-    { href: "/data", label: t("nav.data"), Icon: Database },
-    { href: "/plans", label: t("nav.plans"), Icon: CreditCard },
-    { href: "/account", label: t("nav.account"), Icon: UserCircle },
-  ];
+  // Desktop sidebar: expanded or icon rail. The choice is remembered on this device.
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORE);
+      if (saved === "1" || saved === "0") setCollapsed(saved === "1");
+      else setCollapsed(window.innerWidth < 1024);
+    } catch {
+      /* storage unavailable: keep default */
+    }
+  }, []);
+  const toggle = () =>
+    setCollapsed((v) => {
+      try { localStorage.setItem(STORE, v ? "0" : "1"); } catch { /* ignore */ }
+      return !v;
+    });
+
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   const tab = (href: string, label: string, Icon: typeof Users) => (
@@ -45,48 +54,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#EEF1F6]">
       <PlanRedirect />
-      {/* Tablet + desktop sidebar: icon rail at md, full at lg */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-20 flex-col border-r border-line bg-white p-3 md:flex lg:w-64 lg:p-5">
-        <Link href="/dashboard" aria-label={BRAND} className="flex h-10 items-center justify-center lg:justify-start">
-          <Mascot className="h-9 w-9 lg:hidden" />
-          <span className="hidden lg:inline"><Logo /></span>
-        </Link>
-
-        <nav className="mt-8 space-y-1" aria-label="Main">
-          {links.map(({ href, label, Icon }) => {
-            const active = isActive(href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                title={label}
-                aria-label={label}
-                aria-current={active ? "page" : undefined}
-                className={`flex min-h-[44px] items-center justify-center gap-3 rounded-xl px-3 text-sm font-semibold transition duration-200 lg:justify-start lg:px-4 ${
-                  active ? "bg-slate-100 text-ink" : "text-slate-600 hover:bg-slate-50 hover:text-ink"
-                }`}
-              >
-                <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                <span className="hidden lg:inline">{label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        <Link
-          href="/followups/new"
-          aria-label={t("nav.addFollowUp")}
-          className="mt-6 flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand px-3 text-sm font-semibold text-white shadow-soft hover:bg-brand-dark"
-        >
-          <Plus className="h-5 w-5" aria-hidden="true" />
-          <span className="hidden lg:inline">{t("nav.addFollowUp")}</span>
-        </Link>
-
-        <div className="mt-auto space-y-4">
-          <LanguageSwitcher />
-          <SignOutButton />
-        </div>
-      </aside>
+      <Suspense fallback={null}>
+        <AppSidebar collapsed={collapsed} onToggle={toggle} />
+      </Suspense>
 
       {/* Phone top bar */}
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-white px-4 py-3 md:hidden">
@@ -99,7 +69,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="pb-24 md:pb-0 md:pl-20 lg:pl-64">
+      <div className={`pb-24 transition-[padding] duration-300 ease-[cubic-bezier(.4,0,.2,1)] md:pb-0 ${collapsed ? "md:pl-[76px]" : "md:pl-[272px]"}`}>
         {/* Desktop and laptop only: account menu, top right */}
         <div className="pointer-events-none sticky top-0 z-40 hidden h-0 md:block">
           <div className="mx-auto flex w-full max-w-[1400px] justify-end px-5 pt-4">
