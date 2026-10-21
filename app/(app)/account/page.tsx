@@ -42,9 +42,7 @@ function AccountView() {
       setError(
         failure === "members_exist"
           ? t("account.err.members")
-          : failure === "billing_cancel_failed"
-            ? t("account.err.billing")
-            : t("common.error")
+          : t("common.error")
       );
       setBusy(false);
       return;

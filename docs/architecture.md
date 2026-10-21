@@ -10,8 +10,6 @@ Browser
    +--> Supabase (Auth, Postgres + RLS)     contacts, follow-ups, workspaces
    |
    +--> Next.js API routes (Vercel)
-            |-- /api/billing    Stripe checkout and portal
-            |-- /api/stripe     Stripe webhook (writes subscriptions)
             |-- /api/ai         OpenAI drafts (limits enforced in the database)
             |-- /api/contact    contact form via Resend
             |-- /api/account    account deletion (service role)
@@ -25,7 +23,7 @@ each page to the right one:
 
 - `octom.eu` / `www.octom.eu`: public site, legal pages, contact form.
 - `one.octom.eu`: the app, OCTOM One (sign in, sign up, CRM). Not indexed.
-- `/api/*` works on both (the Stripe webhook keeps its address).
+- `/api/*` works on both .
 - Other hosts (localhost, preview deployments) are never redirected.
 
 The browser session is kept per address, so signing in happens on

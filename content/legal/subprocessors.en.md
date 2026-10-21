@@ -15,7 +15,6 @@ The list below shows the providers Octom currently uses that may process persona
 | **Supabase** | Database, authentication and related infrastructure | Account data, authentication data, workspace data, contacts, notes, follow-ups and activity | Infrastructure configured in the EU, including the Frankfurt region, depending on the service used |
 | **Vercel** | Hosting and delivery of the application and of web/API components | Technical data, request information, IP addresses, logs and data needed to provide the service | International provider; some processing may take place outside the EEA |
 | **Vercel Web Analytics** | Aggregated analysis of site use, only after the necessary consent | Information about page use and some technical data linked to the visit | International provider; some processing may take place outside the EEA |
-| **Stripe** | Payment processing and subscription management | Identification data linked to the payment, email address, information about the plan, subscription, transactions and billing | International provider; some processing may take place outside the EEA |
 | **Resend** | Sending operational emails and, if enabled, optional communications | Email addresses and the content of messages sent through the service | International provider; some processing may take place outside the EEA |
 | **OpenAI** | Providing artificial intelligence features | Data included in the AI request and the context information sent by Octom to generate the answer | International provider; some processing may take place outside the EEA |
 
@@ -44,16 +43,6 @@ This service is enabled only after the necessary consent is given.
 It may process information about visits and page use, as well as some technical information linked to the visit.
 
 We do not use this service for behavioral advertising.
-
-### Stripe
-
-Stripe is used to process payments and manage paid subscriptions.
-
-Stripe may receive information needed to process the payment, including data linked to the customer, the subscription and the transaction.
-
-Full card details are sent to Stripe and are not stored by Octom.
-
-Stripe may process some data outside the EEA, in accordance with the applicable transfer mechanisms.
 
 ### Resend
 

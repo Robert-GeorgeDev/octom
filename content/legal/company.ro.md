@@ -40,7 +40,7 @@ Informațiile privind utilizarea Octom și prelucrarea datelor sunt prezentate �
 * [Termeni și condiții](/terms)
 * [Politica de confidențialitate](/privacy)
 * [Cookie-uri și stocare în browser](/cookies)
-* [Facturare, anulare și rambursări](/refunds)
+* [Facturare](/refunds)
 * [Subprocesatori](/subprocessors)
 * [Securitate](/security)
 * [Accesibilitate](/accessibility)

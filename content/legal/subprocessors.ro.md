@@ -15,7 +15,6 @@ Lista de mai jos prezintă furnizorii utilizați în prezent de Octom care pot p
 | **Supabase**             | Bază de date, autentificare și infrastructură asociată                                 | Date de cont, date de autentificare, date din spațiul de lucru, contacte, notițe, follow-up-uri și activitate      | Infrastructură configurată în UE, inclusiv regiunea Frankfurt, în funcție de serviciul utilizat |
 | **Vercel**               | Găzduire și livrare a aplicației și a componentelor web/API                            | Date tehnice, informații despre solicitări, adrese IP, loguri și date necesare furnizării serviciului              | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 | **Vercel Web Analytics** | Analiză agregată a utilizării site-ului, numai după consimțământul necesar             | Informații privind utilizarea paginilor și anumite date tehnice asociate vizitei                                   | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
-| **Stripe**               | Procesarea plăților și administrarea abonamentelor                                     | Date de identificare asociate plății, adresă de e-mail, informații despre plan, abonament, tranzacții și facturare | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 | **Resend**               | Trimiterea e-mailurilor operaționale și, dacă este activată, a comunicărilor opționale | Adrese de e-mail și conținutul mesajelor transmise prin serviciu                                                   | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 | **OpenAI**               | Furnizarea funcționalităților de inteligență artificială                               | Datele incluse în solicitarea AI și informațiile de context transmise de Octom pentru generarea răspunsului        | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 
@@ -44,16 +43,6 @@ Acest serviciu este activat numai după acordarea consimțământului necesar.
 Poate prelucra informații privind vizitele și utilizarea paginilor, precum și anumite informații tehnice asociate vizitei.
 
 Nu utilizăm acest serviciu pentru publicitate comportamentală.
-
-### Stripe
-
-Stripe este utilizat pentru procesarea plăților și administrarea abonamentelor plătite.
-
-Stripe poate primi informații necesare procesării plății, inclusiv date asociate clientului, abonamentului și tranzacției.
-
-Datele complete ale cardului sunt transmise către Stripe și nu sunt stocate de Octom.
-
-Stripe poate prelucra anumite date în afara SEE, în conformitate cu mecanismele de transfer aplicabile.
 
 ### Resend
 

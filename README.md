@@ -28,7 +28,7 @@ need clarity more than features.
 - CSV import with preview; CSV export for contacts, follow-ups and activity
 - Optional daily summary email
 - English and Romanian interface
-- Free, Pro and Business plans with Stripe subscriptions
+- Free to use during beta (paid plans may come later)
 
 ## Stack
 
@@ -36,7 +36,6 @@ need clarity more than features.
 |---|---|
 | App | Next.js (App Router), React, TypeScript, Tailwind CSS |
 | Data and auth | Supabase: Postgres with row level security, Auth |
-| Payments | Stripe subscriptions and customer portal |
 | Email | Resend |
 | AI | OpenAI API |
 | Tests | Vitest, Playwright, SQL security tests |
@@ -45,7 +44,7 @@ need clarity more than features.
 ## Security in short
 
 - Every table uses row level security. Users only reach the data of their own workspace, and the SQL test in `supabase/tests/security_test.sql` checks isolation between workspaces.
-- Subscriptions are written only by the payment webhook, with a server key.
+- The subscriptions table is not used yet (no paid plans); it can only be written with a server key.
 - Billing, AI, contact and account-deletion routes check the signed-in user on the server and have usage limits where abuse is likely.
 - Secrets live only in the hosting environment, never in the repository.
 - To report a vulnerability, see [SECURITY.md](SECURITY.md).

@@ -123,13 +123,13 @@ const SECTIONS: Section[] = [
   },
   {
     id: "plans",
-    en: "Plans and limits",
-    ro: "Planuri și limite",
+    en: "Price",
+    ro: "Preț",
     bodyEn: (
-      <p>The free plan includes up to 10 contacts and 10 active follow-ups. See the <Link href="/#pricing">pricing section</Link> for paid plans. Billing and refund terms are on the <Link href="/refunds">Billing &amp; refunds</Link> page.</p>
+      <p>OCTOM One is free while it is in beta: unlimited contacts and follow-ups, up to 5 people per workspace. If paid plans are introduced later, you will be told in advance and never charged without your agreement. See <Link href="/refunds">Billing</Link>.</p>
     ),
     bodyRo: (
-      <p>Planul gratuit include până la 10 contacte și 10 follow-up-uri active. Planurile plătite sunt în <Link href="/#pricing">secțiunea de prețuri</Link>. Condițiile de facturare și rambursare sunt pe pagina <Link href="/refunds">Facturare și rambursări</Link>.</p>
+      <p>OCTOM One este gratuit cât timp este în beta: contacte și follow-up-uri nelimitate, până la 5 persoane într-un spațiu de lucru. Dacă introducem planuri plătite mai târziu, vei fi anunțat din timp și nu vei fi taxat fără acordul tău. Vezi <Link href="/refunds">Facturare</Link>.</p>
     ),
   },
   {

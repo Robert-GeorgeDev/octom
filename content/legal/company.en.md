@@ -40,7 +40,7 @@ How Octom is used and how data is processed is described in these documents:
 * [Terms and conditions](/terms)
 * [Privacy policy](/privacy)
 * [Cookies and browser storage](/cookies)
-* [Billing, cancellation and refunds](/refunds)
+* [Billing](/refunds)
 * [Subprocessors](/subprocessors)
 * [Security](/security)
 * [Accessibility](/accessibility)

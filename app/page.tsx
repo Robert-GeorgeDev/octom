@@ -47,11 +47,7 @@ const privacy: { Icon: LucideIcon; text: Key }[] = [
   { Icon: Lock, text: "land.sec.4" },
 ];
 
-const plans: { name: Key; line: Key; price: string; feats: Key[]; slug: "free" | "pro" | "business"; pick: boolean }[] = [
-  { name: "plans.free", line: "site.plan.free", price: "0", slug: "free", pick: false, feats: ["plans.free.f1", "plans.free.f2", "plans.free.f3", "plans.free.f4", "plans.free.f5"] },
-  { name: "plans.pro", line: "site.plan.pro", price: "7.99", slug: "pro", pick: true, feats: ["plans.pro.f1", "plans.pro.f2", "plans.pro.f3", "plans.pro.f4"] },
-  { name: "plans.business", line: "site.plan.business", price: "14.99", slug: "business", pick: false, feats: ["plans.business.f1", "plans.business.f2", "plans.business.f3"] },
-];
+const freeFeatures: Key[] = ["plans.free.f1", "plans.free.f2", "plans.free.f3", "plans.free.f4", "plans.free.f5", "plans.free.f6"];
 
 const faq: { q: Key; a: Key }[] = [
   { q: "land.q1", a: "land.a1" }, { q: "land.q2", a: "land.a2" }, { q: "land.q3", a: "land.a3" },
@@ -321,25 +317,15 @@ export default function Home() {
             <h2 className="h2">{t("land.pricing.title")}</h2>
             <p className="lead">{t("site.pricing.sub")}</p>
             <span className="beta">{t("site.beta")}</span>
-            <div className="pg3" style={{ textAlign: "left" }}>
-              {plans.map((p) => (
-                <div key={p.name} className={`pc${p.pick ? " pro" : ""}`}>
-                  {p.pick && <span className="badge">{t("site.plan.recommended")}</span>}
-                  <div className="pn1">{t(p.name)}</div>
-                  <div className="pl1">{t(p.line)}</div>
-                  <div className="pr">€{p.price} <small>{t("plans.perMonth")}</small></div>
-                  <ul className="pf1">
-                    {p.feats.map((f) => (<li key={f}><Check aria-hidden="true" strokeWidth={2.6} color="#4F46E5" />{t(f)}</li>))}
-                  </ul>
-                  {p.slug === "free" ? (
-                    <Link className="btn btn-k" href="/signup">{t("landing.cta")}</Link>
-                  ) : (
-                    <Link className={`btn ${p.pick ? "btn-p" : "btn-g"}`} href={`/signup?plan=${p.slug}`}>
-                      {t("site.plan.choose").replace("{name}", t(p.name))}
-                    </Link>
-                  )}
-                </div>
-              ))}
+            <div className="pg3" style={{ textAlign: "left", gridTemplateColumns: "minmax(0, 420px)", justifyContent: "center" }}>
+              <div className="pc pro">
+                <div className="pn1">{t("plans.free")}</div>
+                <div className="pr">€0 <small>{t("plans.perMonth")}</small></div>
+                <ul className="pf1">
+                  {freeFeatures.map((f) => (<li key={f}><Check aria-hidden="true" strokeWidth={2.6} color="#4F46E5" />{t(f)}</li>))}
+                </ul>
+                <Link className="btn btn-p" href="/signup">{t("landing.cta")}</Link>
+              </div>
             </div>
             <p className="plnote">{t("plans.betaNote")}</p>
           </div>

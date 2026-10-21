@@ -73,17 +73,9 @@ We may process information about your preferences for:
 
 For commercial communications that require consent, we also keep the information needed to show that consent was given or withdrawn.
 
-### 2.6. Subscription and payment data
+### 2.6. Payment data
 
-If you choose a paid plan, we may process information such as:
-
-* the plan chosen;
-* the subscription status;
-* the customer or subscription identifier;
-* information about transactions and invoices;
-* data needed to administer the subscription.
-
-Card payments are processed through **Stripe**. Octom does not receive or store the full card number.
+Octom is currently free and does not process payments. We do not collect card or bank details. If we introduce paid plans, we will update this policy and tell you before any payment is requested.
 
 ### 2.7. Technical data
 
@@ -125,8 +117,7 @@ We process the data needed for:
 * managing workspaces;
 * storing and displaying the data you enter;
 * providing follow-up features;
-* providing the AI features you request;
-* managing the subscription.
+* providing the AI features you request.
 
 The legal basis is, as applicable, **performance of a contract** or taking steps at your request before entering into a contract, under Art. 6(1)(b) GDPR.
 
@@ -210,14 +201,6 @@ In some features, the request may also include limited conversation context need
 
 Processing by external providers is subject to their own contractual terms and data protection documentation. For up-to-date information about providers and the safeguards that apply, see the **Subprocessors** page and the relevant documentation.
 
-### Stripe
-
-Used to process payments and manage subscriptions.
-
-Full card details are sent directly to Stripe and are not stored by Octom.
-
-We may keep information about the subscription, transactions and invoices for as long as needed to administer the service and meet legal obligations. This information is not deleted automatically together with the account where the law requires it to be kept (for example, accounting documents).
-
 ### Public authorities and other recipients
 
 We may disclose personal data where necessary to:
@@ -251,7 +234,6 @@ In general:
 
 * account data and workspace data are kept while the account or workspace is active;
 * some data may be kept for a limited period after the account is closed, where necessary for security, fraud prevention, dispute resolution or legal obligations;
-* billing data and financial and accounting documents are kept for the period set by applicable law;
 * data in backups may remain temporarily in the backup copies until the normal retention cycle ends;
 * technical data and security logs may be kept for the period needed for the purposes for which they are collected;
 * consent records are kept for as long as needed to show that consent was given and how it was managed.

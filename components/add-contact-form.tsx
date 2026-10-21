@@ -57,11 +57,7 @@ export default function AddContactForm({
       ...(source.trim() ? { source: source.trim() } : {}),
     });
     if (failure) {
-      setError(
-        String(failure.message).includes("plan_limit")
-          ? t("plan.limitContacts")
-          : t("common.error")
-      );
+      setError(t("common.error"));
       setBusy(false);
       return;
     }

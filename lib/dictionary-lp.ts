@@ -5,7 +5,7 @@ export const enLp = {
   "lp.nav.how": "How it works",
   "lp.nav.compare": "Comparison",
 
-  "lp.hero.pill": "Open beta · Free up to 10 contacts",
+  "lp.hero.pill": "Open beta · Free to use",
   "lp.hero.sub": "Every morning, Octom shows you who to contact today and what to say. No spreadsheets, no lost notes, no forgotten leads.",
   "lp.hero.cta2": "See a day with Octom",
   "lp.hero.bubble": "Who's on today's list?",
@@ -138,7 +138,7 @@ export const enLp = {
   "lp.team.lead": "Invite your colleagues, assign follow-ups and see together what's next.",
   "lp.team.p1": "Owner, Admin and Member roles",
   "lp.team.p2": "Assign follow-ups and switch between “Mine” and “Everyone”",
-  "lp.team.p3": "One plan and one workspace for the whole company",
+  "lp.team.p3": "One workspace for the whole company",
   "lp.team.mine": "Mine",
   "lp.team.all": "Everyone",
   "lp.team.you": "You",
@@ -154,7 +154,7 @@ export const enLp = {
 
   "lp.final.title": "Got something to follow up?",
   "lp.final.text": "Start with your first contact. It takes less than a minute.",
-  "lp.final.note": "No card · Free up to 10 contacts",
+  "lp.final.note": "No card · Free during beta",
   "lp.scroll": "Page progress",
 } as const;
 
@@ -163,7 +163,7 @@ export const roLp: Record<keyof typeof enLp, string> = {
   "lp.nav.how": "Cum funcționează",
   "lp.nav.compare": "Comparație",
 
-  "lp.hero.pill": "Beta deschisă · Gratuit până la 10 contacte",
+  "lp.hero.pill": "Beta deschisă · Gratuit",
   "lp.hero.sub": "În fiecare dimineață, Octom îți arată pe cine contactezi azi și ce să-i spui. Fără tabele, fără notițe pierdute, fără lead-uri uitate.",
   "lp.hero.cta2": "Vezi o zi cu Octom",
   "lp.hero.bubble": "Cine e pe lista de azi?",
@@ -296,7 +296,7 @@ export const roLp: Record<keyof typeof enLp, string> = {
   "lp.team.lead": "Invită-ți colegii, atribuie follow-up-uri și vedeți cu toții ce urmează.",
   "lp.team.p1": "Roluri de Proprietar, Administrator și Membru",
   "lp.team.p2": "Atribuie follow-up-uri și comută între „Ale mele” și „Toți”",
-  "lp.team.p3": "Un plan și un spațiu de lucru pentru toată firma",
+  "lp.team.p3": "Un spațiu de lucru pentru toată firma",
   "lp.team.mine": "Ale mele",
   "lp.team.all": "Toți",
   "lp.team.you": "Tu",
@@ -312,6 +312,6 @@ export const roLp: Record<keyof typeof enLp, string> = {
 
   "lp.final.title": "Ai ceva de urmărit?",
   "lp.final.text": "Începe cu primul tău contact. Durează mai puțin de un minut.",
-  "lp.final.note": "Fără card · Gratuit până la 10 contacte",
+  "lp.final.note": "Fără card · Gratuit în perioada beta",
   "lp.scroll": "Progresul paginii",
 };

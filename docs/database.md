@@ -23,7 +23,7 @@ auth.users
 | `organization_members` | Who belongs to which workspace, with role. One workspace per user |
 | `contacts`, `follow_ups`, `activities` | The CRM data, always scoped by `organization_id` |
 | `invitations` | Pending invitation links (admins see member invites only) |
-| `subscriptions` | Plan and Stripe references. Written only by the webhook (service role) |
+| `subscriptions` | Unused for now (no paid plans). Kept so a payment provider can be added later |
 | `email_preferences` | Daily summary and marketing consent per user |
 | `ai_usage` | Counters for AI limits. No message content is stored |
 

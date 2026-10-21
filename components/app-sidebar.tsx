@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  Home, Users, LayoutGrid, Sparkles, UserPlus, Database, CreditCard,
+  Home, Users, LayoutGrid, Sparkles, UserPlus, Database,
   UserCircle, Plus, ChevronDown, PanelLeftClose, PanelLeftOpen, Briefcase, LogOut,
 } from "lucide-react";
 import Mascot from "@/components/mascot";
@@ -79,11 +79,10 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
     { id: "assistant", label: t("nav.assistant"), Icon: Sparkles, href: "/assistant", matches: under("/assistant") },
     {
       id: "workspace", label: t("crm.workspace"), Icon: Briefcase,
-      matches: (p) => ["/team", "/data", "/plans", "/account"].some((b) => under(b)(p)),
+      matches: (p) => ["/team", "/data", "/account"].some((b) => under(b)(p)),
       children: [
         { href: "/team", label: t("nav.team") },
         { href: "/data", label: t("nav.data") },
-        { href: "/plans", label: t("nav.plans") },
         { href: "/account", label: t("nav.account") },
       ],
     },
@@ -94,7 +93,7 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
     if (!query) return pathname === base && !activeStatus;
     return pathname === base && query === `status=${encodeURIComponent(activeStatus)}`;
   };
-  const leafIcon: Record<string, Icon> = { "/team": UserPlus, "/data": Database, "/plans": CreditCard, "/account": UserCircle };
+  const leafIcon: Record<string, Icon> = { "/team": UserPlus, "/data": Database, "/account": UserCircle };
 
   const expanded = (e: Entry) => openIds[e.id] ?? e.matches(pathname);
   const toggleGroup = (e: Entry) => setOpenIds((s) => ({ ...s, [e.id]: !expanded(e) }));

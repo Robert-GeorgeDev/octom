@@ -611,7 +611,7 @@ function FollowUpsTab({
     });
     setBusy(false);
     if (failure) {
-      setError(String(failure.message).includes("plan_limit") ? t("plan.limitFollowUps") : t("common.error"));
+      setError(t("common.error"));
       return;
     }
     setNote("");

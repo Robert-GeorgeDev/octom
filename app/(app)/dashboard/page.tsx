@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AlertCircle, ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Clock, Plus, Sparkles, Trophy, Users } from "lucide-react";
 import RequireAuth from "@/components/require-auth";
 import FollowUpCard, { type Group } from "@/components/followup-card";
-import PlanUsage from "@/components/plan-usage";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
 import { useAuth } from "@/components/auth-provider";
@@ -257,7 +256,6 @@ function DashboardView() {
         </Link>
       </div>
 
-      {orgId && <PlanUsage orgId={orgId} />}
 
       {error && (
         <p role="alert" className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-overdue">

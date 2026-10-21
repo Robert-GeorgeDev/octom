@@ -3,7 +3,7 @@
 For a suspected leak, account takeover, exposed key or data-isolation bug.
 
 ## 1. Contain (first hour)
-- Exposed secret: rotate it in the provider (Stripe, Supabase service role, Resend, OpenAI, `CRON_SECRET`), update Vercel, redeploy.
+- Exposed secret: rotate it in the provider (Supabase service role, Resend, OpenAI, `CRON_SECRET`), update Vercel, redeploy.
 - Isolation bug: disable the affected feature or route, or revert the last deploy in Vercel.
 - Compromised account: reset the password, sign the user out everywhere, review recent activity.
 - Keep logs and screenshots. Do not delete evidence.

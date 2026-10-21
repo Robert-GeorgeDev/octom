@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import RequireAuth from "@/components/require-auth";
 import { useAuth } from "@/components/auth-provider";
@@ -209,16 +208,6 @@ function TeamView() {
               </ul>
             </>
           )}
-        </section>
-      )}
-
-      {seats <= 1 && (
-        <section className="mt-4 rounded-2xl border border-line bg-lavender p-5">
-          <h2 className="text-lg font-semibold">{t("team.upsell.title")}</h2>
-          <p className="mt-1 text-sm text-slate-600">{t("team.upsell.text")}</p>
-          <Link href="/plans" className={`${btn} mt-3 inline-flex items-center bg-cta text-white hover:bg-cta-dark`}>
-            {t("team.upsell.cta")}
-          </Link>
         </section>
       )}
     </main>
