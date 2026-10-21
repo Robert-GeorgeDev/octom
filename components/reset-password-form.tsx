@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AuthShell, { authInput } from "@/components/auth-shell";
+import AuthShell, { AuthTitle, authButton, authError, authInfo, authInputDark, authLabel, authLink } from "@/components/auth-shell";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
@@ -84,14 +84,14 @@ export default function ResetPasswordForm() {
 
   return (
     <AuthShell>
-      <h1 className="mt-10 text-3xl font-semibold tracking-tight">{t("reset.title")}</h1>
+      <AuthTitle>{t("reset.title")}</AuthTitle>
 
-      {state === "checking" && <p className="mt-4 text-slate-600">{t("reset.checking")}</p>}
+      {state === "checking" && <p className="mt-4 text-center text-sm text-slate-300">{t("reset.checking")}</p>}
 
       {state === "confirm" && (
         <>
-          <p className="mt-2 text-slate-600">{t("reset.verify")}</p>
-          <button type="button" onClick={confirmLink} disabled={busy} className="btn-brand mt-6 w-full py-3">
+          <p className="mb-6 mt-3 text-center text-sm text-slate-300">{t("reset.verify")}</p>
+          <button type="button" onClick={confirmLink} disabled={busy} className={`${authButton} mt-6 block text-center`}>
             {busy ? t("auth.wait") : t("reset.verifyBtn")}
           </button>
         </>
@@ -99,27 +99,27 @@ export default function ResetPasswordForm() {
 
       {state === "invalid" && (
         <>
-          <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
+          <p role="alert" className={`${authError} mt-6`}>
             {t("reset.invalid")}
           </p>
-          <Link href="/forgot-password" className="btn-brand mt-6 w-full py-3">
+          <Link href="/forgot-password" className={`${authButton} mt-6 block text-center`}>
             {t("reset.invalidBtn")}
           </Link>
         </>
       )}
 
       {state === "done" && (
-        <p role="status" className="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-done">
+        <p role="status" className={`${authInfo} mt-6`}>
           {t("reset.done")}
         </p>
       )}
 
       {state === "ready" && (
         <>
-          <p className="mt-2 text-slate-600">{t("reset.sub")}</p>
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <p className="mb-6 mt-3 text-center text-sm text-slate-300">{t("reset.sub")}</p>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium">
+              <label htmlFor="password" className={authLabel}>
                 {t("reset.new")}
               </label>
               <input
@@ -130,11 +130,11 @@ export default function ResetPasswordForm() {
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={authInput}
+                className={authInputDark}
               />
             </div>
             <div>
-              <label htmlFor="repeat" className="block text-sm font-medium">
+              <label htmlFor="repeat" className={authLabel}>
                 {t("reset.confirm")}
               </label>
               <input
@@ -145,15 +145,15 @@ export default function ResetPasswordForm() {
                 autoComplete="new-password"
                 value={repeat}
                 onChange={(e) => setRepeat(e.target.value)}
-                className={authInput}
+                className={authInputDark}
               />
             </div>
             {error && (
-              <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
+              <p role="alert" className={authError}>
                 {error}
               </p>
             )}
-            <button type="submit" disabled={busy} className="btn-brand w-full py-3">
+            <button type="submit" disabled={busy} className={authButton}>
               {busy ? t("auth.wait") : t("reset.btn")}
             </button>
           </form>

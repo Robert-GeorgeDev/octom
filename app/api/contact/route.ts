@@ -11,7 +11,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX_HITS = 5;
 const WINDOW_SECS = 60 * 60;
 
-const CATEGORIES = ["bug", "suggestion", "help", "other"] as const;
+const CATEGORIES = ["bug", "suggestion", "billing", "account", "security", "other"] as const;
 type Category = (typeof CATEGORIES)[number];
 
 function fail(status: number, code: string) {
