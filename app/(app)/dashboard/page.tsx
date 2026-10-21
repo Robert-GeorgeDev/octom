@@ -339,14 +339,14 @@ function DashboardView() {
                   </button>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] font-semibold uppercase text-slate-400">
+              <div className="mt-3 grid grid-cols-7 gap-1.5 text-center text-[11px] font-semibold uppercase text-slate-400">
                 {weekdays.map((w, i) => (
                   <span key={i}>{w}</span>
                 ))}
               </div>
               <div className="mt-2 grid grid-cols-7 gap-1.5">
                 {cells.map((iso, i) => {
-                  if (!iso) return <span key={i} className="aspect-square" />;
+                  if (!iso) return <span key={i} className="aspect-square lg:aspect-auto lg:h-8" />;
                   const n = byDay.get(iso) ?? 0;
                   const isToday = iso === today;
                   const late = n > 0 && iso < today;
@@ -354,7 +354,7 @@ function DashboardView() {
                     <span
                       key={iso}
                       title={n ? String(n) : undefined}
-                      className={`relative grid aspect-square place-items-center rounded-xl text-xs font-semibold transition ${
+                      className={`relative grid aspect-square place-items-center rounded-lg text-xs lg:aspect-auto lg:h-8 font-semibold transition ${
                         isToday
                           ? "bg-gradient-to-br from-[#5B5BF0] to-[#3B82F6] text-white shadow-soft"
                           : late
