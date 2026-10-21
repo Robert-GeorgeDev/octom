@@ -22,7 +22,6 @@ export const enAccount = {
   "account.deleteBtn": "Delete my account",
   "account.deleting": "Deleting…",
   "account.err.members": "This workspace has other members, so it cannot be deleted from here. Contact us for help.",
-  "account.err.billing": "We could not cancel your subscription, so your account was not deleted. Try again or contact us.",
 };
 
 export const roAccount: Record<keyof typeof enAccount, string> = {
@@ -49,5 +48,4 @@ export const roAccount: Record<keyof typeof enAccount, string> = {
   "account.deleteBtn": "Șterge contul meu",
   "account.deleting": "Se șterge…",
   "account.err.members": "Acest spațiu de lucru are alți membri, deci nu poate fi șters de aici. Contactează-ne pentru ajutor.",
-  "account.err.billing": "Nu am putut anula abonamentul, deci contul nu a fost șters. Încearcă din nou sau contactează-ne.",
 };

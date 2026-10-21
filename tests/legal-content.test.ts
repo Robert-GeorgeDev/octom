@@ -67,12 +67,21 @@ describe.each(LEGAL_SLUGS)("legal page %s", (slug) => {
   });
 });
 
-describe("paid plans wording", () => {
-  it.each(["terms", "refunds"])("%s lists the paid plans and no free-launch wording", (slug) => {
+describe("free-service wording", () => {
+  it.each(["terms", "refunds"])("%s says the service is free and shows no old prices or Stripe", (slug) => {
     for (const lang of ["ro", "en"] as const) {
       const text = read(slug, lang);
-      expect(text).toMatch(/7[.,]99/);
-      expect(text).not.toMatch(/launch period|perioada de lansare/i);
+      expect(text).toMatch(/gratuit|free to use/i);
+      expect(text).not.toMatch(/7[.,]99|14[.,]99/);
+      expect(text).not.toMatch(/stripe/i);
+    }
+  });
+
+  it("no legal page mentions Stripe any more", () => {
+    for (const slug of LEGAL_SLUGS) {
+      for (const lang of ["ro", "en"] as const) {
+        expect(read(slug, lang), `${slug}.${lang}`).not.toMatch(/stripe/i);
+      }
     }
   });
 

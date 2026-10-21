@@ -6,7 +6,6 @@ import { Download, Upload } from "lucide-react";
 import RequireAuth from "@/components/require-auth";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
-import { usePlan } from "@/hooks/use-plan";
 import { supabase } from "@/lib/supabase";
 import { addDays, todayISO } from "@/lib/dates";
 import { BRAND_SLUG } from "@/lib/brand";
@@ -62,7 +61,6 @@ async function fetchPages<T>(
 function DataView() {
   const { t } = useLanguage();
   const orgId = useOrgId();
-  const { state: planState, reload: reloadPlan } = usePlan(orgId);
 
   const [parsed, setParsed] = useState<Parsed | null>(null);
   // Rows that look like contacts you already have, or repeat inside the file.
@@ -189,7 +187,6 @@ function DataView() {
     }
 
     setResult({ imported, followUps, failed });
-    reloadPlan();
     setImporting(false);
   }
 
@@ -338,18 +335,6 @@ function DataView() {
 
   const showPreview = parsed !== null && result === null;
 
-  const contactLimit = planState?.entitlements.limits.contacts ?? null;
-  const followUpLimit = planState?.entitlements.limits.followUps ?? null;
-  const contactsLeft =
-    planState && contactLimit !== null ? Math.max(0, contactLimit - planState.contacts) : null;
-  const followUpsLeft =
-    planState && followUpLimit !== null ? Math.max(0, followUpLimit - planState.followUps) : null;
-  const datedRows = importRows.filter((r) => r.nextFollowup).length;
-  const overLimit =
-    parsed !== null &&
-    ((contactsLeft !== null && importRows.length > contactsLeft) ||
-      (followUpsLeft !== null && datedRows > followUpsLeft));
-
   return (
     <main className="mx-auto max-w-3xl px-5 pb-10 pt-8">
       <h1 className="text-3xl font-bold tracking-tight">{t("data.title")}</h1>
@@ -470,19 +455,11 @@ function DataView() {
               </div>
             )}
 
-            {overLimit && (
-              <p role="alert" className="mt-5 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                {t("plan.limitImport")
-                  .replace("{c}", String(contactsLeft ?? 0))
-                  .replace("{f}", String(followUpsLeft ?? 0))}
-              </p>
-            )}
-
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={runImport}
-                disabled={importing || importRows.length === 0 || !orgId || overLimit}
+                disabled={importing || importRows.length === 0 || !orgId}
                 className="rounded-xl bg-cta px-6 py-3 font-semibold text-white hover:bg-cta-dark disabled:opacity-60"
               >
                 {importing

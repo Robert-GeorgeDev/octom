@@ -134,41 +134,13 @@ Limitele aplicabile sunt afișate în cadrul planului relevant și pot fi modifi
 
 ---
 
-## 6. Planuri, abonamente și plăți
+## 6. Preț și planuri
 
-Octom poate oferi planuri gratuite și planuri plătite.
+Octom este în prezent **gratuit** cât timp este în beta. Produsul nu are planuri plătite și nu încasează plăți.
 
-În prezent, planurile disponibile sunt **Free**, **Pro** (7,99 EUR/lună) și **Business** (14,99 EUR/lună). Prețul final, perioada de facturare, taxele aplicabile și limitele fiecărui plan sunt afișate înainte de efectuarea abonării. Nu vei fi trecut la un plan plătit fără acordul tău expres. Poți folosi planul gratuit în limitele afișate în aplicație.
+Este posibil să introducem planuri plătite în viitor. În acest caz te vom informa din timp, îți vom explica ce include și cât costă fiecare plan și nu te vom taxa fără acordul tău expres. Acești Termeni vor fi actualizați cu condițiile de plată, reînnoire și anulare înainte de solicitarea oricărei plăți.
 
 Putem introduce, modifica sau elimina planuri și funcționalități pentru viitor, în conformitate cu legislația aplicabilă.
-
-### Abonamentele plătite
-
-Abonamentele plătite sunt facturate lunar, dacă nu este indicat altfel în momentul achiziției.
-
-Dacă alegi un abonament cu reînnoire automată, acesta se va reînnoi la sfârșitul fiecărei perioade de facturare până când este anulat.
-
-Plățile sunt procesate prin **Stripe**.
-
-Nu stocăm numărul complet al cardului bancar în sistemele Octom.
-
-### Anularea abonamentului
-
-Poți anula abonamentul din funcția de gestionare a abonamentului disponibilă în cont sau prin contactarea noastră.
-
-Anularea oprește reînnoirea automată. În lipsa unui drept legal la rambursare sau a unei alte politici aplicabile, vei putea utiliza planul plătit până la sfârșitul perioadei deja achitate.
-
-Anularea unui abonament nu șterge automat contul, cu excepția cazului în care alegi în mod separat ștergerea contului.
-
-### Modificarea prețurilor
-
-Putem modifica prețurile pentru viitor.
-
-Dacă ești deja abonat la un plan plătit, vom comunica modificarea prețului înainte ca aceasta să se aplice următoarei perioade de facturare, în măsura cerută de lege.
-
-În cazul în care nu dorești să accepți noul preț, poți anula abonamentul înainte de intrarea acestuia în vigoare.
-
----
 
 ## 7. Drepturile consumatorilor
 
@@ -302,7 +274,7 @@ Pentru modificările semnificative, vom lua măsuri rezonabile pentru a informa 
 
 Dacă legea permite și dacă modificarea nu afectează drepturile obligatorii ale utilizatorului, continuarea utilizării serviciului după intrarea în vigoare a modificărilor poate constitui acceptarea acestora.
 
-Dacă nu dorești să accepți modificările aplicabile contractului tău, poți înceta utilizarea serviciului și, dacă este cazul, îți poți anula abonamentul.
+Dacă nu dorești să accepți modificările aplicabile contractului tău, poți înceta utilizarea serviciului .
 
 Drepturile obligatorii ale consumatorilor rămân neafectate.
 

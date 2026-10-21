@@ -66,7 +66,6 @@ Aceste verificări sunt importante în special pentru operațiuni precum:
 * modificarea datelor;
 * ștergerea datelor;
 * ștergerea contului;
-* gestionarea abonamentului;
 * funcționalitățile AI;
 * operațiunile administrative;
 * alte acțiuni care pot afecta datele sau contul.
@@ -93,15 +92,7 @@ Limitele pot fi ajustate în funcție de evoluția serviciului și de riscurile 
 
 ## 7. Plăți
 
-Plățile pentru planurile plătite sunt procesate prin **Stripe**.
-
-Datele complete ale cardului sunt introduse și procesate prin infrastructura Stripe și nu sunt stocate în baza de date Octom.
-
-Octom primește și stochează numai informațiile necesare pentru administrarea abonamentului și evidența plăților, conform Politicii de confidențialitate.
-
-Pentru mai multe informații despre modul în care sunt procesate plățile, consultă **Politica de facturare, anulare și rambursări**.
-
----
+Octom este în prezent gratuit și nu procesează plăți și nu stochează date despre carduri.
 
 ## 8. Backup și disponibilitate
 

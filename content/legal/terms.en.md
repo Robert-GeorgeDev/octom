@@ -124,37 +124,13 @@ To protect the service and keep use fair, we may apply limits on the number or f
 
 The applicable limits are shown in the relevant plan and may be changed for the future under the conditions set by these Terms.
 
-## 6. Plans, subscriptions and payments
+## 6. Price and plans
 
-Octom may offer free plans and paid plans.
+Octom is currently **free to use** while it is in beta. The product has no paid plans and does not take payments.
 
-The plans currently available are **Free**, **Pro** (EUR 7.99/month) and **Business** (EUR 14.99/month). The final price, billing period, applicable taxes and limits of each plan are shown before you subscribe. You will not be moved to a paid plan without your express agreement. You can use the free plan within the limits shown in the application.
+We may introduce paid plans in the future. If we do, we will tell you well in advance, explain what each plan includes and costs, and will not charge you without your express agreement. These Terms will be updated with the payment, renewal and cancellation conditions before any payment is requested.
 
-### Paid subscriptions
-
-Paid subscriptions are billed monthly, unless indicated otherwise at the time of purchase.
-
-If you choose a subscription with automatic renewal, it will renew at the end of each billing period until it is cancelled.
-
-Payments are processed through **Stripe**.
-
-We do not store the full bank card number in Octom's systems.
-
-### Cancelling a subscription
-
-You can cancel the subscription from the subscription management feature in your account or by contacting us.
-
-Cancelling stops automatic renewal. Where there is no legal right to a refund or other applicable policy, you will be able to use the paid plan until the end of the period already paid.
-
-Cancelling a subscription does not automatically delete your account, unless you separately choose to delete the account.
-
-### Changing prices
-
-We may change prices for the future.
-
-If you already have a paid subscription, we will tell you about the price change before it applies to the next billing period, as far as required by law.
-
-If you do not want to accept the new price, you can cancel the subscription before it takes effect.
+We may introduce, change or remove plans and features for the future, in accordance with applicable law.
 
 ## 7. Consumer rights
 
@@ -278,7 +254,7 @@ For significant changes, we will take reasonable steps to inform users before th
 
 Where the law allows and where the change does not affect the user's mandatory rights, continuing to use the service after the changes take effect may constitute acceptance of them.
 
-If you do not want to accept the changes that apply to your contract, you can stop using the service and, where applicable, cancel your subscription.
+If you do not want to accept the changes that apply to your contract, you can stop using the service .
 
 Mandatory consumer rights remain unaffected.
 

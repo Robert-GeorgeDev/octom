@@ -5,8 +5,8 @@ import { Gift } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 
 // Slim banner for the Early Feedback programme: a confirmed bug or an accepted
-// idea earns one free month of Business through a 100% Stripe voucher. The rules
-// are repeated on the contact form so the promise stays honest.
+// idea earns a 100% voucher for one month of Business, valid when paid plans launch.
+// The rules are repeated on the contact form so the promise stays honest.
 export default function FeedbackBanner({ showButton = true }: { showButton?: boolean }) {
   const { t } = useLanguage();
   return (

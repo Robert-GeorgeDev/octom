@@ -2,7 +2,7 @@ export const enLand = {
   "land.nav.features": "Features",
   "land.nav.pricing": "Pricing",
   "land.nav.faq": "FAQ",
-  "land.hero.note": "No card · Free up to 10 contacts",
+  "land.hero.note": "No card · Free during beta",
   "land.preview.title": "Example",
   "land.preview.n1": "Waiting for feedback on the proposal.",
   "land.preview.n2": "Asked for a call this week.",
@@ -35,11 +35,11 @@ export const enLand = {
   "land.use.1.title": "Freelancers",
   "land.use.1.text": "Designers, developers, photographers, copywriters and consultants who keep clients in a spreadsheet.",
   "land.use.2.title": "Small studios and agencies",
-  "land.use.2.text": "A few people and a few dozen leads that need one clear place for next steps. Share one workspace on the Business plan.",
+  "land.use.2.text": "A few people and a few dozen leads that need one clear place for next steps. Share one workspace.",
   "land.use.3.title": "Service businesses",
   "land.use.3.text": "IT, consulting, construction, recruitment and other B2B services that live on follow-ups.",
 
-  "land.pricing.title": "Simple pricing",
+  "land.pricing.title": "Free while in beta",
 
   "land.security.title": "Your data is yours.",
   "land.sec.1": "Your data is stored in the EU.",
@@ -50,7 +50,7 @@ export const enLand = {
 
   "land.faq.title": "Questions",
   "land.q1": "Is it really free?",
-  "land.a1": "Yes. The Free plan includes up to 10 contacts and 10 active follow-ups, with no card needed. Upgrade to Pro or Business when you need more.",
+  "land.a1": "Yes. OCTOM One is free while it is in beta, with unlimited contacts and follow-ups and no card needed. If we introduce paid plans later, we will tell you well in advance and never charge you without your agreement.",
   "land.q2": "Do I need to connect my email?",
   "land.a2": "No. Generate a message, copy it, or open it in your email app. OCTOM One never sends anything for you.",
   "land.q3": "Can I bring my spreadsheet?",
@@ -70,7 +70,7 @@ export const roLand: Record<keyof typeof enLand, string> = {
   "land.nav.features": "Funcții",
   "land.nav.pricing": "Prețuri",
   "land.nav.faq": "Întrebări",
-  "land.hero.note": "Fără card · Gratuit până la 10 contacte",
+  "land.hero.note": "Fără card · Gratuit în perioada beta",
   "land.preview.title": "Exemplu",
   "land.preview.n1": "Aștept feedback la ofertă.",
   "land.preview.n2": "A cerut un apel săptămâna asta.",
@@ -103,11 +103,11 @@ export const roLand: Record<keyof typeof enLand, string> = {
   "land.use.1.title": "Freelanceri",
   "land.use.1.text": "Designeri, dezvoltatori, fotografi, copywriteri și consultanți care își țin clienții într-un tabel.",
   "land.use.2.title": "Studiouri și agenții mici",
-  "land.use.2.text": "Câțiva oameni și câteva zeci de lead-uri care au nevoie de un loc clar pentru pașii următori. Lucrați într-un singur spațiu de lucru, în planul Business.",
+  "land.use.2.text": "Câțiva oameni și câteva zeci de lead-uri care au nevoie de un loc clar pentru pașii următori. Lucrați într-un singur spațiu de lucru.",
   "land.use.3.title": "Afaceri de servicii",
   "land.use.3.text": "IT, consultanță, construcții, recrutare și alte servicii B2B care trăiesc din follow-up-uri.",
 
-  "land.pricing.title": "Prețuri simple",
+  "land.pricing.title": "Gratuit în perioada beta",
 
   "land.security.title": "Datele tale sunt ale tale.",
   "land.sec.1": "Datele sunt stocate în UE.",
@@ -118,7 +118,7 @@ export const roLand: Record<keyof typeof enLand, string> = {
 
   "land.faq.title": "Întrebări",
   "land.q1": "Chiar este gratuit?",
-  "land.a1": "Da. Planul gratuit include până la 10 contacte și 10 follow-up-uri active, fără card. Treci la Pro sau Business când ai nevoie de mai mult.",
+  "land.a1": "Da. OCTOM One este gratuit cât timp este în beta, cu contacte și follow-up-uri nelimitate și fără card. Dacă introducem planuri plătite mai târziu, te anunțăm din timp și nu te taxăm niciodată fără acordul tău.",
   "land.q2": "Trebuie să-mi conectez emailul?",
   "land.a2": "Nu. Generezi un mesaj, îl copiezi sau îl deschizi în aplicația ta de email. OCTOM One nu trimite nimic în locul tău.",
   "land.q3": "Pot să-mi aduc tabelul?",

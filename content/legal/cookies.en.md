@@ -30,15 +30,7 @@ We may store your preference for the interface language, for example Romanian or
 
 This information is used to display the interface in the language you chose.
 
-### 2.3. Selected plan
-
-If you choose a plan before finishing account creation, we may keep the selected plan locally and temporarily.
-
-At present this information is kept for a maximum of **24 hours** and is used to continue the sign-up and payment process.
-
-This information is not used for advertising or to track your activity on other websites.
-
-### 2.4. Cookie preference
+### 2.3. Cookie preference
 
 If we show you a consent banner for cookies and similar technologies, we may store your choice so that we do not ask you for the same option repeatedly.
 
@@ -96,7 +88,6 @@ If you delete local preferences, it is possible that:
 
 * the chosen language is reset;
 * the cookie preference is asked for again;
-* the temporarily selected plan is no longer available locally;
 * the login session is closed.
 
 Disabling all forms of browser storage may affect the operation of some Octom components.

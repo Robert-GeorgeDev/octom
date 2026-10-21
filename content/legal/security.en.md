@@ -58,7 +58,6 @@ These checks are especially important for operations such as:
 * changing data;
 * deleting data;
 * deleting the account;
-* managing the subscription;
 * AI features;
 * administrative operations;
 * other actions that may affect data or the account.
@@ -81,13 +80,7 @@ If we identify misuse, we may temporarily limit access to certain features or to
 
 ## 7. Payments
 
-Payments for paid plans are processed through **Stripe**.
-
-Full card details are entered and processed through Stripe's infrastructure and are not stored in Octom's database.
-
-Octom receives and stores only the information needed to administer the subscription and keep payment records, in accordance with the Privacy policy.
-
-For more information about how payments are processed, see the **Billing, cancellation and refunds** policy.
+Octom is currently free and does not process payments or store card details.
 
 ## 8. Backup and availability
 

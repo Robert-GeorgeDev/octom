@@ -3,13 +3,11 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Plus, Users, CreditCard, UserCircle, Sparkles } from "lucide-react";
+import { LayoutDashboard, LayoutGrid, Plus, Users, UserCircle, Sparkles } from "lucide-react";
 import Logo from "@/components/logo";
 import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import AccountMenu from "@/components/account-menu";
-import PlanRedirect from "@/components/plan-redirect";
-import PaymentIssueBanner from "@/components/payment-issue-banner";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
@@ -63,7 +61,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             "radial-gradient(60% 50% at 8% 0%, rgba(165,180,252,.55), transparent 70%), radial-gradient(50% 45% at 100% 10%, rgba(196,181,253,.45), transparent 70%), radial-gradient(55% 50% at 90% 100%, rgba(125,211,252,.45), transparent 70%), radial-gradient(45% 40% at 20% 100%, rgba(199,210,254,.5), transparent 70%)",
         }}
       />
-      <PlanRedirect />
       <Suspense fallback={null}>
         <AppSidebar collapsed={collapsed} onToggle={toggle} />
       </Suspense>
@@ -89,7 +86,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="mx-auto w-full max-w-[1400px] md:pt-14">
-          <PaymentIssueBanner />
           {children}
         </div>
       </div>
@@ -106,7 +102,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           >
             <Plus className="h-6 w-6" aria-hidden="true" />
           </Link>
-          {tab("/plans", t("nav.plans"), CreditCard)}
+          {tab("/pipeline", t("nav.pipeline"), LayoutGrid)}
           {tab("/account", t("nav.account"), UserCircle)}
         </div>
       </nav>

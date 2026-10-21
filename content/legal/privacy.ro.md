@@ -75,17 +75,9 @@ Putem prelucra informații privind preferințele tale pentru:
 
 Pentru comunicările comerciale pentru care este necesar consimțământul, păstrăm și informațiile necesare pentru demonstrarea acordării sau retragerii acestuia.
 
-### 2.6. Date privind abonamentul și plățile
+### 2.6. Date privind plățile
 
-Dacă alegi un plan plătit, putem prelucra informații precum:
-
-* planul ales;
-* statusul abonamentului;
-* identificatorul clientului sau al abonamentului;
-* informații privind tranzacțiile și facturile;
-* date necesare pentru administrarea abonamentului.
-
-Plățile cu cardul sunt procesate prin **Stripe**. Octom nu primește și nu stochează numărul complet al cardului bancar.
+Octom este în prezent gratuit și nu procesează plăți. Nu colectăm date despre card sau cont bancar. Dacă introducem planuri plătite, vom actualiza această politică și te vom informa înainte de a-ți solicita orice plată.
 
 ### 2.7. Date tehnice
 
@@ -129,8 +121,7 @@ Prelucrăm datele necesare pentru:
 * gestionarea spațiilor de lucru;
 * stocarea și afișarea datelor introduse de tine;
 * furnizarea funcționalităților de follow-up;
-* furnizarea funcționalităților AI solicitate de tine;
-* gestionarea abonamentului.
+* furnizarea funcționalităților AI solicitate de tine.
 
 Temeiul juridic este, după caz, **executarea contractului** sau efectuarea demersurilor la cererea ta înainte de încheierea contractului, în conformitate cu art. 6 alin. (1) lit. b) GDPR.
 
@@ -218,14 +209,6 @@ Atunci când utilizezi o astfel de funcționalitate, transmitem către furnizor 
 
 Prelucrarea realizată de furnizorii externi este supusă propriilor condiții contractuale și documentației lor privind protecția datelor. Pentru informații actualizate privind furnizorii și garanțiile aplicabile, consultă pagina **Subprocesatori** și documentația relevantă.
 
-### Stripe
-
-Utilizat pentru procesarea plăților și administrarea abonamentelor.
-
-Datele complete ale cardului sunt transmise direct către Stripe și nu sunt stocate de Octom.
-
-Putem păstra informații privind abonamentul, tranzacțiile și facturile atât timp cât este necesar pentru administrarea serviciului și îndeplinirea obligațiilor legale. Aceste informații nu sunt șterse automat odată cu contul, în măsura în care legea impune păstrarea lor (de exemplu, documentele contabile).
-
 ### Autorități publice și alte destinatari
 
 Putem divulga date cu caracter personal atunci când acest lucru este necesar pentru:
@@ -263,7 +246,6 @@ Păstrăm datele cu caracter personal numai atât timp cât este necesar pentru 
 
 * datele contului și datele din spațiul de lucru sunt păstrate cât timp contul sau spațiul de lucru este activ;
 * anumite date pot fi păstrate pentru o perioadă limitată după închiderea contului, atunci când acest lucru este necesar pentru securitate, prevenirea fraudelor, soluționarea disputelor sau îndeplinirea unor obligații legale;
-* datele privind facturarea și documentele financiar-contabile sunt păstrate pentru perioada prevăzută de legislația aplicabilă;
 * datele din backup-uri pot rămâne temporar în copiile de siguranță până la expirarea ciclului normal de retenție;
 * datele tehnice și jurnalele de securitate pot fi păstrate pentru perioada necesară scopurilor pentru care sunt colectate;
 * datele privind consimțământul sunt păstrate atât timp cât este necesar pentru a demonstra existența și gestionarea acestuia.

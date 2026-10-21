@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -18,7 +18,6 @@ import AuthShell, {
   authLink,
 } from "@/components/auth-shell";
 import { useLanguage } from "@/components/language-provider";
-import { clearPendingPlan, isPaidPlan, setPendingPlan, type PaidPlan } from "@/lib/pending-plan";
 import type { Key } from "@/lib/dictionaries";
 
 function errorKey(code: string | undefined): Key {
@@ -53,18 +52,6 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [busy, setBusy] = useState(false);
   const [show, setShow] = useState(false);
   const isSignup = mode === "signup";
-  const [chosen, setChosen] = useState<PaidPlan | null>(null);
-
-  // A plan picked on the pricing section arrives as ?plan=pro or ?plan=business.
-  useEffect(() => {
-    const value = new URLSearchParams(window.location.search).get("plan");
-    if (!isPaidPlan(value)) return;
-    setChosen(value);
-    setPendingPlan(value);
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) router.replace("/dashboard");
-    });
-  }, [router]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -100,20 +87,6 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       setBusy(false);
     }
   }
-
-  const planNote = chosen === "pro" ? t("billing.trialNote") : chosen === "business" ? t("auth.planChosen").replace("{plan}", t("plans.business")) : t("auth.createSub");
-
-  function pickPlan(next: PaidPlan | null) {
-    setChosen(next);
-    if (next) setPendingPlan(next);
-    else clearPendingPlan();
-  }
-
-  const planOptions: { id: PaidPlan | null; name: Key; desc: Key }[] = [
-    { id: null, name: "plans.free", desc: "auth.plan.free.d" },
-    { id: "pro", name: "plans.pro", desc: "auth.plan.pro.d" },
-    { id: "business", name: "plans.business", desc: "auth.plan.business.d" },
-  ];
 
   const form = (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -263,32 +236,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <GlassCard className="mx-auto w-full max-w-[520px] lg:max-w-none">
           <AuthTitle>{t("auth.createTitle")}</AuthTitle>
 
-          <fieldset className="mb-6 mt-6">
-            <legend className="mb-2 text-sm font-medium text-slate-200">{t("auth.plan.title")}</legend>
-            <div role="radiogroup" className="grid grid-cols-3 gap-2">
-              {planOptions.map((o) => {
-                const on = chosen === o.id;
-                return (
-                  <button
-                    key={o.id ?? "free"}
-                    type="button"
-                    role="radio"
-                    aria-checked={on}
-                    onClick={() => pickPlan(o.id)}
-                    className={`rounded-2xl border px-3 py-3 text-left transition ${
-                      on
-                        ? "border-indigo-300/70 bg-gradient-to-b from-[#6C6FF5]/40 to-[#3B6FF0]/25 shadow-[0_0_0_3px_rgba(129,140,248,.25)]"
-                        : "border-white/10 bg-white/[.04] hover:bg-white/[.08]"
-                    }`}
-                  >
-                    <span className="block text-sm font-semibold text-white">{t(o.name)}</span>
-                    <span className="mt-0.5 block text-[11px] leading-snug text-slate-300">{t(o.desc)}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <p className="mt-2 text-xs text-slate-400">{planNote}</p>
-          </fieldset>
+          <p className="mb-6 mt-3 text-center text-sm text-slate-300">{t("auth.createSub")}</p>
 
           {form}
           {switchLink}

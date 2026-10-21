@@ -30,7 +30,6 @@ for (const [path, title] of [
   ["/pipeline", "Pipeline"],
   ["/team", "Team"],
   ["/account", "Account"],
-  ["/plans", "Plans"],
 ] as const) {
   test(`${path} opens when logged in`, async ({ page }) => {
     await login(page);

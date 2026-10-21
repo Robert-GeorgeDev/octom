@@ -32,15 +32,7 @@ Putem stoca preferința ta privind limba interfeței, de exemplu română sau en
 
 Această informație este utilizată pentru a afișa interfața în limba aleasă.
 
-### 2.3. Planul selectat
-
-Dacă alegi un plan înainte de finalizarea creării contului, putem păstra local, temporar, informația privind planul selectat.
-
-În prezent, această informație este păstrată pentru o perioadă de maximum **24 de ore** și este utilizată pentru a continua procesul de înregistrare și plată.
-
-Această informație nu este utilizată pentru publicitate sau pentru urmărirea activității tale pe alte site-uri.
-
-### 2.4. Preferința privind cookie-urile
+### 2.3. Preferința privind cookie-urile
 
 Dacă îți prezentăm un banner de consimțământ pentru cookie-uri și tehnologii similare, putem stoca alegerea ta pentru a nu îți solicita în mod repetat aceeași opțiune.
 
@@ -104,7 +96,6 @@ Dacă ștergi preferințele locale, este posibil ca:
 
 * limba aleasă să fie resetată;
 * preferința privind cookie-urile să fie solicitată din nou;
-* planul selectat temporar să nu mai fie disponibil local;
 * sesiunea de autentificare să fie închisă.
 
 Dezactivarea tuturor formelor de stocare în browser poate afecta funcționarea anumitor componente ale Octom.

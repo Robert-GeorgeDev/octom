@@ -55,7 +55,7 @@ export const PAGES: SeoPage[] = [
     intro:
       "A small team does not need a large system. It needs to know who talks to whom and when. OCTOM One covers that and little else.",
     points: [
-      { t: "Built for a few people", d: "The Business plan supports up to 5 users in one workspace." },
+      { t: "Built for a few people", d: "One workspace supports up to 5 users." },
       { t: "Open source core", d: "The code is public under the AGPL-3.0 license." },
       { t: "English and Romanian", d: "The interface works in both languages." },
     ],
