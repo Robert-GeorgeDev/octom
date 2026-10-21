@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Round social media icons (LinkedIn, Facebook, GitHub, TikTok, YouTube) in the site and legal-page footers. Links are set in `lib/social.ts`; an icon with an empty link is hidden.
 - Failed payments: a paid plan now stays active for 7 days after the first failed payment, with a banner asking the owner to update the card. After that the workspace drops to Free. Run `supabase/billing-grace.sql` before deploying.
 - Pro now starts with a 7-day free trial for a workspace's first subscription, no card needed. If no card is added the trial ends and nothing is charged.
 - Contact form has a category (help, bug, suggestion, other) that shows in the email subject. Its rate limit is now kept in the database, so it holds across servers.
