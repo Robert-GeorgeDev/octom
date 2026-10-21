@@ -12,6 +12,8 @@ export type PlanState = {
   contacts: number;
   followUps: number;
   entitlements: Entitlements;
+  /** True until the workspace has started a first checkout. */
+  trialEligible: boolean;
 };
 
 export function usePlan(orgId: string | null) {
@@ -23,7 +25,7 @@ export function usePlan(orgId: string | null) {
     const [sub, contacts, followUps] = await Promise.all([
       supabase
         .from("subscriptions")
-        .select("plan, status")
+        .select("plan, status, grace_until, stripe_customer_id")
         .eq("organization_id", orgId)
         .maybeSingle(),
       supabase
@@ -38,7 +40,7 @@ export function usePlan(orgId: string | null) {
     ]);
 
     const entitlements = resolveEntitlements(
-      sub.data as { plan: string; status: string } | null
+      sub.data as { plan: string; status: string; grace_until: string | null; stripe_customer_id: string | null } | null
     );
 
     setState({
@@ -46,6 +48,7 @@ export function usePlan(orgId: string | null) {
       contacts: contacts.count ?? 0,
       followUps: followUps.count ?? 0,
       entitlements,
+      trialEligible: !(sub.data as { stripe_customer_id?: string | null } | null)?.stripe_customer_id,
     });
   }, [orgId]);
 

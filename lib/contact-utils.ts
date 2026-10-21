@@ -72,3 +72,35 @@ export function parseLogged(description: string): { kind: string; text: string }
   if (i === -1) return { kind: description, text: "" };
   return { kind: description.slice(0, i), text: description.slice(i + 1) };
 }
+
+export type AttentionContact = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  company: string;
+  status: string;
+  updated_at: string;
+};
+
+/** Days without any change after which an open contact is worth a nudge. */
+export const STALE_DAYS = 21;
+
+/**
+ * Open contacts (not Won or Lost) that have no open follow-up and have not been
+ * touched for a while, longest quiet first. These are the ones that slip through.
+ */
+export function needsAttention(
+  contacts: AttentionContact[],
+  contactIdsWithOpenFollowUp: Set<string>,
+  now: Date = new Date(),
+  limit = 5
+): (AttentionContact & { days: number })[] {
+  const out: (AttentionContact & { days: number })[] = [];
+  for (const c of contacts) {
+    if (c.status === "Won" || c.status === "Lost") continue;
+    if (contactIdsWithOpenFollowUp.has(c.id)) continue;
+    const days = Math.floor((now.getTime() - new Date(c.updated_at).getTime()) / 86_400_000);
+    if (Number.isFinite(days) && days >= STALE_DAYS) out.push({ ...c, days });
+  }
+  return out.sort((a, b) => b.days - a.days).slice(0, limit);
+}

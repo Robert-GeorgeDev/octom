@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { adminClient, planFromPrice, stripeClient } from "@/lib/billing";
+import { GRACE_DAYS } from "@/lib/entitlements";
 
 export const runtime = "nodejs";
 
@@ -22,7 +23,28 @@ async function sync(sub: Stripe.Subscription, orgHint?: string | null) {
   const customer = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
   const end = (sub.items.data[0] as unknown as { current_period_end?: number })
     ?.current_period_end;
-  const { error } = await adminClient()
+  const db = adminClient();
+
+  // Grace period: the first failed payment starts a 7-day clock. Later retries
+  // do not extend it. Stripe's "unpaid" means retries are exhausted: no grace.
+  let graceUntil: string | null = null;
+  if (status === "past_due") {
+    if (sub.status === "unpaid") {
+      graceUntil = new Date().toISOString();
+    } else {
+      const { data: existing } = await db
+        .from("subscriptions")
+        .select("status, grace_until")
+        .eq("organization_id", orgId)
+        .maybeSingle();
+      graceUntil =
+        existing?.status === "past_due" && existing.grace_until
+          ? existing.grace_until
+          : new Date(Date.now() + GRACE_DAYS * 86_400_000).toISOString();
+    }
+  }
+
+  const { error } = await db
     .from("subscriptions")
     .upsert(
       {
@@ -32,6 +54,7 @@ async function sync(sub: Stripe.Subscription, orgHint?: string | null) {
         stripe_customer_id: customer,
         stripe_subscription_id: ended ? null : sub.id,
         current_period_end: end ? new Date(end * 1000).toISOString() : null,
+        grace_until: graceUntil,
       },
       { onConflict: "organization_id" }
     );

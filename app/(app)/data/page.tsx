@@ -13,6 +13,8 @@ import { BRAND_SLUG } from "@/lib/brand";
 import {
   buildCsv,
   buildTable,
+  findDuplicates,
+  type DuplicateKind,
   downloadCsv,
   MAX_FILE_BYTES,
   parseContactsCsv,
@@ -63,6 +65,10 @@ function DataView() {
   const { state: planState, reload: reloadPlan } = usePlan(orgId);
 
   const [parsed, setParsed] = useState<Parsed | null>(null);
+  // Rows that look like contacts you already have, or repeat inside the file.
+  const [dupes, setDupes] = useState<Map<number, DuplicateKind>>(new Map());
+  const [skipDupes, setSkipDupes] = useState(true);
+  const importRows = parsed ? parsed.rows.filter((r) => !(skipDupes && dupes.has(r.row))) : [];
   const [fileError, setFileError] = useState<Key | "">("");
   const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -72,6 +78,8 @@ function DataView() {
 
   function reset() {
     setParsed(null);
+    setDupes(new Map());
+    setSkipDupes(true);
     setFileError("");
     setResult(null);
     setProgress(0);
@@ -100,6 +108,23 @@ function DataView() {
         return;
       }
       setParsed({ rows: res.rows, issues: res.issues, badRows: res.badRows });
+      // Look for duplicates among the contacts you already have. If this lookup
+      // fails the import still works, just without the warning.
+      if (orgId) {
+        try {
+          const existing = await fetchPages<{ email: string | null; phone: string | null }>((from, to) =>
+            supabase
+              .from("contacts")
+              .select("email, phone")
+              .eq("organization_id", orgId)
+              .order("id", { ascending: true })
+              .range(from, to)
+          );
+          setDupes(findDuplicates(res.rows, existing));
+        } catch {
+          /* no duplicate warning */
+        }
+      }
     } catch {
       setFileError("data.err.read");
     }
@@ -117,7 +142,7 @@ function DataView() {
   }
 
   async function runImport() {
-    if (!orgId || !parsed || parsed.rows.length === 0) return;
+    if (!orgId || !parsed || importRows.length === 0) return;
     setImporting(true);
     setProgress(0);
 
@@ -126,8 +151,8 @@ function DataView() {
     let failed = false;
 
     try {
-      for (let i = 0; i < parsed.rows.length; i += 100) {
-        const chunk = parsed.rows.slice(i, i + 100).map((r) => ({
+      for (let i = 0; i < importRows.length; i += 100) {
+        const chunk = importRows.slice(i, i + 100).map((r) => ({
           id: crypto.randomUUID(),
           r,
         }));
@@ -319,10 +344,10 @@ function DataView() {
     planState && contactLimit !== null ? Math.max(0, contactLimit - planState.contacts) : null;
   const followUpsLeft =
     planState && followUpLimit !== null ? Math.max(0, followUpLimit - planState.followUps) : null;
-  const datedRows = parsed ? parsed.rows.filter((r) => r.nextFollowup).length : 0;
+  const datedRows = importRows.filter((r) => r.nextFollowup).length;
   const overLimit =
     parsed !== null &&
-    ((contactsLeft !== null && parsed.rows.length > contactsLeft) ||
+    ((contactsLeft !== null && importRows.length > contactsLeft) ||
       (followUpsLeft !== null && datedRows > followUpsLeft));
 
   return (
@@ -363,7 +388,7 @@ function DataView() {
 
             <div className="mt-3 grid grid-cols-2 gap-3">
               <div className="rounded-xl bg-emerald-50 p-3">
-                <p className="text-2xl font-bold text-done">{parsed.rows.length}</p>
+                <p className="text-2xl font-bold text-done">{importRows.length}</p>
                 <p className="text-xs text-slate-600">{t("data.ready")}</p>
               </div>
               <div className="rounded-xl bg-red-50 p-3">
@@ -371,6 +396,23 @@ function DataView() {
                 <p className="text-xs text-slate-600">{t("data.skipped")}</p>
               </div>
             </div>
+
+            {dupes.size > 0 && (
+              <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={skipDupes}
+                  onChange={(e) => setSkipDupes(e.target.checked)}
+                  className="mt-0.5 h-5 w-5 shrink-0 accent-[#4F46E5]"
+                />
+                <span>
+                  <span className="block font-semibold text-amber-900">
+                    {t("data.dupes.title").replace("{n}", String(dupes.size))}
+                  </span>
+                  <span className="text-amber-800">{t("data.dupes.text")}</span>
+                </span>
+              </label>
+            )}
 
             {parsed.rows.length > 0 && (
               <>
@@ -440,12 +482,12 @@ function DataView() {
               <button
                 type="button"
                 onClick={runImport}
-                disabled={importing || parsed.rows.length === 0 || !orgId || overLimit}
+                disabled={importing || importRows.length === 0 || !orgId || overLimit}
                 className="rounded-xl bg-cta px-6 py-3 font-semibold text-white hover:bg-cta-dark disabled:opacity-60"
               >
                 {importing
-                  ? `${t("data.importing")} ${progress} / ${parsed.rows.length}`
-                  : `${t("data.importBtn")} (${parsed.rows.length})`}
+                  ? `${t("data.importing")} ${progress} / ${importRows.length}`
+                  : `${t("data.importBtn")} (${importRows.length})`}
               </button>
               {!importing && (
                 <button

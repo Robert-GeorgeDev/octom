@@ -9,6 +9,7 @@ import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import AccountMenu from "@/components/account-menu";
 import PlanRedirect from "@/components/plan-redirect";
+import PaymentIssueBanner from "@/components/payment-issue-banner";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
@@ -87,7 +88,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-[1400px] md:pt-14">{children}</div>
+        <div className="mx-auto w-full max-w-[1400px] md:pt-14">
+          <PaymentIssueBanner />
+          {children}
+        </div>
       </div>
 
       {/* Phone bottom bar */}

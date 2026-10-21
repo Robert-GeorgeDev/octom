@@ -73,6 +73,9 @@ export const enCrm = {
   "dash.tag.soon": "Coming up",
   "dash.funnelEmpty": "Your funnel fills up as you add contacts.",
   "dash.seeAll": "See all",
+  "dash.attention": "Worth a message",
+  "dash.attentionHelp": "Open contacts with no follow-up planned and no activity for a while.",
+  "dash.quietDays": "{n} days quiet",
 };
 
 export const roCrm: Record<keyof typeof enCrm, string> = {
@@ -150,4 +153,7 @@ export const roCrm: Record<keyof typeof enCrm, string> = {
   "dash.tag.soon": "În curând",
   "dash.funnelEmpty": "Pâlnia se umple pe măsură ce adaugi contacte.",
   "dash.seeAll": "Vezi tot",
+  "dash.attention": "Merită un mesaj",
+  "dash.attentionHelp": "Contacte deschise, fără follow-up programat și fără activitate de ceva timp.",
+  "dash.quietDays": "{n} zile fără semne",
 };

@@ -185,3 +185,39 @@ export function downloadCsv(filename: string, content: string) {
   link.remove();
   URL.revokeObjectURL(url);
 }
+
+export type DuplicateKind = "existing" | "file";
+
+const digits = (v: string) => v.replace(/\D/g, "");
+
+/**
+ * Flags import rows that look like contacts you already have ("existing") or
+ * like an earlier row of the same file ("file"). Match on email (any case) or on
+ * the phone number's digits (at least 7). Returns row number -> kind.
+ */
+export function findDuplicates(
+  rows: ImportRow[],
+  existing: { email?: string | null; phone?: string | null }[]
+): Map<number, DuplicateKind> {
+  const emails = new Set<string>();
+  const phones = new Set<string>();
+  for (const c of existing) {
+    const e = (c.email ?? "").trim().toLowerCase();
+    if (e) emails.add(e);
+    const p = digits(c.phone ?? "");
+    if (p.length >= 7) phones.add(p);
+  }
+  const seenEmails = new Set<string>();
+  const seenPhones = new Set<string>();
+  const out = new Map<number, DuplicateKind>();
+  for (const r of rows) {
+    const e = r.contact.email.trim().toLowerCase();
+    const p = digits(r.contact.phone);
+    const pOk = p.length >= 7;
+    if ((e && emails.has(e)) || (pOk && phones.has(p))) out.set(r.row, "existing");
+    else if ((e && seenEmails.has(e)) || (pOk && seenPhones.has(p))) out.set(r.row, "file");
+    if (e) seenEmails.add(e);
+    if (pOk) seenPhones.add(p);
+  }
+  return out;
+}
