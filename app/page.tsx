@@ -72,7 +72,7 @@ export default function Home() {
     <div className="lp">
       <header className="hd">
         <div className="wrap hdin">
-          <Link className="brandlink" href="/" aria-label="OCTOM One"><Logo /></Link>
+          <Link className="brandlink" href="/" aria-label="OCTOM One"><Logo light /></Link>
           <nav className="nav" aria-label="Main">
             <a href="#product">{t("lp.nav.product")}</a>
             <a href="#how">{t("lp.nav.how")}</a>
@@ -91,19 +91,27 @@ export default function Home() {
 
       <main>
         <section className="hero" id="top">
+          <div className="wrap herogrid">
+            <div className="herotxt">
+              <span className="pill"><i />{t("lp.hero.pill")}</span>
+              <h1 className="h1">{h1a}<br /><em>{h1b}</em></h1>
+              <p className="sub">{t("lp.hero.sub")}</p>
+              <div className="cta">
+                <Link className="btn btn-p" href="/signup">{t("landing.cta")} <ArrowRight width={18} height={18} aria-hidden="true" /></Link>
+                <a className="btn btn-g" href="#product">{t("lp.hero.cta2")}</a>
+              </div>
+              <div className="tr">
+                {(["lp.trust.1", "lp.trust.2", "lp.trust.3", "lp.trust.4"] as Key[]).map((k) => (
+                  <span key={k}>{tick}{t(k)}</span>
+                ))}
+              </div>
+            </div>
+            <div className="hm" aria-hidden="true">
+              <Mascot wave />
+              <span className="bubble">{t("lp.hero.bubble")}</span>
+            </div>
+          </div>
           <div className="wrap">
-            <span className="pill"><i />{t("lp.hero.pill")}</span>
-            <h1 className="h1">{h1a}<br /><em>{h1b}</em></h1>
-            <p className="sub">{t("lp.hero.sub")}</p>
-            <div className="cta">
-              <Link className="btn btn-p" href="/signup">{t("landing.cta")} <ArrowRight width={18} height={18} aria-hidden="true" /></Link>
-              <a className="btn btn-g" href="#product">{t("lp.hero.cta2")}</a>
-            </div>
-            <div className="tr">
-              {(["lp.trust.1", "lp.trust.2", "lp.trust.3", "lp.trust.4"] as Key[]).map((k) => (
-                <span key={k}>{tick}{t(k)}</span>
-              ))}
-            </div>
             <HeroDemo />
           </div>
         </section>
@@ -366,7 +374,7 @@ export default function Home() {
       <footer className="ft">
         <div className="wrap ftg">
           <div>
-            <Logo />
+            <Logo light />
             <p className="ftcopy">© {year} Octom. {t("site.footer.rights")}</p>
             <AnpcSal className="mt-5" />
           </div>
