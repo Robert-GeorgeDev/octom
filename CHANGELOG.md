@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Dashboard redesigned: soft blurred backdrop in the brand colours, rounded frosted panels, colour-coded follow-up tiles with one-tap complete, month calendar, stage funnel, today's schedule. Same data and actions as before.
 - New app sidebar: collapsible (icon rail with hover menus), submenus for Contacts (by status, with counts) and Workspace, smooth animations. The choice is remembered on the device.
 - Contacts: status filters, sorting, and a slide-over panel per contact (also available as a full page) with call, email, WhatsApp and website buttons, editable details (job title, company, email, phone, website, location, source), tags, activity log (notes, calls, emails, meetings), follow-ups and AI tab. Run `supabase/contacts-v2.sql` when deploying.
 - Added PNG icons (apple-touch, favicon.ico, PWA manifest) generated from the octopus icon.
