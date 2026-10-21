@@ -61,6 +61,18 @@ describe("contact route", () => {
     expect(sent.html).toBeUndefined();
   });
 
+  it("puts the chosen category in the subject and body, and ignores unknown ones", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    await POST(request({ ...valid, category: "bug" }));
+    await POST(request({ ...valid, category: "<script>" }));
+    const first = JSON.parse(fetchMock.mock.calls[0][1].body as string);
+    const second = JSON.parse(fetchMock.mock.calls[1][1].body as string);
+    expect(first.subject).toContain("[bug]");
+    expect(first.text).toContain("Category: bug");
+    expect(second.subject).toContain("[other]");
+  });
+
   it("answers 502 when the email provider fails", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 403, text: async () => "domain not verified" }));
     const res = await POST(request(valid));

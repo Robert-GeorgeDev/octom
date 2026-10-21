@@ -5,6 +5,14 @@ import { useAuth } from "@/components/auth-provider";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
+function browserZone(): string | null {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || null;
+  } catch {
+    return null;
+  }
+}
+
 export default function EmailPrefs() {
   const { t } = useLanguage();
   const { user } = useAuth();
@@ -18,7 +26,17 @@ export default function EmailPrefs() {
       .select("daily_summary")
       .eq("user_id", user.id)
       .maybeSingle()
-      .then(({ data }) => setOn(Boolean(data?.daily_summary)));
+      .then(({ data }) => {
+        setOn(Boolean(data?.daily_summary));
+        // Keep the summary's "today" in this person's own time zone. Ignored
+        // until supabase/launch-readiness.sql has been run.
+        if (data?.daily_summary) {
+          const tz = browserZone();
+          if (tz) {
+            supabase.from("email_preferences").update({ timezone: tz }).eq("user_id", user.id).then(() => undefined);
+          }
+        }
+      });
   }, [user]);
 
   async function toggle(next: boolean) {
@@ -28,6 +46,10 @@ export default function EmailPrefs() {
     const { error } = await supabase
       .from("email_preferences")
       .upsert({ user_id: user.id, daily_summary: next });
+    const tz = browserZone();
+    if (!error && next && tz) {
+      await supabase.from("email_preferences").update({ timezone: tz }).eq("user_id", user.id);
+    }
     if (error) {
       setOn(!next);
       setMsg(t("common.error"));

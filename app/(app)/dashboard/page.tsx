@@ -13,7 +13,7 @@ import { useFollowUps } from "@/hooks/use-followups";
 import { notifyContactsChanged } from "@/hooks/use-contact-counts";
 import { supabase } from "@/lib/supabase";
 import { addDays, formatDate, toISODate, todayISO } from "@/lib/dates";
-import { initials } from "@/lib/contact-utils";
+import { initials, needsAttention, type AttentionContact } from "@/lib/contact-utils";
 import type { Key } from "@/lib/dictionaries";
 import type { FollowUp } from "@/types/followup";
 import { STATUSES, type Status } from "@/types/contact";
@@ -67,6 +67,7 @@ function DashboardView() {
   const [teamSize, setTeamSize] = useState(1);
   const [wonCount, setWonCount] = useState<number | null>(null);
   const [pipe, setPipe] = useState<PipeCard[] | null>(null);
+  const [quiet, setQuiet] = useState<AttentionContact[]>([]);
   const [month, setMonth] = useState(() => {
     const n = new Date();
     return new Date(n.getFullYear(), n.getMonth(), 1);
@@ -109,6 +110,17 @@ function DashboardView() {
       .then(({ data }) => {
         if (!cancelled) setPipe((data ?? []) as PipeCard[]);
       });
+    // Open contacts that have been quiet the longest (see needsAttention).
+    supabase
+      .from("contacts")
+      .select("id, first_name, last_name, company, status, updated_at")
+      .eq("organization_id", orgId)
+      .not("status", "in", "(Won,Lost)")
+      .order("updated_at", { ascending: true })
+      .limit(100)
+      .then(({ data }) => {
+        if (!cancelled) setQuiet((data ?? []) as AttentionContact[]);
+      });
     return () => {
       cancelled = true;
     };
@@ -127,6 +139,10 @@ function DashboardView() {
     today: open.filter((f) => f.due_date === today),
     upcoming: open.filter((f) => f.due_date > today),
   };
+  const attention = useMemo(
+    () => needsAttention(quiet, new Set((followUps ?? []).filter((f) => f.status === "open").map((f) => f.contact_id))),
+    [quiet, followUps]
+  );
   const groupOf = (f: FollowUp): Group => (f.due_date < today ? "overdue" : f.due_date === today ? "today" : "upcoming");
 
   const hour = new Date().getHours();
@@ -411,6 +427,30 @@ function DashboardView() {
             </section>
 
             <aside className="space-y-5 lg:col-span-2 xl:col-span-1">
+              {attention.length > 0 && (
+                <section className={`${glass} p-5 sm:p-6`} aria-label={t("dash.attention")}>
+                  <h2 className="text-base font-semibold">{t("dash.attention")}</h2>
+                  <p className="mt-1 text-sm text-slate-600">{t("dash.attentionHelp")}</p>
+                  <ul className="mt-3 space-y-1">
+                    {attention.map((c) => (
+                      <li key={c.id}>
+                        <Link
+                          href={`/contacts?c=${c.id}`}
+                          className="flex min-h-[44px] items-center justify-between gap-3 rounded-xl px-2 text-sm transition hover:bg-white/60"
+                        >
+                          <span className="min-w-0 truncate font-semibold">
+                            {`${c.first_name} ${c.last_name}`.trim()}
+                            {c.company ? <span className="font-normal text-slate-500"> · {c.company}</span> : null}
+                          </span>
+                          <span className="shrink-0 text-xs font-semibold text-today">
+                            {t("dash.quietDays").replace("{n}", String(c.days))}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
               <section className={`${glass} p-5 sm:p-6`}>
                 <h2 className="text-base font-semibold">{t("dash.schedule")}</h2>
                 {groups.today.length === 0 ? (

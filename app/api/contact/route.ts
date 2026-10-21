@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isRateLimited } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -6,24 +7,12 @@ export const dynamic = "force-dynamic";
 const MAX_BODY = 8_000;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-// Best-effort limit per server instance: 5 messages per IP per hour.
-const hits = new Map<string, { count: number; reset: number }>();
-const WINDOW_MS = 60 * 60 * 1000;
+// 5 messages per IP per hour, counted in the database so it holds across servers.
 const MAX_HITS = 5;
+const WINDOW_SECS = 60 * 60;
 
-function limited(ip: string): boolean {
-  const now = Date.now();
-  if (hits.size > 5_000) {
-    for (const [key, value] of hits) if (value.reset < now) hits.delete(key);
-  }
-  const entry = hits.get(ip);
-  if (!entry || entry.reset < now) {
-    hits.set(ip, { count: 1, reset: now + WINDOW_MS });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > MAX_HITS;
-}
+const CATEGORIES = ["bug", "suggestion", "help", "other"] as const;
+type Category = (typeof CATEGORIES)[number];
 
 function fail(status: number, code: string) {
   return NextResponse.json({ error: code }, { status, headers: { "Cache-Control": "no-store" } });
@@ -56,12 +45,15 @@ export async function POST(req: Request) {
   const name = clean(body.name, 100).replace(/\s+/g, " ");
   const email = clean(body.email, 200);
   const message = clean(body.message, 3_000);
+  const category: Category = CATEGORIES.includes(body.category as Category)
+    ? (body.category as Category)
+    : "other";
   if (name.length < 1 || !EMAIL.test(email) || message.length < 10) {
     return fail(400, "invalid");
   }
 
   const ip = (req.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
-  if (limited(ip)) return fail(429, "rate_limited");
+  if (await isRateLimited("contact", ip, MAX_HITS, WINDOW_SECS)) return fail(429, "rate_limited");
 
   const key = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
@@ -80,9 +72,9 @@ export async function POST(req: Request) {
         from: process.env.EMAIL_FROM ?? "OCTOM One <onboarding@resend.dev>",
         to,
         reply_to: email,
-        subject: `Octom contact: ${name}`.replace(/[\r\n]/g, " ").slice(0, 150),
+        subject: `Octom [${category}]: ${name}`.replace(/[\r\n]/g, " ").slice(0, 150),
         // Plain text only, so nothing the visitor typed is ever treated as markup.
-        text: `From: ${name} <${email}>\n\n${message}\n`,
+        text: `Category: ${category}\nFrom: ${name} <${email}>\n\n${message}\n`,
       }),
     });
     if (!res.ok) {
