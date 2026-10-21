@@ -61,6 +61,18 @@ export const enCrm = {
   "crm.in2weeks": "In 2 weeks",
   "crm.completed": "Completed",
   "crm.notesPlaceholder": "Anything worth remembering about this person…",
+
+  "dash.nextUp": "Next up",
+  "dash.allFollowUps": "All follow-ups",
+  "dash.funnel": "Stage funnel",
+  "dash.inPipeline": "contacts in pipeline",
+  "dash.calendar": "Calendar",
+  "dash.openContact": "Open contact",
+  "dash.tag.overdue": "Overdue",
+  "dash.tag.today": "Today",
+  "dash.tag.soon": "Coming up",
+  "dash.funnelEmpty": "Your funnel fills up as you add contacts.",
+  "dash.seeAll": "See all",
 };
 
 export const roCrm: Record<keyof typeof enCrm, string> = {
@@ -126,4 +138,16 @@ export const roCrm: Record<keyof typeof enCrm, string> = {
   "crm.in2weeks": "Peste 2 săptămâni",
   "crm.completed": "Finalizate",
   "crm.notesPlaceholder": "Orice merită ținut minte despre această persoană…",
+
+  "dash.nextUp": "Următoarele",
+  "dash.allFollowUps": "Toate follow-up-urile",
+  "dash.funnel": "Pâlnia de vânzări",
+  "dash.inPipeline": "contacte în pipeline",
+  "dash.calendar": "Calendar",
+  "dash.openContact": "Deschide contactul",
+  "dash.tag.overdue": "Întârziat",
+  "dash.tag.today": "Azi",
+  "dash.tag.soon": "În curând",
+  "dash.funnelEmpty": "Pâlnia se umple pe măsură ce adaugi contacte.",
+  "dash.seeAll": "Vezi tot",
 };

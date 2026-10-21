@@ -52,7 +52,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen bg-[#EEF1F6]">
+    <div className="relative isolate min-h-screen bg-[#EEF1FA]">
+      {/* Soft blurred backdrop in the brand colours. Panels on top use frosted glass. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(60% 50% at 8% 0%, rgba(165,180,252,.55), transparent 70%), radial-gradient(50% 45% at 100% 10%, rgba(196,181,253,.45), transparent 70%), radial-gradient(55% 50% at 90% 100%, rgba(125,211,252,.45), transparent 70%), radial-gradient(45% 40% at 20% 100%, rgba(199,210,254,.5), transparent 70%)",
+        }}
+      />
       <PlanRedirect />
       <Suspense fallback={null}>
         <AppSidebar collapsed={collapsed} onToggle={toggle} />
