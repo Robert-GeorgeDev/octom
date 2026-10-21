@@ -1,43 +1,10 @@
 export const enLand = {
-  "land.nav.features": "Features",
   "land.nav.pricing": "Pricing",
   "land.nav.faq": "FAQ",
-  "land.hero.note": "No card · Free during beta",
-  "land.preview.title": "Example",
-  "land.preview.n1": "Waiting for feedback on the proposal.",
-  "land.preview.n2": "Asked for a call this week.",
-  "land.preview.n3": "Send pricing details.",
 
-  "land.problem.title": "Leads don't disappear.\nThey get lost among everything else.",
-  "land.problem.text": "You don't have to remember them all.",
-  "land.problem.p1": "A message you meant to answer.",
-  "land.problem.p2": "An offer you meant to chase.",
-  "land.problem.p3": "A client who said \"let's talk next week.\"",
 
-  "land.features.title": "Only what a follow-up needs",
-  "land.f1.title": "A Today view",
-  "land.f1.text": "One screen that shows who to contact today, with overdue follow-ups first.",
-  "land.f2.title": "Follow-ups that fit real life",
-  "land.f2.text": "Complete them, snooze to tomorrow or next week, or pick any date.",
-  "land.f3.title": "Lead statuses",
-  "land.f3.text": "Track every contact from New to Won or Lost.",
-  "land.f4.title": "Activity history",
-  "land.f4.text": "See what happened with each contact: status changes, notes and follow-ups.",
-  "land.f5.title": "CSV import and export",
-  "land.f5.text": "Move from your spreadsheet in minutes and take your data with you any time.",
-  "land.f6.title": "English and Romanian",
-  "land.f6.text": "Switch the interface language whenever you like.",
 
-  "land.ai.title": "AI can write.\nYou choose what to send.",
-  "land.ai.text": "Generate a follow-up, rewrite a message or summarize some notes.\nOctom doesn't send anything for you.",
 
-  "land.use.title": "For people who work with people.",
-  "land.use.1.title": "Freelancers",
-  "land.use.1.text": "Designers, developers, photographers, copywriters and consultants who keep clients in a spreadsheet.",
-  "land.use.2.title": "Small studios and agencies",
-  "land.use.2.text": "A few people and a few dozen leads that need one clear place for next steps. Share one workspace.",
-  "land.use.3.title": "Service businesses",
-  "land.use.3.text": "IT, consulting, construction, recruitment and other B2B services that live on follow-ups.",
 
   "land.pricing.title": "Free while in beta",
 
@@ -62,50 +29,15 @@ export const enLand = {
   "land.q6": "Can I leave and take my data?",
   "land.a6": "Yes. Export your contacts as CSV at any time and delete your account from the Account page.",
 
-  "land.final.title": "Have something to follow up on?",
-  "land.final.text": "Start with your first contact. It takes less than a minute.",
 };
 
 export const roLand: Record<keyof typeof enLand, string> = {
-  "land.nav.features": "Funcții",
   "land.nav.pricing": "Prețuri",
   "land.nav.faq": "Întrebări",
-  "land.hero.note": "Fără card · Gratuit în perioada beta",
-  "land.preview.title": "Exemplu",
-  "land.preview.n1": "Aștept feedback la ofertă.",
-  "land.preview.n2": "A cerut un apel săptămâna asta.",
-  "land.preview.n3": "Trimite detaliile de preț.",
 
-  "land.problem.title": "Lead-urile nu dispar.\nSe pierd printre celelalte lucruri.",
-  "land.problem.text": "Nu trebuie să le ții pe toate minte.",
-  "land.problem.p1": "Un mesaj la care trebuia să răspunzi.",
-  "land.problem.p2": "O ofertă pe care trebuia să o urmărești.",
-  "land.problem.p3": "Un client care ți-a spus „vorbim săptămâna viitoare”.",
 
-  "land.features.title": "Doar ce are nevoie un follow-up",
-  "land.f1.title": "Un ecran „Azi”",
-  "land.f1.text": "Un singur ecran care arată pe cine contactezi azi, cu follow-up-urile întârziate primele.",
-  "land.f2.title": "Follow-up-uri adaptate vieții reale",
-  "land.f2.text": "Finalizează-le, amână-le pe mâine sau pe săptămâna viitoare, sau alege orice dată.",
-  "land.f3.title": "Statusuri pentru lead-uri",
-  "land.f3.text": "Urmărește fiecare contact de la Nou până la Câștigat sau Pierdut.",
-  "land.f4.title": "Istoric de activitate",
-  "land.f4.text": "Vezi ce s-a întâmplat cu fiecare contact: schimbări de status, notițe și follow-up-uri.",
-  "land.f5.title": "Import și export CSV",
-  "land.f5.text": "Treci de la tabelul tău în câteva minute și îți iei datele cu tine oricând.",
-  "land.f6.title": "Engleză și română",
-  "land.f6.text": "Schimbi limba interfeței oricând vrei.",
 
-  "land.ai.title": "AI-ul poate scrie.\nTu alegi ce trimiți.",
-  "land.ai.text": "Generează un follow-up, rescrie un mesaj sau rezumă niște notițe.\nOctom nu trimite nimic în locul tău.",
 
-  "land.use.title": "Pentru oamenii care lucrează cu oameni.",
-  "land.use.1.title": "Freelanceri",
-  "land.use.1.text": "Designeri, dezvoltatori, fotografi, copywriteri și consultanți care își țin clienții într-un tabel.",
-  "land.use.2.title": "Studiouri și agenții mici",
-  "land.use.2.text": "Câțiva oameni și câteva zeci de lead-uri care au nevoie de un loc clar pentru pașii următori. Lucrați într-un singur spațiu de lucru.",
-  "land.use.3.title": "Afaceri de servicii",
-  "land.use.3.text": "IT, consultanță, construcții, recrutare și alte servicii B2B care trăiesc din follow-up-uri.",
 
   "land.pricing.title": "Gratuit în perioada beta",
 
@@ -130,6 +62,4 @@ export const roLand: Record<keyof typeof enLand, string> = {
   "land.q6": "Pot pleca și să-mi iau datele?",
   "land.a6": "Da. Îți exporți contactele ca CSV oricând și îți ștergi contul din pagina Cont.",
 
-  "land.final.title": "Ai ceva de urmărit?",
-  "land.final.text": "Începe cu primul tău contact. Durează mai puțin de un minut.",
 };

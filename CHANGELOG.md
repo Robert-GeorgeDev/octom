@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Cleanup: removed the unused `stripe` package, two unused components, 87 unused translation texts left from older landing pages, and a few unused styles and constants. No change to what visitors see.
 - Stripe, paid plans and plan limits removed. OCTOM One is free during beta: unlimited contacts and follow-ups, up to 5 people per workspace, 30 AI requests per user per day. Removed: checkout, billing portal, webhook, Plans page, usage banner, grace period and trial, plan picker on sign-up. The landing pricing section is now one free card. Run `supabase/remove-plans.sql` when deploying. Legal pages updated (Terms section 6, Privacy, Security, Subprocessors, Cookies, Billing); have them reviewed before launch.
 - Early Feedback reward is now a 100% voucher for one month of Business, valid when paid plans launch.
 - Log in, sign up, forgot and reset password redesigned: dark navy background with a violet-blue light beam, frosted glass card, gradient button, show/hide password. Sign-up is two columns (what you get, with a sample "Today" list) with a plan picker (Free, Pro with 7 days free, Business).
