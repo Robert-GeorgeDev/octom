@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RequireAuth from "@/components/require-auth";
-import Logo from "@/components/logo";
-import LanguageSwitcher from "@/components/language-switcher";
+import AuthShell, { AuthTitle, authButton, authError, authInputDark, authLabel } from "@/components/auth-shell";
+import Mascot from "@/components/mascot";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
@@ -38,18 +38,14 @@ function OnboardingForm() {
   }
 
   return (
-    <main className="mx-auto max-w-sm px-5 py-10">
-      <div className="flex items-center justify-between">
-        <Logo />
-        <LanguageSwitcher />
-      </div>
-
-      <h1 className="mt-10 text-3xl font-bold tracking-tight">{t("onb.title")}</h1>
-      <p className="mt-2 text-slate-600">{t("onb.sub")}</p>
+    <AuthShell>
+      <Mascot className="mx-auto mb-4 h-16 w-16" />
+      <AuthTitle>{t("onb.title")}</AuthTitle>
+      <p className="mt-3 text-center text-slate-300">{t("onb.sub")}</p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <div>
-          <label htmlFor="workspace" className="block text-sm font-medium">
+          <label htmlFor="workspace" className={authLabel}>
             {t("onb.label")}
           </label>
           <input
@@ -59,25 +55,21 @@ function OnboardingForm() {
             maxLength={80}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
+            className={authInputDark}
           />
         </div>
 
         {error && (
-          <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-overdue">
+          <p role="alert" className={authError}>
             {error}
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={busy}
-          className="w-full rounded-xl bg-cta px-6 py-3 font-semibold text-white hover:bg-cta-dark disabled:opacity-60"
-        >
+        <button type="submit" disabled={busy} className={authButton}>
           {busy ? t("auth.wait") : t("onb.continue")}
         </button>
       </form>
-    </main>
+    </AuthShell>
   );
 }
 
