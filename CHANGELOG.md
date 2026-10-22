@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- In-app feedback: a Feedback button (top right on computers, top bar on phones) opens a small window to report a bug, suggest an idea or write something else. It uses the contact form's inbox; the email subject says "app" and shows the page the person was on.
 - The invitation page (/join) and the first-step page (/onboarding) now use the same dark design as sign-in and sign-up.
 - First minute: a new, empty workspace now shows a "Start in one minute" card on the dashboard with two choices, add the first contact or try three example contacts (with follow-ups overdue, today and later). While examples exist a banner offers to remove them with one click.
 - Language in the address: the home page now exists in English (/) and Romanian (/ro), each sent as ready-made HTML in its own language (no more English flash), with hreflang links and a sitemap entry. Visitors whose browser is Romanian, or who chose Romanian before, are taken to /ro. Fixed: every public page claimed the home page as its canonical address.

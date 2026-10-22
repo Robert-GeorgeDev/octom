@@ -48,6 +48,10 @@ export async function POST(req: Request) {
   const category: Category = CATEGORIES.includes(body.category as Category)
     ? (body.category as Category)
     : "other";
+  // Sent by the in-app feedback button: which page the person was on.
+  const fromApp = body.source === "app";
+  const pageRaw = clean(body.page, 200);
+  const page = fromApp && pageRaw.startsWith("/") ? pageRaw.replace(/\s+/g, "") : "";
   if (name.length < 1 || !EMAIL.test(email) || message.length < 10) {
     return fail(400, "invalid");
   }
@@ -72,9 +76,9 @@ export async function POST(req: Request) {
         from: process.env.EMAIL_FROM ?? "OCTOM One <onboarding@resend.dev>",
         to,
         reply_to: email,
-        subject: `Octom [${category}]: ${name}`.replace(/[\r\n]/g, " ").slice(0, 150),
+        subject: `Octom${fromApp ? " app" : ""} [${category}]: ${name}`.replace(/[\r\n]/g, " ").slice(0, 150),
         // Plain text only, so nothing the visitor typed is ever treated as markup.
-        text: `Category: ${category}\nFrom: ${name} <${email}>\n\n${message}\n`,
+        text: `Category: ${category}\nFrom: ${name} <${email}>\n${fromApp ? `Sent from inside the app${page ? `, page ${page}` : ""}\n` : ""}\n${message}\n`,
       }),
     });
     if (!res.ok) {

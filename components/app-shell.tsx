@@ -8,6 +8,7 @@ import Logo from "@/components/logo";
 import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import AccountMenu from "@/components/account-menu";
+import FeedbackButton from "@/components/feedback-button";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
@@ -72,6 +73,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/assistant" aria-label={t("nav.assistant")} className="grid h-11 w-11 place-items-center rounded-xl text-slate-600">
             <Sparkles className="h-5 w-5" aria-hidden="true" />
           </Link>
+          <FeedbackButton compact />
           <LanguageSwitcher />
         </div>
       </header>
@@ -80,7 +82,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {/* Desktop and laptop only: account menu, top right */}
         <div className="pointer-events-none sticky top-0 z-40 hidden h-0 md:block">
           <div className="mx-auto flex w-full max-w-[1400px] justify-end px-5 pt-4">
-            <div className="pointer-events-auto">
+            <div className="pointer-events-auto flex items-center gap-3">
+              <FeedbackButton />
               <AccountMenu />
             </div>
           </div>

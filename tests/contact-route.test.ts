@@ -73,6 +73,21 @@ describe("contact route", () => {
     expect(second.subject).toContain("[other]");
   });
 
+  it("marks feedback sent from inside the app, with the page, and ignores the page otherwise", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    await POST(request({ ...valid, category: "bug", source: "app", page: "/contacts?c=1" }));
+    await POST(request({ ...valid, page: "/contacts" }));
+    await POST(request({ ...valid, source: "app", page: "https://evil.example" }));
+    const [a, b, c] = [0, 1, 2].map((i) => JSON.parse(fetchMock.mock.calls[i][1].body as string));
+    expect(a.subject).toContain("Octom app [bug]");
+    expect(a.text).toContain("Sent from inside the app, page /contacts?c=1");
+    expect(b.subject).not.toContain("app");
+    expect(b.text).not.toContain("page");
+    expect(c.text).toContain("Sent from inside the app");
+    expect(c.text).not.toContain("evil");
+  });
+
   it("answers 502 when the email provider fails", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 403, text: async () => "domain not verified" }));
     const res = await POST(request(valid));
