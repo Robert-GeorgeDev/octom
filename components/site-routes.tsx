@@ -6,7 +6,7 @@ import DocsView from "@/components/docs-view";
 import StatusView from "@/components/status-view";
 import JsonLd from "@/components/json-ld";
 import { LangScope } from "@/components/language-provider";
-import { loadLegalDoc } from "@/lib/legal-content";
+import { LEGAL_SLUGS, loadLegalDoc } from "@/lib/legal-content";
 import { SITE_PAGES, SITE_SLUGS, type SiteSlug } from "@/lib/site-pages";
 import { pageMetadata, type Lang } from "@/lib/seo";
 import { breadcrumbLd, graph } from "@/lib/jsonld";
@@ -25,8 +25,9 @@ export function siteMetadata(slug: SiteSlug, lang: Lang): Metadata {
 export function SitePageRoute({ slug, lang }: { slug: SiteSlug; lang: Lang }) {
   const page = SITE_PAGES[slug];
   let body: React.ReactNode;
-  if (page.legal) {
-    const doc = loadLegalDoc(slug);
+  const legalSlug = (LEGAL_SLUGS as readonly string[]).find((s) => s === slug) as (typeof LEGAL_SLUGS)[number] | undefined;
+  if (page.legal && legalSlug) {
+    const doc = loadLegalDoc(legalSlug);
     body = (
       <LegalLayout title={page.en.title} titleRo={page.ro.title}>
         <LegalDoc ro={doc.ro} en={doc.en} />
