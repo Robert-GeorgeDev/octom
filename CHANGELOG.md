@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Database changes are now tracked: new files in `supabase/migrations/`, a small `app_migrations` table, and `/api/health` reports `"schema": true` when every required change is applied (false or null otherwise, details only in the server log). A test keeps the file list and the app's list in sync.
 - CSV import is friendlier: it recognises column names from Google Contacts, LinkedIn and Excel (English and Romanian, for example Prenume, Nume, Telefon, Firmă), accepts a single name column, dates written DD.MM.YYYY, and reads job title, website, location, source and tags. The export has the same new columns.
 - The add-contact form is redesigned: every field from the contact details (job title, website, location, source, tags) is on the form, plus an optional first follow-up date with Tomorrow / In 3 days / Next week shortcuts, so a new contact does not need a second visit to fill in the rest.
 - In-app feedback: a Feedback button (top right on computers, top bar on phones) opens a small window to report a bug, suggest an idea or write something else. It uses the contact form's inbox; the email subject says "app" and shows the page the person was on.

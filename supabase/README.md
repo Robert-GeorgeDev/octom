@@ -1,6 +1,6 @@
 # Octom database files
 
-SQL is applied by hand: Supabase dashboard > SQL Editor > paste > Run.
+SQL is applied by hand: Supabase dashboard > SQL Editor > paste > Run. From 2026-10-22 new changes live in `migrations/` and are tracked.
 
 | File | What it is | Run on production? |
 |---|---|---|
@@ -12,6 +12,7 @@ SQL is applied by hand: Supabase dashboard > SQL Editor > paste > Run.
 | `contacts-v2.sql` | Adds website, location, job_title, source, tags to contacts (contact panel) | Yes, once, when the contact-panel version is deployed |
 | `remove-plans.sql` | Removes the contact and follow-up limits; 5 seats and 30 AI requests a day for everyone | Yes, once, when the no-plans version is deployed |
 | `launch-readiness.sql` | Persistent rate limits, `error_events` log, email time zone per user | Yes, once, when the launch-readiness version is deployed |
+| `migrations/` | New database changes, one file each, with tracking (see its README). `/api/health` shows `"schema": true` when all are applied | Yes, in the order of the file names |
 | `inspect-*.sql` | Read-only diagnostics | Any time |
 | `tests/security_test.sql` | Security test, rolls back everything | Any time |
 
