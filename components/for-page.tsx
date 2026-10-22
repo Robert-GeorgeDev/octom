@@ -101,6 +101,13 @@ export default function ForPage({ page, lang }: { page: SeoPage; lang: Lang }) {
               </li>
             ))}
           </ul>
+          {lang === "ro" && (
+            <p className="mt-4 text-sm">
+              <Link href="/ro/blog" className="text-brand hover:underline">
+                Articole despre follow-up și organizarea clienților
+              </Link>
+            </p>
+          )}
         </nav>
       </main>
     </LangScope>

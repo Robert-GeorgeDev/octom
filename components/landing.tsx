@@ -378,6 +378,7 @@ export default function Home() {
               <Link href="/for/agencies">{lang === "ro" ? "Pentru agenții" : "For agencies"}</Link>
               <Link href="/for/consultants">{lang === "ro" ? "Pentru consultanți" : "For consultants"}</Link>
               <Link href="/for/small-teams">{lang === "ro" ? "Pentru echipe mici" : "For small teams"}</Link>
+              {lang === "ro" && <Link href="/ro/blog">Blog</Link>}
               <Link href="/docs">{lang === "ro" ? "Documentație" : "Documentation"}</Link>
               <Link href="/status">Status</Link>
             </div>
