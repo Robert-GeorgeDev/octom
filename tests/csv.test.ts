@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildCsv, parseContactsCsv } from "@/lib/csv";
 
 const HEADER =
-  "first_name,last_name,company,email,phone,status,notes,next_followup";
+  "first_name,last_name,company,email,phone,status,notes,next_followup,job_title,website,location,source,tags";
 
 describe("parseContactsCsv", () => {
   it("parses a valid file", () => {
@@ -68,11 +68,72 @@ describe("parseContactsCsv", () => {
     expect(res.issues[0].field).toBe("first_name");
   });
 
-  it("rejects files without a first_name column", () => {
-    expect(parseContactsCsv("name,email\nAna,a@b.co")).toEqual({
+  it("rejects files without a first name or name column", () => {
+    expect(parseContactsCsv("email,company\na@b.co,Acme")).toEqual({
       ok: false,
       error: "noFirstName",
     });
+  });
+
+  it("splits a single name column", () => {
+    const res = parseContactsCsv("Name,Email\nAna Maria Popescu,a@b.co\nMadonna,");
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    expect(res.rows[0].contact.first_name).toBe("Ana Maria");
+    expect(res.rows[0].contact.last_name).toBe("Popescu");
+    expect(res.rows[1].contact.first_name).toBe("Madonna");
+    expect(res.rows[1].contact.last_name).toBe("");
+  });
+
+  it("reads Romanian headers, with Nume as the surname next to Prenume", () => {
+    const res = parseContactsCsv("Prenume;Nume;Firmă;Telefon;Notițe;Funcție;Oraș;Etichete\nIon;Vasile;Acme;0700 000 000;Sună;Director;Iași;client");
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    const c = res.rows[0].contact;
+    expect([c.first_name, c.last_name, c.company, c.phone, c.notes, c.job_title, c.location]).toEqual([
+      "Ion", "Vasile", "Acme", "0700 000 000", "Sună", "Director", "Iași",
+    ]);
+  });
+
+  it("reads Google Contacts style headers and ignores a second email column", () => {
+    const res = parseContactsCsv(
+      'First Name,Last Name,E-mail 1 - Value,E-mail 2 - Value,Phone 1 - Value,Organization Name,Organization Title,Website\nAna,Pop,first@example.com,second@example.com,+40 700,Acme,CEO,acme.example'
+    );
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    const c = res.rows[0].contact;
+    expect(c.email).toBe("first@example.com");
+    expect(c.company).toBe("Acme");
+    expect(c.job_title).toBe("CEO");
+    expect(c.website).toBe("acme.example");
+  });
+
+  it("reads the extra fields and splits tags", () => {
+    const res = parseContactsCsv(
+      `${HEADER}\nAna,,,,,,,,CEO,acme.example,Cluj,LinkedIn,"client; vip, client"`
+    );
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    const c = res.rows[0].contact;
+    expect([c.job_title, c.website, c.location, c.source]).toEqual(["CEO", "acme.example", "Cluj", "LinkedIn"]);
+    expect(c.tags).toEqual(["client", "vip"]);
+  });
+
+  it("flags more than 10 tags and long extra fields", () => {
+    const many = Array.from({ length: 11 }, (_, i) => `t${i}`).join(";");
+    const res = parseContactsCsv(`${HEADER}\nAna,,,,,,,,,,,,${many}\nBo,,,,,,,,${"x".repeat(121)},,,,`);
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    expect(res.badRows).toBe(2);
+    expect(res.issues.map((i) => i.field)).toEqual(["tags", "job_title"]);
+  });
+
+  it("accepts dates written DD.MM.YYYY and DD/MM/YYYY", () => {
+    const res = parseContactsCsv(`${HEADER}\nA,,,,,,,15.10.2026,,,,,\nB,,,,,,,5/1/2027,,,,,\nC,,,,,,,31.02.2026,,,,,`);
+    expect(res.ok).toBe(true);
+    if (!res.ok) return;
+    expect(res.rows.map((r) => r.nextFollowup)).toEqual(["2026-10-15", "2027-01-05"]);
+    expect(res.issues[0].code).toBe("date_invalid");
   });
 
   it("rejects empty files", () => {
@@ -129,6 +190,11 @@ describe("buildCsv", () => {
         "Won",
         'Said "yes"\nsecond line',
         "2026-10-15",
+        "CEO",
+        "acme.example",
+        "Cluj",
+        "Referral",
+        "client; vip",
       ],
     ]);
     const res = parseContactsCsv(csv);
@@ -141,5 +207,7 @@ describe("buildCsv", () => {
     expect(c.status).toBe("Won");
     expect(c.notes).toBe('Said "yes"\nsecond line');
     expect(res.rows[0].nextFollowup).toBe("2026-10-15");
+    expect([c.job_title, c.website, c.location, c.source]).toEqual(["CEO", "acme.example", "Cluj", "Referral"]);
+    expect(c.tags).toEqual(["client", "vip"]);
   });
 });

@@ -34,6 +34,11 @@ type ContactRow = {
   phone: string;
   status: string;
   notes: string;
+  job_title?: string | null;
+  website?: string | null;
+  location?: string | null;
+  source?: string | null;
+  tags?: string[] | null;
 };
 
 type FollowUpRow = { contact_id: string; due_date: string };
@@ -133,8 +138,8 @@ function DataView() {
     downloadCsv(
       `${BRAND_SLUG}-contacts-template.csv`,
       buildCsv([
-        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next],
-        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", ""],
+        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next, "Marketing manager", "brightagency.example", "Cluj-Napoca", "LinkedIn", "client; priority"],
+        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", "", "", "", "", "", ""],
       ])
     );
   }
@@ -156,11 +161,21 @@ function DataView() {
         }));
 
         const { error: contactError } = await supabase.from("contacts").insert(
-          chunk.map(({ id, r }) => ({
-            id,
-            organization_id: orgId,
-            ...r.contact,
-          }))
+          chunk.map(({ id, r }) => {
+            const { job_title, website, location, source, tags, ...base } = r.contact;
+            return {
+              id,
+              organization_id: orgId,
+              ...base,
+              // Only sent when filled in, so an import keeps working even before
+              // supabase/contacts-v2.sql has been run.
+              ...(job_title ? { job_title } : {}),
+              ...(website ? { website } : {}),
+              ...(location ? { location } : {}),
+              ...(source ? { source } : {}),
+              ...(tags.length > 0 ? { tags } : {}),
+            };
+          })
         );
         if (contactError) throw contactError;
         imported += chunk.length;
@@ -282,7 +297,7 @@ function DataView() {
       const contacts = await fetchPages<ContactRow>((from, to) =>
         supabase
           .from("contacts")
-          .select("id, first_name, last_name, company, email, phone, status, notes")
+          .select("id, first_name, last_name, company, email, phone, status, notes, job_title, website, location, source, tags")
           .eq("organization_id", orgId)
           .order("created_at", { ascending: true })
           .order("id", { ascending: true })
@@ -317,6 +332,11 @@ function DataView() {
             c.status,
             c.notes,
             next.get(c.id) ?? "",
+            c.job_title ?? "",
+            c.website ?? "",
+            c.location ?? "",
+            c.source ?? "",
+            (c.tags ?? []).join("; "),
           ])
         )
       );
