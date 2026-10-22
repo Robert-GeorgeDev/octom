@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Logo from "@/components/logo";
+import AuthShell, { AuthTitle, authButton, authError, authLink } from "@/components/auth-shell";
 import { useAuth } from "@/components/auth-provider";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
@@ -64,47 +64,50 @@ export default function JoinPage() {
     member: t("team.role.member"),
   };
 
-  return (
-    <main className="grid min-h-screen place-items-center px-5">
-      <div className="w-full max-w-md rounded-2xl border border-line bg-white p-6 shadow-sm">
-        <Logo />
-        <h1 className="mt-6 text-2xl font-bold tracking-tight">{t("join.title")}</h1>
+  const secondary =
+    "min-h-[44px] flex-1 rounded-xl border border-white/15 bg-white/[.06] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10";
+  const primary = authButton.replace("w-full", "flex-1 text-center text-sm");
+  const text = "mt-4 text-center text-slate-300";
 
-        {loading || token === null ? (
-          <p className="mt-4 text-slate-600">{t("common.loading")}</p>
-        ) : !user ? (
-          <>
-            <p className="mt-4 text-slate-600">{t("join.needLogin")}</p>
-            <div className="mt-5 flex gap-3">
-              <Link href="/login" className="min-h-[44px] flex-1 rounded-xl bg-cta px-4 py-3 text-center text-sm font-semibold text-white hover:bg-cta-dark">
-                {t("join.login")}
-              </Link>
-              <Link href="/signup" className="min-h-[44px] flex-1 rounded-xl border border-line px-4 py-3 text-center text-sm font-semibold">
-                {t("join.signup")}
-              </Link>
-            </div>
-          </>
-        ) : state === "loading" ? (
-          <p className="mt-4 text-slate-600">{t("common.loading")}</p>
-        ) : state === "invalid" ? (
-          <p className="mt-4 text-slate-600">{t("join.invalid")}</p>
-        ) : (
-          <>
-            <p className="mt-4 text-slate-600">
-              {t("join.invitedTo")} <strong className="text-ink">{info?.organization_name}</strong>{" "}
-              {t("join.asRole")} {roleLabel[info?.role ?? "member"]}.
-            </p>
-            {error && <p role="alert" className="mt-3 text-sm text-overdue">{error}</p>}
-            <button
-              onClick={accept}
-              disabled={busy}
-              className="mt-5 min-h-[44px] w-full rounded-xl bg-cta px-4 py-3 text-sm font-semibold text-white hover:bg-cta-dark disabled:opacity-60"
-            >
-              {busy ? t("join.joining") : t("join.accept")}
-            </button>
-          </>
-        )}
-      </div>
-    </main>
+  return (
+    <AuthShell>
+      <AuthTitle>{t("join.title")}</AuthTitle>
+
+      {loading || token === null ? (
+        <p className={text}>{t("common.loading")}</p>
+      ) : !user ? (
+        <>
+          <p className={text}>{t("join.needLogin")}</p>
+          <div className="mt-6 flex gap-3">
+            <Link href="/login" className={primary}>
+              {t("join.login")}
+            </Link>
+            <Link href="/signup" className={secondary}>
+              {t("join.signup")}
+            </Link>
+          </div>
+        </>
+      ) : state === "loading" ? (
+        <p className={text}>{t("common.loading")}</p>
+      ) : state === "invalid" ? (
+        <>
+          <p className={text}>{t("join.invalid")}</p>
+          <p className="mt-6 text-center text-sm">
+            <Link href="/dashboard" className={authLink}>{t("nav.dashboard")}</Link>
+          </p>
+        </>
+      ) : (
+        <>
+          <p className={text}>
+            {t("join.invitedTo")} <strong className="text-white">{info?.organization_name}</strong>{" "}
+            {t("join.asRole")} {roleLabel[info?.role ?? "member"]}.
+          </p>
+          {error && <p role="alert" className={`${authError} mt-4`}>{error}</p>}
+          <button onClick={accept} disabled={busy} className={`${authButton} mt-6`}>
+            {busy ? t("join.joining") : t("join.accept")}
+          </button>
+        </>
+      )}
+    </AuthShell>
   );
 }
