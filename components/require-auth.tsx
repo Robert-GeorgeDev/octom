@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
+import LoadingScreen from "@/components/loading-screen";
+import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
 export default function RequireAuth({
@@ -14,6 +16,7 @@ export default function RequireAuth({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { t } = useLanguage();
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -51,14 +54,14 @@ export default function RequireAuth({
 
   if (failed) {
     return (
-      <p className="p-8 text-slate-600">
-        Something went wrong. Please refresh the page.
+      <p role="alert" className="p-8 text-slate-600">
+        {t("common.error")}
       </p>
     );
   }
 
   if (loading || !user || !ready) {
-    return <p className="p-8 text-slate-600">Loading…</p>;
+    return <LoadingScreen />;
   }
 
   return <>{children}</>;
