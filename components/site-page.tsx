@@ -1,7 +1,7 @@
 "use client";
 
 import SocialLinks from "@/components/social-links";
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import Logo from "@/components/logo";
 import AnpcSal from "@/components/anpc-sal";
 import { CookieSettingsButton } from "@/components/consent";

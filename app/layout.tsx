@@ -27,6 +27,19 @@ export const metadata: Metadata = {
     locale: "en_US",
     alternateLocale: ["ro_RO"],
   },
+  applicationName: "OCTOM One",
+  category: "business",
+  // Lets search engines and AI assistants show full snippets and large images.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
+  // Search Console and Bing Webmaster ownership codes, if set in Vercel (otherwise nothing is added).
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } } : {}),
+  },
   twitter: {
     card: "summary_large_image",
     title: "OCTOM One – Know who to contact today",
@@ -36,27 +49,6 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#0B1026" };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      name: "Octom",
-      ...(siteConfigured ? { url: SITE_URL } : {}),
-    },
-    {
-      "@type": "SoftwareApplication",
-      name: "OCTOM One",
-      applicationCategory: "BusinessApplication",
-      operatingSystem: "Web",
-      description:
-        "A simple CRM built around follow-ups for freelancers, consultants and small teams.",
-      inLanguage: ["en", "ro"],
-      license: "https://www.gnu.org/licenses/agpl-3.0.html",
-    },
-  ],
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -65,12 +57,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${nunito.variable} font-sans`}>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
         <LanguageProvider>
           {children}
           <Consent />

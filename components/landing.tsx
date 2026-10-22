@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import {
   ArrowRight, Bell, Briefcase, CalendarDays, Check, Download, FileText, Lock, Minus, Server,
   Sun, Trash2, UserPlus, User, Users, type LucideIcon,
@@ -50,7 +50,7 @@ const privacy: { Icon: LucideIcon; text: Key }[] = [
 const freeFeatures: Key[] = ["plans.free.f1", "plans.free.f2", "plans.free.f3", "plans.free.f4", "plans.free.f5", "plans.free.f6"];
 
 const faq: { q: Key; a: Key }[] = [
-  { q: "land.q1", a: "land.a1" }, { q: "land.q2", a: "land.a2" }, { q: "land.q3", a: "land.a3" },
+  { q: "land.q0", a: "land.a0" }, { q: "land.q1", a: "land.a1" }, { q: "land.q2", a: "land.a2" }, { q: "land.q3", a: "land.a3" },
   { q: "land.q4", a: "land.a4" }, { q: "land.q5", a: "land.a5" }, { q: "land.q6", a: "land.a6" },
 ];
 
@@ -374,6 +374,10 @@ export default function Home() {
               <a href="#product">{t("lp.nav.product")}</a>
               <a href="#pricing">{t("land.nav.pricing")}</a>
               <a href="#faq">{t("land.nav.faq")}</a>
+              <Link href="/for/freelancers">{lang === "ro" ? "Pentru freelanceri" : "For freelancers"}</Link>
+              <Link href="/for/agencies">{lang === "ro" ? "Pentru agenții" : "For agencies"}</Link>
+              <Link href="/for/consultants">{lang === "ro" ? "Pentru consultanți" : "For consultants"}</Link>
+              <Link href="/for/small-teams">{lang === "ro" ? "Pentru echipe mici" : "For small teams"}</Link>
               <Link href="/docs">{lang === "ro" ? "Documentație" : "Documentation"}</Link>
               <Link href="/status">Status</Link>
             </div>

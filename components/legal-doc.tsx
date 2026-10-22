@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import { Fragment } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { LEGAL } from "@/lib/legal";

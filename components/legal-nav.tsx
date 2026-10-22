@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/components/language-provider";
 
@@ -21,7 +21,7 @@ export default function LegalNav() {
   return (
     <nav className="flex flex-wrap gap-2" aria-label="Legal">
       {ITEMS.map(({ href, en, ro }) => {
-        const active = pathname === href;
+        const active = pathname === href || pathname === `/ro${href}`;
         const label = lang === "ro" ? ro : en;
         return (
           <Link

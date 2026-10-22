@@ -1,14 +1,7 @@
-import LegalLayout from "@/components/legal-layout";
-import LegalDoc from "@/components/legal-doc";
-import { loadLegalDoc } from "@/lib/legal-content";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata = { title: "Subprocessors – Octom" };
+export const metadata = siteMetadata("subprocessors", "en");
 
 export default function Page() {
-  const doc = loadLegalDoc("subprocessors");
-  return (
-    <LegalLayout title="Subprocessors" titleRo="Subprocesatori">
-      <LegalDoc ro={doc.ro} en={doc.en} />
-    </LegalLayout>
-  );
+  return <SitePageRoute slug="subprocessors" lang="en" />;
 }

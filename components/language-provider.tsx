@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -69,12 +69,13 @@ export function useLanguage() {
 }
 
 /**
- * Fixes the language for one page (the home page at "/" is English, "/ro" is
- * Romanian), so the server sends that language in the HTML. Choosing the other
- * language moves to the other address.
+ * Fixes the language for one page (English at the normal address, Romanian under
+ * /ro), so the server sends that language in the HTML. Choosing the other language
+ * moves to the same page at the other address.
  */
 export function LangScope({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname() ?? "/";
   const outer = useContext(LanguageContext);
   const { setLang: setOuter } = outer;
 
@@ -86,9 +87,12 @@ export function LangScope({ lang, children }: { lang: Lang; children: React.Reac
   const setLang = useCallback(
     (next: Lang) => {
       setOuter(next);
-      if (next !== lang) router.push(next === "ro" ? "/ro" : "/");
+      if (next === lang) return;
+      // Same page in the other language: /privacy <-> /ro/privacy, / <-> /ro.
+      const english = pathname === "/ro" ? "/" : pathname.replace(/^\/ro(?=\/)/, "");
+      router.push(next === "ro" ? (english === "/" ? "/ro" : `/ro${english}`) : english);
     },
-    [lang, router, setOuter]
+    [lang, pathname, router, setOuter]
   );
   const t = useCallback((key: Key) => dictionaries[lang][key], [lang]);
 

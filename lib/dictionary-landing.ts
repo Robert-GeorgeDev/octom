@@ -16,6 +16,8 @@ export const enLand = {
   "land.sec.link": "Read the Privacy Policy",
 
   "land.faq.title": "Questions",
+  "land.q0": "What is OCTOM One?",
+  "land.a0": "OCTOM One is a simple CRM built around follow-ups, for freelancers, consultants, small agencies and small B2B teams. Every morning it shows who to contact today and helps you draft what to say. It is free during beta and the core is open source.",
   "land.q1": "Is it really free?",
   "land.a1": "Yes. OCTOM One is free while it is in beta, with unlimited contacts and follow-ups and no card needed. If we introduce paid plans later, we will tell you well in advance and never charge you without your agreement.",
   "land.q2": "Do I need to connect my email?",
@@ -49,6 +51,8 @@ export const roLand: Record<keyof typeof enLand, string> = {
   "land.sec.link": "Citește Politica de confidențialitate",
 
   "land.faq.title": "Întrebări",
+  "land.q0": "Ce este OCTOM One?",
+  "land.a0": "OCTOM One este un CRM simplu, construit în jurul follow-up-urilor, pentru freelanceri, consultanți, agenții mici și echipe B2B mici. În fiecare dimineață îți arată pe cine contactezi azi și te ajută să scrii ce să spui. Este gratuit în beta, iar nucleul este open source.",
   "land.q1": "Chiar este gratuit?",
   "land.a1": "Da. OCTOM One este gratuit cât timp este în beta, cu contacte și follow-up-uri nelimitate și fără card. Dacă introducem planuri plătite mai târziu, te anunțăm din timp și nu te taxăm niciodată fără acordul tău.",
   "land.q2": "Trebuie să-mi conectez emailul?",

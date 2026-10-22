@@ -1,11 +1,7 @@
-import type { Metadata } from "next";
-import ContactForm from "@/components/contact-form";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Write to the Octom team.",
-};
+export const metadata = siteMetadata("contact", "en");
 
-export default function ContactPage() {
-  return <ContactForm />;
+export default function Page() {
+  return <SitePageRoute slug="contact" lang="en" />;
 }

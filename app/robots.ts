@@ -3,6 +3,17 @@ import { headers } from "next/headers";
 import { SITE_URL, siteConfigured } from "@/lib/site";
 import { APP_HOST, hostName } from "@/lib/hosts";
 
+// Crawlers of AI search and assistant products. They are allowed on purpose: being
+// quoted and linked by ChatGPT, Claude, Perplexity, Gemini and Apple Intelligence
+// brings visitors. To opt out of training only, remove "Google-Extended" and
+// "Applebot-Extended" from this list.
+const AI_CRAWLERS = [
+  "GPTBot", "OAI-SearchBot", "ChatGPT-User",
+  "ClaudeBot", "Claude-SearchBot", "Claude-User",
+  "PerplexityBot", "Perplexity-User",
+  "Google-Extended", "Applebot-Extended",
+];
+
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const host = hostName((await headers()).get("host"));
 
@@ -12,11 +23,10 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   }
 
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/"],
-    },
-    ...(siteConfigured ? { sitemap: `${SITE_URL}/sitemap.xml` } : {}),
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      { userAgent: AI_CRAWLERS, allow: "/", disallow: ["/api/"] },
+    ],
+    ...(siteConfigured ? { sitemap: `${SITE_URL}/sitemap.xml`, host: SITE_URL } : {}),
   };
 }

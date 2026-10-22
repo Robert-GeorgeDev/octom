@@ -1,11 +1,7 @@
-import StatusView from "@/components/status-view";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata = {
-  title: "Status – OCTOM One",
-  description: "Live availability of the OCTOM One website, app and database.",
-  alternates: { canonical: "/status" },
-};
+export const metadata = siteMetadata("status", "en");
 
 export default function Page() {
-  return <StatusView />;
+  return <SitePageRoute slug="status" lang="en" />;
 }
