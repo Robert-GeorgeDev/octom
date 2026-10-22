@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- CSV import is friendlier: it recognises column names from Google Contacts, LinkedIn and Excel (English and Romanian, for example Prenume, Nume, Telefon, Firmă), accepts a single name column, dates written DD.MM.YYYY, and reads job title, website, location, source and tags. The export has the same new columns.
+- The add-contact form is redesigned: every field from the contact details (job title, website, location, source, tags) is on the form, plus an optional first follow-up date with Tomorrow / In 3 days / Next week shortcuts, so a new contact does not need a second visit to fill in the rest.
 - In-app feedback: a Feedback button (top right on computers, top bar on phones) opens a small window to report a bug, suggest an idea or write something else. It uses the contact form's inbox; the email subject says "app" and shows the page the person was on.
 - The invitation page (/join) and the first-step page (/onboarding) now use the same dark design as sign-in and sign-up.
 - First minute: a new, empty workspace now shows a "Start in one minute" card on the dashboard with two choices, add the first contact or try three example contacts (with follow-ups overdue, today and later). While examples exist a banner offers to remove them with one click.

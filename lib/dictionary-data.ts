@@ -4,8 +4,8 @@ export const enData = {
   "data.title": "Import & export",
 
   "data.importTitle": "Import contacts",
-  "data.importHelp": "Upload a CSV file with a header row. Only first_name is required. Save the file as “CSV UTF-8” so accents are read correctly. Maximum 500 rows and 1 MB.",
-  "data.columns": "Columns: first_name, last_name, company, email, phone, status, notes, next_followup (YYYY-MM-DD).",
+  "data.importHelp": "Upload a CSV file with a header row. Only a first name (or a single name column) is required. Column names from Google Contacts, LinkedIn and Excel are recognised, in English and Romanian. Save the file as “CSV UTF-8” so accents are read correctly. Maximum 500 rows and 1 MB.",
+  "data.columns": "Columns: first_name, last_name, company, email, phone, status, notes, next_followup (YYYY-MM-DD or DD.MM.YYYY), job_title, website, location, source, tags (separated by ;).",
   "data.downloadTemplate": "Download CSV template",
   "data.chooseFile": "Choose CSV file",
 
@@ -45,7 +45,7 @@ export const enData = {
   "data.err.fileType": "Please choose a .csv file.",
   "data.err.fileSize": "The file is too large (maximum 1 MB).",
   "data.err.empty": "The file has no data rows.",
-  "data.err.noFirstName": "The file must have a first_name column in the first row.",
+  "data.err.noFirstName": "The first row must have a column for the first name (first_name, First Name, Prenume) or for the full name (Name, Nume).",
   "data.err.tooMany": "Too many rows (maximum 500 per import).",
   "data.err.read": "Could not read the file.",
 
@@ -62,8 +62,8 @@ export const roData: Record<keyof typeof enData, string> = {
   "data.title": "Import și export",
 
   "data.importTitle": "Importă contacte",
-  "data.importHelp": "Încarcă un fișier CSV cu un rând de antet. Doar first_name este obligatoriu. Salvează fișierul ca „CSV UTF-8”, ca diacriticele să fie citite corect. Maximum 500 de rânduri și 1 MB.",
-  "data.columns": "Coloane: first_name, last_name, company, email, phone, status, notes, next_followup (AAAA-LL-ZZ).",
+  "data.importHelp": "Încarcă un fișier CSV cu un rând de antet. Doar prenumele (sau o singură coloană cu numele) este obligatoriu. Recunoaștem numele de coloane din Google Contacts, LinkedIn și Excel, în română și engleză. Salvează fișierul ca „CSV UTF-8”, ca diacriticele să fie citite corect. Maximum 500 de rânduri și 1 MB.",
+  "data.columns": "Coloane: first_name, last_name, company, email, phone, status, notes, next_followup (AAAA-LL-ZZ sau ZZ.LL.AAAA), job_title, website, location, source, tags (separate prin ;).",
   "data.downloadTemplate": "Descarcă șablonul CSV",
   "data.chooseFile": "Alege fișier CSV",
 
@@ -103,7 +103,7 @@ export const roData: Record<keyof typeof enData, string> = {
   "data.err.fileType": "Alege un fișier .csv.",
   "data.err.fileSize": "Fișierul este prea mare (maximum 1 MB).",
   "data.err.empty": "Fișierul nu are rânduri cu date.",
-  "data.err.noFirstName": "Fișierul trebuie să aibă coloana first_name în primul rând.",
+  "data.err.noFirstName": "Primul rând trebuie să aibă o coloană pentru prenume (first_name, First Name, Prenume) sau pentru numele complet (Name, Nume).",
   "data.err.tooMany": "Prea multe rânduri (maximum 500 per import).",
   "data.err.read": "Nu am putut citi fișierul.",
 

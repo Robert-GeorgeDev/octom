@@ -10,6 +10,11 @@ export const CSV_COLUMNS = [
   "status",
   "notes",
   "next_followup",
+  "job_title",
+  "website",
+  "location",
+  "source",
+  "tags",
 ] as const;
 
 export const MAX_ROWS = 500;
@@ -22,7 +27,64 @@ const LIMITS: Record<string, number> = {
   email: 200,
   phone: 40,
   notes: 5000,
+  job_title: 120,
+  website: 200,
+  location: 200,
+  source: 120,
 };
+
+const MAX_TAGS = 10;
+const MAX_TAG_LENGTH = 40;
+
+// Other names a column may have (Google Contacts, LinkedIn, Excel, Romanian).
+// Compared after lowercasing and replacing punctuation with single spaces.
+const ALIASES: Record<string, string[]> = {
+  first_name: ["first name", "firstname", "given name", "prenume", "first"],
+  last_name: ["last name", "lastname", "surname", "family name", "nume de familie", "nume familie"],
+  full_name: ["name", "full name", "nume", "nume complet", "contact", "contact name"],
+  company: ["company", "company name", "organization", "organization name", "organization 1 name", "companie", "firma", "firmă"],
+  email: ["email", "e mail", "email address", "e mail address", "e mail 1 value", "email 1", "adresa email", "adresă email", "adresa de email"],
+  phone: ["phone", "phone number", "mobile", "mobile phone", "phone 1 value", "telefon", "mobil", "tel"],
+  status: ["status", "stage", "etapa", "etapă"],
+  notes: ["notes", "note", "notite", "notițe", "comments", "comentarii", "observatii", "observații"],
+  next_followup: ["next followup", "next follow up", "follow up", "follow up date", "urmatorul follow up", "următorul follow up", "data follow up"],
+  job_title: ["job title", "title", "position", "organization 1 title", "functie", "funcție", "pozitie", "poziție"],
+  website: ["website", "web site", "url", "web", "site", "pagina web", "pagină web"],
+  location: ["location", "city", "oras", "oraș", "locatie", "locație", "address", "adresa", "adresă", "country", "tara", "țara"],
+  source: ["source", "sursa", "sursă"],
+  tags: ["tags", "tag", "labels", "label", "etichete", "eticheta", "etichetă", "group membership"],
+};
+
+const ALIAS_TO_FIELD = new Map<string, string>();
+for (const [field, names] of Object.entries(ALIASES)) {
+  for (const n of names) ALIAS_TO_FIELD.set(n, field);
+}
+for (const f of CSV_COLUMNS) ALIAS_TO_FIELD.set(f.replace(/_/g, " "), f);
+
+function canonicalHeader(raw: string): string | null {
+  const key = raw
+    .replace(/^\uFEFF/, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9ăâîșțşţ]+/g, " ")
+    .trim();
+  return ALIAS_TO_FIELD.get(key) ?? null;
+}
+
+/** "Ana Maria Popescu" becomes first "Ana Maria", last "Popescu". */
+function splitName(full: string): { first: string; last: string } {
+  const parts = full.split(/\s+/).filter(Boolean);
+  if (parts.length <= 1) return { first: parts[0] ?? "", last: "" };
+  return { first: parts.slice(0, -1).join(" "), last: parts[parts.length - 1] };
+}
+
+/** Accepts 2026-10-15, 15.10.2026 and 15/10/2026. Returns "" when it is none of them. */
+function normalizeDate(value: string): string {
+  if (isRealDate(value)) return value;
+  const m = /^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/.exec(value);
+  if (!m) return "";
+  const iso = `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  return isRealDate(iso) ? iso : "";
+}
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -34,6 +96,11 @@ export type ImportContact = {
   phone: string;
   status: Status;
   notes: string;
+  job_title: string;
+  website: string;
+  location: string;
+  source: string;
+  tags: string[];
 };
 
 export type ImportRow = {
@@ -65,12 +132,21 @@ export function parseContactsCsv(text: string): ParseResult {
   const result = Papa.parse<Record<string, string>>(text, {
     header: true,
     skipEmptyLines: "greedy",
-    transformHeader: (h: string) =>
-      h.replace(/^\uFEFF/, "").trim().toLowerCase(),
+    // Unknown columns keep a name nobody reads; a second column for the same
+    // field (for example "E-mail 2") is ignored, the first one wins.
+    transformHeader: (() => {
+      const seen = new Set<string>();
+      return (h: string) => {
+        const field = canonicalHeader(h);
+        if (!field || seen.has(field)) return `_ignored_${seen.size}_${h}`;
+        seen.add(field);
+        return field;
+      };
+    })(),
   });
 
   const fields = result.meta.fields ?? [];
-  if (!fields.includes("first_name")) {
+  if (!fields.includes("first_name") && !fields.includes("full_name")) {
     return { ok: false, error: "noFirstName" };
   }
 
@@ -87,13 +163,31 @@ export function parseContactsCsv(text: string): ParseResult {
     const get = (key: string) => String(raw[key] ?? "").trim();
     const rowIssues: RowIssue[] = [];
 
-    const firstName = get("first_name");
+    let firstName = get("first_name");
+    let lastName = get("last_name");
+    // A single "name" column is split when there is no first-name column.
+    if (!fields.includes("first_name") && get("full_name")) {
+      ({ first: firstName, last: lastName } = splitName(get("full_name")));
+    } else if (!fields.includes("last_name") && get("full_name")) {
+      // "Prenume" + "Nume": the plain name column is the surname.
+      lastName = get("full_name");
+    }
     if (!firstName) rowIssues.push({ row, code: "first_name_required" });
 
     for (const field of Object.keys(LIMITS)) {
-      if (get(field).length > LIMITS[field]) {
+      const value = field === "last_name" ? lastName : field === "first_name" ? firstName : get(field);
+      if (value.length > LIMITS[field]) {
         rowIssues.push({ row, code: "too_long", field });
       }
+    }
+
+    const tags: string[] = [];
+    for (const piece of get("tags").split(/[;|,]/)) {
+      const tag = piece.trim();
+      if (tag && !tags.some((x) => x.toLowerCase() === tag.toLowerCase())) tags.push(tag);
+    }
+    if (tags.length > MAX_TAGS || tags.some((x) => x.length > MAX_TAG_LENGTH)) {
+      rowIssues.push({ row, code: "too_long", field: "tags" });
     }
 
     const email = get("email");
@@ -114,7 +208,8 @@ export function parseContactsCsv(text: string): ParseResult {
     let nextFollowup: string | null = null;
     const dateRaw = get("next_followup");
     if (dateRaw) {
-      if (isRealDate(dateRaw)) nextFollowup = dateRaw;
+      const iso = normalizeDate(dateRaw);
+      if (iso) nextFollowup = iso;
       else rowIssues.push({ row, code: "date_invalid" });
     }
 
@@ -128,12 +223,17 @@ export function parseContactsCsv(text: string): ParseResult {
       row,
       contact: {
         first_name: firstName,
-        last_name: get("last_name"),
+        last_name: lastName,
         company: get("company"),
         email,
         phone: get("phone"),
         status,
         notes: get("notes"),
+        job_title: get("job_title"),
+        website: get("website"),
+        location: get("location"),
+        source: get("source"),
+        tags,
       },
       nextFollowup,
     });

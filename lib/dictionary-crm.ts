@@ -36,8 +36,6 @@ export const enCrm = {
   "crm.addTag": "Add a tag and press Enter",
   "crm.removeTag": "Remove tag",
   "crm.added": "Added on",
-  "crm.moreDetails": "More details",
-  "crm.fewerDetails": "Fewer details",
 
   "crm.tab.ai": "AI",
   "crm.logPlaceholder": "Log a note, call, email or meeting…",
@@ -115,8 +113,6 @@ export const roCrm: Record<keyof typeof enCrm, string> = {
   "crm.addTag": "Adaugă o etichetă și apasă Enter",
   "crm.removeTag": "Elimină eticheta",
   "crm.added": "Adăugat pe",
-  "crm.moreDetails": "Mai multe detalii",
-  "crm.fewerDetails": "Mai puține detalii",
 
   "crm.tab.ai": "AI",
   "crm.logPlaceholder": "Notează o discuție, un apel, un email sau o întâlnire…",
