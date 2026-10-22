@@ -28,7 +28,7 @@ They are used for the operation and security of the service and are not used by 
 
 We may store your preference for the interface language, for example Romanian or English.
 
-This information is used to display the interface in the language you chose.
+This information is used to display the interface in the language you chose. It is kept in local storage and in a small cookie named `octom-lang` (one year), so that the home page opens in your language.
 
 ### 2.3. Cookie preference
 

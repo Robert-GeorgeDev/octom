@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Language in the address: the home page now exists in English (/) and Romanian (/ro), each sent as ready-made HTML in its own language (no more English flash), with hreflang links and a sitemap entry. Visitors whose browser is Romanian, or who chose Romanian before, are taken to /ro. Fixed: every public page claimed the home page as its canonical address.
 - Speed: public pages no longer load the sign-in session code (only the app, join and onboarding pages do), far-below-the-fold landing sections are drawn lazily, icons are cached for a week.
 - New social preview image (dark brand background with the octopus), a slightly larger octopus in the browser tab icon, and a dark theme colour for phone browsers and the installed app.
 - Cleanup: removed the unused `stripe` package, two unused components, 87 unused translation texts left from older landing pages, and a few unused styles and constants. No change to what visitors see.
