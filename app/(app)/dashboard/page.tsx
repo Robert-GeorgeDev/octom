@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Clock, Plus, Sparkles, Trophy, Users } from "lucide-react";
 import RequireAuth from "@/components/require-auth";
+import LoadingScreen from "@/components/loading-screen";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
@@ -73,6 +74,13 @@ function DashboardView() {
     return new Date(n.getFullYear(), n.getMonth(), 1);
   });
   const [busyId, setBusyId] = useState("");
+  // Bumped to reload the numbers, funnel and "needs attention" list (not only the follow-ups).
+  const [statsVersion, setStatsVersion] = useState(0);
+  const refreshAll = () => {
+    reload();
+    setStatsVersion((v) => v + 1);
+    notifyContactsChanged();
+  };
 
   useEffect(() => {
     supabase.rpc("list_members").then(({ data }) => {
@@ -124,7 +132,7 @@ function DashboardView() {
     return () => {
       cancelled = true;
     };
-  }, [orgId]);
+  }, [orgId, statsVersion]);
 
   const today = todayISO();
   const open = (followUps ?? [])
@@ -264,11 +272,15 @@ function DashboardView() {
         </p>
       )}
 
-      {followUps === null && !error && <p className="mt-8 text-slate-600">{t("common.loading")}</p>}
+      {followUps === null && !error && (
+        <div className="mt-8">
+          <LoadingScreen />
+        </div>
+      )}
 
       {followUps !== null && (
         <>
-          <ExamplesBanner orgId={orgId} onChange={reload} />
+          <ExamplesBanner orgId={orgId} onChange={refreshAll} />
           {/* Next up: colourful tiles */}
           <section className={`${glass} mt-6 p-5 sm:p-6`} aria-label={t("dash.nextUp")}>
             <div className="flex items-center justify-between">
@@ -279,7 +291,7 @@ function DashboardView() {
             </div>
 
             {tiles.length === 0 ? (
-              <GetStartedCard orgId={orgId} onChange={reload}>
+              <GetStartedCard orgId={orgId} onChange={refreshAll}>
               <div className="mt-4 rounded-3xl border border-dashed border-slate-300/70 bg-white/40 p-10 text-center">
                 <p className="text-lg font-semibold">{t("dash.emptyTitle")}</p>
                 <p className="mt-1 text-slate-600">{t("dash.emptyText")}</p>
