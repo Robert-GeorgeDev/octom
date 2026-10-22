@@ -22,8 +22,16 @@ describe("public site host", () => {
 
   it("keeps the public pages, the API and static files", () => {
     for (const path of ["/", "/privacy", "/terms", "/contact", "/for/freelancers", "/docs", "/status", "/ro/privacy", "/llms.txt", "/api/health", "/api/contact", "/api/report-error", "/sitemap.xml", "/.well-known/security.txt"]) {
-      expect(redirectTarget("www.octom.eu", path)).toBeNull();
+      expect(redirectTarget("octom.eu", path)).toBeNull();
     }
+  });
+
+  it("sends www.octom.eu to octom.eu, keeping path and query", () => {
+    expect(redirectTarget("www.octom.eu", "/")).toBe("https://octom.eu/");
+    expect(redirectTarget("www.octom.eu", "/ro/privacy")).toBe("https://octom.eu/ro/privacy");
+    expect(redirectTarget("www.octom.eu", "/sitemap.xml")).toBe("https://octom.eu/sitemap.xml");
+    expect(redirectTarget("www.octom.eu", "/contact", "?topic=bug")).toBe("https://octom.eu/contact?topic=bug");
+    expect(redirectTarget("www.octom.eu", "/login")).toBe(`${APP_URL}/login`);
   });
 
   it("does not confuse /contact (site) with /contacts (app)", () => {

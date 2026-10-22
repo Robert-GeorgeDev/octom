@@ -40,6 +40,9 @@ export function redirectTarget(host: string, pathname: string, search = ""): str
 
   if (SITE_HOSTS.includes(host)) {
     if (APP_SEGMENTS.has(segment)) return `${APP_URL}${pathname}${search}`;
+    // One address for the public site: www.octom.eu goes to octom.eu, so search engines
+    // see a single copy of every page.
+    if (host !== new URL(SITE_URL).hostname) return `${SITE_URL}${pathname}${search}`;
     return null;
   }
 
