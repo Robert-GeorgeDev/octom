@@ -16,6 +16,7 @@ import { initials, needsAttention, type AttentionContact } from "@/lib/contact-u
 import type { Key } from "@/lib/dictionaries";
 import type { FollowUp } from "@/types/followup";
 import { STATUSES, type Status } from "@/types/contact";
+import { GetStartedCard, ExamplesBanner } from "@/components/get-started";
 
 type PipeCard = { id: string; status: Status };
 
@@ -267,6 +268,7 @@ function DashboardView() {
 
       {followUps !== null && (
         <>
+          <ExamplesBanner orgId={orgId} onChange={reload} />
           {/* Next up: colourful tiles */}
           <section className={`${glass} mt-6 p-5 sm:p-6`} aria-label={t("dash.nextUp")}>
             <div className="flex items-center justify-between">
@@ -277,6 +279,7 @@ function DashboardView() {
             </div>
 
             {tiles.length === 0 ? (
+              <GetStartedCard orgId={orgId} onChange={reload}>
               <div className="mt-4 rounded-3xl border border-dashed border-slate-300/70 bg-white/40 p-10 text-center">
                 <p className="text-lg font-semibold">{t("dash.emptyTitle")}</p>
                 <p className="mt-1 text-slate-600">{t("dash.emptyText")}</p>
@@ -284,6 +287,7 @@ function DashboardView() {
                   {t("nav.addFollowUp")}
                 </Link>
               </div>
+              </GetStartedCard>
             ) : (
               <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {tiles.map((f, i) => {

@@ -38,7 +38,7 @@ function ContactsView() {
   const [contacts, setContacts] = useState<Contact[] | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<Sort>("recent");
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(() => params.get("new") === "1");
   const [error, setError] = useState("");
 
   const load = useCallback(async () => {
