@@ -15,29 +15,27 @@ Set up in UptimeRobot (free plan, commercial use allowed):
 
 ## 2. Daily encrypted backup
 
-Workflow: `.github/workflows/backup.yml` (every night 02:17 UTC, and on demand). It dumps your tables and data plus the login accounts, encrypts the file with `age`, and stores it in a **private** repository, keeping the newest 30.
+Workflow: `.github/workflows/backup.yml` (every night 02:17 UTC, and on demand). It dumps your tables and data plus the login accounts, encrypts the file with a password (GPG, AES-256), and stores it in a **private** repository, keeping the newest 30.
 
 ### One-time setup
 
 1. **Private repo**: create `octom-backups` (private, empty, with a README so it has a branch).
-2. **Encryption key** (on your computer; install `age` from https://github.com/FiloSottile/age):
-   `age-keygen -o octom-backup-key.txt`
-   It prints `Public key: age1...`. The **public** key goes into GitHub. The file `octom-backup-key.txt` is the **private** key: keep copies in your password manager and offline. Without it the backups cannot be opened; anyone who has it can open them. Never put it on GitHub.
+2. **Backup password**: invent a long random password (at least 16 characters, e.g. 4-5 random words) and save it in your password manager. It goes into GitHub as a secret. Without it the backups cannot be opened, so keep a second copy offline.
 3. **Database URL**: Supabase dashboard → Connect → *Session pooler* → copy the URI (port 5432) and put your database password in place of `[YOUR-PASSWORD]`. (The direct connection does not work from GitHub because it needs IPv6.)
 4. **Token**: GitHub → Settings → Developer settings → Fine-grained tokens → only repository `octom-backups`, permission *Contents: Read and write*, expiry 1 year (put the date in your calendar).
 5. **Monitor for missed backups (recommended)**: healthchecks.io free account → new check, period 1 day, grace 3 hours → copy its ping URL.
 6. In the octom repo → Settings → Secrets and variables → Actions:
-   - Secrets: `SUPABASE_DB_URL`, `BACKUP_AGE_PUBLIC_KEY`, `BACKUP_REPO_TOKEN`, `HEALTHCHECK_URL` (optional)
+   - Secrets: `SUPABASE_DB_URL`, `BACKUP_PASSPHRASE`, `BACKUP_REPO_TOKEN`, `HEALTHCHECK_URL` (optional)
    - Variable: `BACKUP_REPO` = `Robert-GeorgeDev/octom-backups`
-7. Actions → *Database backup* → Run workflow. Check that a `.age` file appears in the private repo.
+7. Actions → *Database backup* → Run workflow. Check that a `.gpg` file appears in the private repo.
 
 ### Restore drill (do it once now, then every few months)
 
 A backup you never restored is not a backup.
 
 1. Create an empty Supabase project (free).
-2. Download a file from `octom-backups/backups/` and decrypt:
-   `age -d -i octom-backup-key.txt -o backup.tar.gz octom-....tar.gz.age && tar -xzf backup.tar.gz`
+2. Download a file from `octom-backups/backups/` and decrypt (it asks for the password):
+   `gpg -o backup.tar.gz -d octom-....tar.gz.gpg && tar -xzf backup.tar.gz`
 3. In the new project run `psql "<its session pooler URI>" -f public.sql`, then `psql "<URI>" -f auth-data.sql`.
 4. Open the app against the new project and check that you can log in and see contacts.
 

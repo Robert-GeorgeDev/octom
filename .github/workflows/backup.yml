@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 20
     env:
       DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-      AGE_PUBLIC_KEY: ${{ secrets.BACKUP_AGE_PUBLIC_KEY }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
       BACKUP_REPO: ${{ vars.BACKUP_REPO }}
       HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
       KEEP_DAYS: "30"
@@ -31,14 +31,14 @@ jobs:
         run: |
           missing=""
           [ -z "$DB_URL" ] && missing="$missing SUPABASE_DB_URL"
-          [ -z "$AGE_PUBLIC_KEY" ] && missing="$missing BACKUP_AGE_PUBLIC_KEY"
+          [ -z "$BACKUP_PASSPHRASE" ] && missing="$missing BACKUP_PASSPHRASE"
           [ -z "$BACKUP_REPO" ] && missing="$missing BACKUP_REPO(variable)"
           [ -z "${{ secrets.BACKUP_REPO_TOKEN }}" ] && missing="$missing BACKUP_REPO_TOKEN"
           if [ -n "$missing" ]; then
             echo "::error::Missing setup values:$missing (see docs/backup-and-uptime.md)"
             exit 1
           fi
-          case "$AGE_PUBLIC_KEY" in age1*) ;; *) echo "::error::BACKUP_AGE_PUBLIC_KEY must start with age1 (public key, not the private one)"; exit 1;; esac
+          if [ "${#BACKUP_PASSPHRASE}" -lt 16 ]; then echo "::error::BACKUP_PASSPHRASE must have at least 16 characters"; exit 1; fi
 
       - name: Tell the monitor we started
         if: env.HEALTHCHECK_URL != ''
@@ -47,7 +47,7 @@ jobs:
       - name: Install database tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq curl ca-certificates gnupg lsb-release age
+          sudo apt-get install -y -qq curl ca-certificates gnupg lsb-release
           sudo install -d /usr/share/postgresql-common/pgdg
           sudo curl -fsS -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
           echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
@@ -75,8 +75,8 @@ jobs:
       - name: Encrypt
         run: |
           set -euo pipefail
-          name="octom-$(date -u +%Y-%m-%d_%H%M)Z.tar.gz.age"
-          age -r "$AGE_PUBLIC_KEY" -o "$name" backup.tar.gz
+          name="octom-$(date -u +%Y-%m-%d_%H%M)Z.tar.gz.gpg"
+          printf %s "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --symmetric --cipher-algo AES256 --output "$name" backup.tar.gz
           echo "BACKUP_FILE=$name" >> "$GITHUB_ENV"
           # Plain files never leave this job.
           shred -u backup.tar.gz dump/*.sql
@@ -90,14 +90,14 @@ jobs:
           mkdir -p store/backups
           cp "$BACKUP_FILE" store/backups/
           # Keep the newest KEEP_DAYS files, drop older ones.
-          ls -1 store/backups/*.age | sort | head -n -"$KEEP_DAYS" | xargs -r rm -f
+          ls -1 store/backups/*.gpg | sort | head -n -"$KEEP_DAYS" | xargs -r rm -f
           cd store
           git config user.name "octom backup"
           git config user.email "backup@octom.eu"
           git add -A
           git commit -m "Backup $(date -u +%Y-%m-%d)" -q
           git push -q origin HEAD
-          echo "Stored $BACKUP_FILE; $(ls -1 backups/*.age | wc -l) backups kept."
+          echo "Stored $BACKUP_FILE; $(ls -1 backups/*.gpg | wc -l) backups kept."
 
       - name: Tell the monitor we succeeded
         if: success() && env.HEALTHCHECK_URL != ''
