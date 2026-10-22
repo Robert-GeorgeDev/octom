@@ -105,3 +105,21 @@ export function breadcrumbLd(lang: Lang, trail: { name: string; path: string }[]
 export function graph(...nodes: object[]) {
   return { "@context": "https://schema.org", "@graph": nodes };
 }
+
+/** A blog article (Romanian only). */
+export function articleLd(a: { slug: string; title: string; desc: string; published: string; updated: string }) {
+  const url = `${SITE_URL}${localizedPath(`/blog/${a.slug}`, "ro")}`;
+  return {
+    "@type": "Article",
+    "@id": `${url}#article`,
+    headline: a.title,
+    description: a.desc,
+    datePublished: a.published,
+    dateModified: a.updated,
+    inLanguage: "ro",
+    mainEntityOfPage: url,
+    url,
+    author: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+  };
+}

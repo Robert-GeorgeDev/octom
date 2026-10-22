@@ -3,6 +3,7 @@ import { SITE_URL, siteConfigured } from "@/lib/site";
 import { LEGAL } from "@/lib/legal";
 import { roPath } from "@/lib/seo";
 import { PAGES } from "@/lib/seo-pages";
+import { ARTICLES } from "@/lib/articles";
 import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
 
 // Date of the last real change to the product pages. Update it when their text changes:
@@ -27,6 +28,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...both("/", PRODUCT_UPDATED, "weekly", 1),
     ...PAGES.flatMap((p) => both(`/for/${p.slug}`, PRODUCT_UPDATED, "monthly", 0.8)),
+    // The blog exists in Romanian only, so these entries have no language twin.
+    { url: `${SITE_URL}${roPath("/blog")}`, lastModified: PRODUCT_UPDATED, changeFrequency: "weekly", priority: 0.7 },
+    ...ARTICLES.map((a): Entry => ({ url: `${SITE_URL}${roPath(`/blog/${a.slug}`)}`, lastModified: a.updated, changeFrequency: "monthly", priority: 0.6 })),
     ...both("/docs", PRODUCT_UPDATED, "monthly", 0.7),
     ...both("/contact", PRODUCT_UPDATED, "yearly", 0.5),
     ...SITE_SLUGS.filter((s) => SITE_PAGES[s].legal).flatMap((s) => both(`/${s}`, LEGAL.updated, "yearly", 0.3)),

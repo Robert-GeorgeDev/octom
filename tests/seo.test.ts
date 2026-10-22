@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
 import { pageMetadata, roPath } from "@/lib/seo";
 import { PAGES } from "@/lib/seo-pages";
+import { ARTICLES } from "@/lib/articles";
 import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
 import { breadcrumbLd, faqLd, graph, organizationLd, softwareLd, websiteLd } from "@/lib/jsonld";
 import { llmsFullTxt, llmsTxt } from "@/lib/llms";
@@ -74,7 +75,7 @@ describe("sitemap", () => {
     expect(urls).toContain(`${SITE_URL}/for/freelancers`);
     expect(urls).toContain(`${SITE_URL}/ro/for/freelancers`);
     expect(urls).toContain(`${SITE_URL}/ro/privacy`);
-    for (const e of entries) {
+    for (const e of entries.filter((x) => !x.url.includes("/blog"))) {
       const langs = e.alternates?.languages as Record<string, string>;
       expect(Object.keys(langs).sort(), e.url).toEqual(["en", "ro", "x-default"]);
       expect(e.url.startsWith(SITE_URL), e.url).toBe(true);
@@ -129,5 +130,33 @@ describe("llms.txt", () => {
     expect(txt).toContain("Frankfurt");
     expect(txt).toContain("What is OCTOM One?");
     expect(txt).toContain("Ce este OCTOM One?");
+  });
+});
+
+describe("blog articles", () => {
+  it("have unique slugs, sensible titles and descriptions, and real content", () => {
+    expect(new Set(ARTICLES.map((a) => a.slug)).size).toBe(ARTICLES.length);
+    expect(ARTICLES.length).toBeGreaterThanOrEqual(5);
+    for (const a of ARTICLES) {
+      expect(a.slug, a.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(a.title.length + " | OCTOM One".length, `${a.slug} title`).toBeLessThanOrEqual(75);
+      expect(a.desc.length, `${a.slug} description`).toBeGreaterThanOrEqual(80);
+      expect(a.desc.length, `${a.slug} description`).toBeLessThanOrEqual(190);
+      expect(a.blocks.length, a.slug).toBeGreaterThanOrEqual(4);
+      expect(a.faq.length, a.slug).toBeGreaterThanOrEqual(3);
+      const text = JSON.stringify(a);
+      expect(text, `${a.slug} placeholder text`).not.toMatch(/TODO|lorem|XXX/i);
+    }
+  });
+
+  it("are in the sitemap and llms.txt, in Romanian only", () => {
+    const urls = sitemap().map((e) => e.url);
+    expect(urls).toContain(`${SITE_URL}/ro/blog`);
+    const txt = llmsTxt();
+    for (const a of ARTICLES) {
+      expect(urls).toContain(`${SITE_URL}/ro/blog/${a.slug}`);
+      expect(txt).toContain(`/ro/blog/${a.slug}`);
+      expect(urls).not.toContain(`${SITE_URL}/blog/${a.slug}`);
+    }
   });
 });

@@ -2,6 +2,7 @@ import { SITE_URL } from "@/lib/site";
 import { SOCIAL_LINKS } from "@/lib/social";
 import { dictionaries } from "@/lib/dictionaries";
 import { PAGES } from "@/lib/seo-pages";
+import { ARTICLES } from "@/lib/articles";
 import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
 import { roPath } from "@/lib/seo";
 
@@ -40,6 +41,9 @@ export function llmsTxt(): string {
     "",
     "## Who it is for",
     ...PAGES.map((p) => `- [${p.en.h1}](${url(`/for/${p.slug}`)}): ${p.en.desc}`),
+    "",
+    "## Articles (Romanian)",
+    ...ARTICLES.map((a) => `- [${a.h1}](${SITE_URL}${roPath(`/blog/${a.slug}`)}): ${a.desc}`),
     "",
     "## Documentation and policies",
     `- [Documentation](${url("/docs")}): ${SITE_PAGES.docs.en.description}`,
@@ -97,6 +101,9 @@ export function llmsFullTxt(): string {
     "",
     "## Pentru cine este OCTOM One (română)",
     audience("ro"),
+    "",
+    "## Articole (română)",
+    ...ARTICLES.map((a) => `### ${a.h1}\n${a.intro}\n${a.faq.map((f) => `- ${f.q} ${f.a}`).join("\n")}\nPage: ${SITE_URL}${roPath(`/blog/${a.slug}`)}`),
     "",
     "## Pages",
     `- Home: ${url("/")} (English), ${SITE_URL}${roPath("/")} (română)`,
