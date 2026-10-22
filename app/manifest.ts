@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Know who to contact today.",
     start_url: "/dashboard",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#4F46E5",
+    background_color: "#0B1026",
+    theme_color: "#0B1026",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

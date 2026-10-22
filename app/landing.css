@@ -401,3 +401,6 @@ html { scrollbar-width: thin; scrollbar-color: #0b1026 #eef2f7; }
 .lp .stage{margin-top:40px}
 }
 @media (prefers-reduced-motion:reduce){.lp .hm svg{animation:none}}
+
+/* Speed: sections far below the first screen are drawn only when scrolled near. */
+.lp .sec:not(#problem),.lp .ft{content-visibility:auto;contain-intrinsic-size:auto 720px}
