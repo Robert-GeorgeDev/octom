@@ -17,6 +17,7 @@ The list below shows the providers Octom currently uses that may process persona
 | **Vercel Web Analytics** | Aggregated analysis of site use, only after the necessary consent | Information about page use and some technical data linked to the visit | International provider; some processing may take place outside the EEA |
 | **Resend** | Sending operational emails and, if enabled, optional communications | Email addresses and the content of messages sent through the service | International provider; some processing may take place outside the EEA |
 | **OpenAI** | Providing artificial intelligence features | Data included in the AI request and the context information sent by Octom to generate the answer | International provider; some processing may take place outside the EEA |
+| **GitHub** | Storage of encrypted database backups (private repository, kept at most 30 days) | Encrypted backup files; GitHub does not hold the key and cannot read them | International provider; files may be stored outside the EEA |
 
 ### Supabase
 
@@ -78,6 +79,16 @@ Octom does not intentionally send OpenAI information that is not needed for the 
 However, the content sent may contain personal data entered or selected by the user.
 
 For more information about the use of AI features, see the **Privacy policy** and the **Terms and conditions**.
+
+### GitHub
+
+GitHub is used to keep backup copies of the database, in a private repository.
+
+The copies are **encrypted before they leave our infrastructure** (AES-256), and the decryption key is not stored at GitHub. GitHub cannot read their content.
+
+We keep backups for at most **30 days**, after which they are deleted automatically.
+
+GitHub may store these encrypted files outside the EEA, including in the United States.
 
 ## 2. How we select subprocessors
 

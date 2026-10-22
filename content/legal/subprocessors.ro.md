@@ -17,6 +17,7 @@ Lista de mai jos prezintă furnizorii utilizați în prezent de Octom care pot p
 | **Vercel Web Analytics** | Analiză agregată a utilizării site-ului, numai după consimțământul necesar             | Informații privind utilizarea paginilor și anumite date tehnice asociate vizitei                                   | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 | **Resend**               | Trimiterea e-mailurilor operaționale și, dacă este activată, a comunicărilor opționale | Adrese de e-mail și conținutul mesajelor transmise prin serviciu                                                   | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
 | **OpenAI**               | Furnizarea funcționalităților de inteligență artificială                               | Datele incluse în solicitarea AI și informațiile de context transmise de Octom pentru generarea răspunsului        | Furnizor internațional; anumite prelucrări pot avea loc în afara SEE                            |
+| **GitHub**               | Păstrarea backup-urilor criptate ale bazei de date (depozit privat, cel mult 30 de zile) | Fișiere de backup criptate; GitHub nu deține cheia și nu le poate citi                                              | Furnizor internațional; fișierele pot fi stocate în afara SEE                                   |
 
 ### Supabase
 
@@ -78,6 +79,16 @@ Octom nu transmite în mod intenționat către OpenAI informații care nu sunt n
 Totuși, conținutul transmis poate conține date cu caracter personal introduse sau selectate de utilizator.
 
 Pentru informații suplimentare privind utilizarea funcționalităților AI, consultă **Politica de confidențialitate** și **Termenii și condițiile**.
+
+### GitHub
+
+GitHub este utilizat pentru păstrarea copiilor de siguranță (backup) ale bazei de date, într-un depozit privat.
+
+Copiile sunt **criptate înainte de a părăsi infrastructura noastră** (AES-256), iar cheia de decriptare nu este stocată la GitHub. GitHub nu poate citi conținutul acestora.
+
+Păstrăm copiile de siguranță cel mult **30 de zile**, după care sunt șterse automat.
+
+GitHub poate stoca aceste fișiere criptate în afara SEE, inclusiv în Statele Unite.
 
 ---
 

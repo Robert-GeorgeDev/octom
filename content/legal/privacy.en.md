@@ -234,7 +234,7 @@ In general:
 
 * account data and workspace data are kept while the account or workspace is active;
 * some data may be kept for a limited period after the account is closed, where necessary for security, fraud prevention, dispute resolution or legal obligations;
-* data in backups may remain temporarily in the backup copies until the normal retention cycle ends;
+* data in backups may remain temporarily in the encrypted backup copies until the normal retention cycle ends, which is at most 30 days;
 * technical data and security logs may be kept for the period needed for the purposes for which they are collected;
 * consent records are kept for as long as needed to show that consent was given and how it was managed.
 

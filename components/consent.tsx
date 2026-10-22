@@ -59,6 +59,12 @@ export default function Consent() {
     } catch {
       /* storage unavailable: choice applies to this visit only */
     }
+    // Withdrawing consent must stop analytics now, not on the next visit: a script
+    // that already ran cannot be unloaded, so start the page again without it.
+    if (choice === "granted" && c === "denied") {
+      window.location.reload();
+      return;
+    }
     setChoice(c);
     setOpen(false);
   }

@@ -10,4 +10,5 @@ export const REQUIRED_MIGRATIONS = [
   "launch-readiness",
   "remove-plans",
   "migration-tracking",
+  "prefs-token-lock",
 ] as const;

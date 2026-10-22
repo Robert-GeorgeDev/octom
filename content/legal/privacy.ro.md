@@ -246,7 +246,7 @@ Păstrăm datele cu caracter personal numai atât timp cât este necesar pentru 
 
 * datele contului și datele din spațiul de lucru sunt păstrate cât timp contul sau spațiul de lucru este activ;
 * anumite date pot fi păstrate pentru o perioadă limitată după închiderea contului, atunci când acest lucru este necesar pentru securitate, prevenirea fraudelor, soluționarea disputelor sau îndeplinirea unor obligații legale;
-* datele din backup-uri pot rămâne temporar în copiile de siguranță până la expirarea ciclului normal de retenție;
+* datele din backup-uri pot rămâne temporar în copiile de siguranță criptate până la expirarea ciclului normal de retenție, de cel mult 30 de zile;
 * datele tehnice și jurnalele de securitate pot fi păstrate pentru perioada necesară scopurilor pentru care sunt colectate;
 * datele privind consimțământul sunt păstrate atât timp cât este necesar pentru a demonstra existența și gestionarea acestuia.
 
