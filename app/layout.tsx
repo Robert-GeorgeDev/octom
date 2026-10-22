@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, siteConfigured } from "@/lib/site";
-import { AuthProvider } from "@/components/auth-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import Consent from "@/components/consent";
 
@@ -25,12 +24,18 @@ export const metadata: Metadata = {
     siteName: "OCTOM One",
     type: "website",
     url: "/",
+    locale: "en_US",
+    alternateLocale: ["ro_RO"],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    title: "OCTOM One – Know who to contact today",
+    description: "A simple CRM built around follow-ups for freelancers, consultants and small teams.",
+  },
   alternates: { canonical: "/" },
 };
 
-export const viewport: Viewport = { themeColor: "#4F46E5" };
+export const viewport: Viewport = { themeColor: "#0B1026" };
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -68,7 +73,7 @@ export default function RootLayout({
           }}
         />
         <LanguageProvider>
-          <AuthProvider>{children}</AuthProvider>
+          {children}
           <Consent />
         </LanguageProvider>
       </body>

@@ -14,6 +14,8 @@ export default function AnpcSal({ className = "" }: { className?: string }) {
         alt="ANPC – Soluționarea alternativă a litigiilor"
         width={201}
         height={50}
+        loading="lazy"
+        decoding="async"
         className="h-[50px] w-[201px] max-w-full"
       />
     </a>
