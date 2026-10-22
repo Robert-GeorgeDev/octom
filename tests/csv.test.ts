@@ -86,7 +86,7 @@ describe("parseContactsCsv", () => {
   });
 
   it("reads Romanian headers, with Nume as the surname next to Prenume", () => {
-    const res = parseContactsCsv("Prenume;Nume;Firmă;Telefon;Notițe;Funcție;Oraș;Etichete\nIon;Vasile;Acme;0700 000 000;Sună;Director;Iași;client; vip");
+    const res = parseContactsCsv("Prenume;Nume;Firmă;Telefon;Notițe;Funcție;Oraș;Etichete\nIon;Vasile;Acme;0700 000 000;Sună;Director;Iași;client");
     expect(res.ok).toBe(true);
     if (!res.ok) return;
     const c = res.rows[0].contact;

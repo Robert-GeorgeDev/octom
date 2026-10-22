@@ -48,7 +48,7 @@ const ALIASES: Record<string, string[]> = {
   status: ["status", "stage", "etapa", "etapă"],
   notes: ["notes", "note", "notite", "notițe", "comments", "comentarii", "observatii", "observații"],
   next_followup: ["next followup", "next follow up", "follow up", "follow up date", "urmatorul follow up", "următorul follow up", "data follow up"],
-  job_title: ["job title", "title", "position", "organization 1 title", "functie", "funcție", "pozitie", "poziție"],
+  job_title: ["job title", "title", "position", "organization title", "organization 1 title", "functie", "funcție", "pozitie", "poziție"],
   website: ["website", "web site", "url", "web", "site", "pagina web", "pagină web"],
   location: ["location", "city", "oras", "oraș", "locatie", "locație", "address", "adresa", "adresă", "country", "tara", "țara"],
   source: ["source", "sursa", "sursă"],
