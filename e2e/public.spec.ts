@@ -44,3 +44,31 @@ for (const width of [360, 390, 768]) {
     });
   }
 }
+
+test("Romanian home page is served in Romanian with language tags", async ({ page, request }) => {
+  const res = await page.goto("/ro");
+  expect(res!.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/revii|ține minte/i);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/ro$/);
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveCount(1);
+  const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
+  expect(ld.join(" ")).toContain("FAQPage");
+  expect((await request.get("/ro/privacy")).status()).toBe(200);
+  expect((await request.get("/ro/for/freelancers")).status()).toBe(200);
+});
+
+for (const path of ["/llms.txt", "/llms-full.txt"]) {
+  test(`${path} is served as text`, async ({ request }) => {
+    const res = await request.get(path);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("text/plain");
+    expect(await res.text()).toContain("OCTOM One");
+  });
+}
+
+test("robots.txt welcomes AI search crawlers and points to the sitemap", async ({ request }) => {
+  const txt = await (await request.get("/robots.txt")).text();
+  expect(txt).toContain("GPTBot");
+  expect(txt).toContain("ClaudeBot");
+  expect(txt).toMatch(/Sitemap:/i);
+});

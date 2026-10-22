@@ -1,11 +1,34 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, siteConfigured } from "@/lib/site";
+import { LEGAL } from "@/lib/legal";
+import { roPath } from "@/lib/seo";
+import { PAGES } from "@/lib/seo-pages";
+import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
+
+// Date of the last real change to the product pages. Update it when their text changes:
+// search engines ignore a date that changes on every visit.
+const PRODUCT_UPDATED = "2026-10-22";
+
+type Entry = MetadataRoute.Sitemap[number];
+
+// Each page is listed in both languages, each entry pointing at its twin (hreflang).
+function both(path: string, lastModified: string, changeFrequency: Entry["changeFrequency"], priority: number): Entry[] {
+  const en = `${SITE_URL}${path}`; // "/" gives "https://octom.eu/", the same as the canonical address
+  const ro = `${SITE_URL}${roPath(path)}`;
+  const languages = { en, ro, "x-default": en };
+  return [
+    { url: en, lastModified, changeFrequency, priority, alternates: { languages } },
+    { url: ro, lastModified, changeFrequency, priority, alternates: { languages } },
+  ];
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!siteConfigured) return [];
-  const now = new Date();
-  return ["", "/ro", "/for/freelancers", "/for/agencies", "/for/consultants", "/for/small-teams", "/privacy", "/terms", "/cookies", "/refunds", "/accessibility", "/subprocessors", "/security", "/company", "/contact", "/docs", "/status"].map((path) => ({
-    url: `${SITE_URL}${path}`,
-    lastModified: now,
-  }));
+  return [
+    ...both("/", PRODUCT_UPDATED, "weekly", 1),
+    ...PAGES.flatMap((p) => both(`/for/${p.slug}`, PRODUCT_UPDATED, "monthly", 0.8)),
+    ...both("/docs", PRODUCT_UPDATED, "monthly", 0.7),
+    ...both("/contact", PRODUCT_UPDATED, "yearly", 0.5),
+    ...SITE_SLUGS.filter((s) => SITE_PAGES[s].legal).flatMap((s) => both(`/${s}`, LEGAL.updated, "yearly", 0.3)),
+  ];
 }

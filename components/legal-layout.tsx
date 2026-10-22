@@ -1,8 +1,9 @@
 "use client";
 
 import SocialLinks from "@/components/social-links";
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import Logo from "@/components/logo";
+import LanguageSwitcher from "@/components/language-switcher";
 import LegalNav from "@/components/legal-nav";
 import LegalToc from "@/components/legal-toc";
 import { CookieSettingsButton } from "@/components/consent";
@@ -28,12 +29,15 @@ export default function LegalLayout({
           <Link href="/" aria-label="Home">
             <Logo />
           </Link>
-          <Link
-            href="/login"
-            className="rounded-xl border border-line bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-brand-soft"
-          >
-            {ro ? "Autentificare" : "Log in"}
-          </Link>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <Link
+              href="/login"
+              className="rounded-xl border border-line bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-brand-soft"
+            >
+              {ro ? "Autentificare" : "Log in"}
+            </Link>
+          </div>
         </div>
       </header>
 

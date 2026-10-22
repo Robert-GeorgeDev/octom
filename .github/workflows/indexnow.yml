@@ -1,0 +1,20 @@
+name: IndexNow
+# After a change to the website, tell IndexNow search engines (Bing and others).
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", "components/**", "lib/seo-pages.ts", "lib/site-pages.ts", "content/**", "public/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Give the deployment time to finish before search engines come to look.
+      - run: sleep 240
+      - run: node scripts/indexnow.mjs
+        continue-on-error: true

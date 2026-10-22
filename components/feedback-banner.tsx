@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import { Gift } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 

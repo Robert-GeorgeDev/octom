@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import Script from "next/script";
 import { useLanguage } from "@/components/language-provider";
 

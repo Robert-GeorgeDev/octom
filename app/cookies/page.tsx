@@ -1,14 +1,7 @@
-import LegalLayout from "@/components/legal-layout";
-import LegalDoc from "@/components/legal-doc";
-import { loadLegalDoc } from "@/lib/legal-content";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata = { title: "Cookies – Octom" };
+export const metadata = siteMetadata("cookies", "en");
 
 export default function Page() {
-  const doc = loadLegalDoc("cookies");
-  return (
-    <LegalLayout title="Cookies and browser storage" titleRo="Cookie-uri și stocare în browser">
-      <LegalDoc ro={doc.ro} en={doc.en} />
-    </LegalLayout>
-  );
+  return <SitePageRoute slug="cookies" lang="en" />;
 }

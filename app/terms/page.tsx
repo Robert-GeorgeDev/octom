@@ -1,14 +1,7 @@
-import LegalLayout from "@/components/legal-layout";
-import LegalDoc from "@/components/legal-doc";
-import { loadLegalDoc } from "@/lib/legal-content";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata = { title: "Terms of Service – Octom" };
+export const metadata = siteMetadata("terms", "en");
 
 export default function Page() {
-  const doc = loadLegalDoc("terms");
-  return (
-    <LegalLayout title="Terms and conditions" titleRo="Termeni și condiții">
-      <LegalDoc ro={doc.ro} en={doc.en} />
-    </LegalLayout>
-  );
+  return <SitePageRoute slug="terms" lang="en" />;
 }

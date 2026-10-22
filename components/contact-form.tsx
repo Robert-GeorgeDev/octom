@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/loc-link";
 import Logo from "@/components/logo";
 import FeedbackBanner from "@/components/feedback-banner";
 import LanguageSwitcher from "@/components/language-switcher";

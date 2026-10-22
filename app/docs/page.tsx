@@ -1,11 +1,7 @@
-import DocsView from "@/components/docs-view";
+import { SitePageRoute, siteMetadata } from "@/components/site-routes";
 
-export const metadata = {
-  title: "Documentation – OCTOM One",
-  description: "How to use OCTOM One: follow-ups, contacts, pipeline, import and export, team and plans.",
-  alternates: { canonical: "/docs" },
-};
+export const metadata = siteMetadata("docs", "en");
 
 export default function Page() {
-  return <DocsView />;
+  return <SitePageRoute slug="docs" lang="en" />;
 }
