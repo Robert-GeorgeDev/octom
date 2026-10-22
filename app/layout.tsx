@@ -32,7 +32,6 @@ export const metadata: Metadata = {
     title: "OCTOM One – Know who to contact today",
     description: "A simple CRM built around follow-ups for freelancers, consultants and small teams.",
   },
-  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = { themeColor: "#0B1026" };

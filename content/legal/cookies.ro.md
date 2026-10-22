@@ -30,7 +30,7 @@ Acestea sunt utilizate pentru funcționarea și securitatea serviciului și nu s
 
 Putem stoca preferința ta privind limba interfeței, de exemplu română sau engleză.
 
-Această informație este utilizată pentru a afișa interfața în limba aleasă.
+Această informație este utilizată pentru a afișa interfața în limba aleasă. Este păstrată în stocarea locală și într-un cookie mic numit `octom-lang` (un an), ca pagina principală să se deschidă în limba ta.
 
 ### 2.3. Preferința privind cookie-urile
 
