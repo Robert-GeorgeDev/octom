@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
+import { GET as sitemapTxt } from "@/app/sitemap.txt/route";
 import { pageMetadata, roPath } from "@/lib/seo";
 import { PAGES } from "@/lib/seo-pages";
 import { ARTICLES } from "@/lib/articles";
@@ -158,5 +159,15 @@ describe("blog articles", () => {
       expect(txt).toContain(`/ro/blog/${a.slug}`);
       expect(urls).not.toContain(`${SITE_URL}/blog/${a.slug}`);
     }
+  });
+});
+
+describe("sitemap.txt", () => {
+  it("lists the same addresses as the XML sitemap, one per line", async () => {
+    const res = sitemapTxt();
+    expect(res.headers.get("content-type")).toContain("text/plain");
+    const lines = (await res.text()).trim().split("\n");
+    expect(lines).toEqual(sitemap().map((e) => e.url));
+    for (const l of lines) expect(l).toMatch(/^https:\/\/octom\.eu\//);
   });
 });
