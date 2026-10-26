@@ -52,7 +52,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="relative isolate min-h-screen bg-[#EEF1FA]">
+    <div className="relative isolate min-h-screen overflow-x-clip bg-[#EEF1FA]">
       {/* Soft blurred backdrop in the brand colours. Panels on top use frosted glass. */}
       <div
         aria-hidden="true"
@@ -88,7 +88,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-[1400px] md:pt-14">
+        <div className="mx-auto w-full min-w-0 max-w-[1400px] [overflow-wrap:anywhere] md:pt-14">
           {children}
         </div>
       </div>

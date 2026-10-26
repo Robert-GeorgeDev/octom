@@ -210,7 +210,7 @@ function ContactsView() {
               return (
                 <li
                   key={c.id}
-                  className={`group relative grid gap-x-6 gap-y-2 px-5 py-4 transition-colors duration-200 hover:bg-slate-50/80 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,1fr)_auto] md:items-center ${
+                  className={`group relative grid grid-cols-[minmax(0,1fr)] gap-x-6 gap-y-2 px-5 py-4 transition-colors duration-200 hover:bg-slate-50/80 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,1fr)_auto] md:items-center ${
                     openId === c.id ? "bg-brand-soft/60" : ""
                   }`}
                 >

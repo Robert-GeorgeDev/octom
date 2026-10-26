@@ -442,7 +442,7 @@ export default function ContactDetail({
       </header>
 
       {/* Body */}
-      <div className="grid flex-1 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid flex-1 grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 px-5 py-5 sm:px-7">
           <div role="tablist" aria-label={name} className="-mx-1 flex gap-1 overflow-x-auto border-b border-line pb-3">
             {tabs.map((tb) => (

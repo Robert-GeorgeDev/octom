@@ -301,7 +301,7 @@ function DashboardView() {
               </div>
               </GetStartedCard>
             ) : (
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {tiles.map((f, i) => {
                   const g = groupOf(f);
                   const c = tile[g];
@@ -354,7 +354,7 @@ function DashboardView() {
           </section>
 
           {/* Calendar, funnel and today's side column */}
-          <div className="mt-5 grid gap-5 lg:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_340px]">
+          <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_340px]">
             <section className={`${glass} p-5 sm:p-6`} aria-label={t("dash.calendar")}>
               <div className="flex items-center justify-between gap-2">
                 <h2 className="text-base font-semibold capitalize">
@@ -523,7 +523,7 @@ function DashboardView() {
                       {t(groupLabel[g])}
                       <span className={`rounded-full px-2 py-0.5 text-xs ${badge[g]}`}>{list.length}</span>
                     </h3>
-                    <div className="grid gap-2.5 xl:grid-cols-2">
+                    <div className="grid grid-cols-[minmax(0,1fr)] gap-2.5 xl:grid-cols-2">
                       {list.map((item) => (
                         <FollowUpCard key={item.id} item={item} group={g} onChanged={reload} />
                       ))}

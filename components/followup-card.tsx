@@ -71,7 +71,7 @@ export default function FollowUpCard({
   const locale = lang === "ro" ? "ro-RO" : "en-GB";
 
   return (
-    <article className="rounded-2xl border border-line bg-white p-4 transition duration-200 hover:shadow-soft">
+    <article className="min-w-0 rounded-2xl border border-line bg-white p-4 transition duration-200 hover:shadow-soft">
       <div className="flex items-start gap-3">
         <span
           aria-hidden="true"
