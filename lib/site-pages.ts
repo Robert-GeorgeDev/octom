@@ -3,7 +3,7 @@ import type { Lang } from "@/lib/seo";
 
 export const SITE_SLUGS = [
   "privacy", "terms", "cookies", "refunds", "accessibility", "subprocessors",
-  "security", "company", "contact", "docs", "status",
+  "security", "company", "contact", "docs", "roadmap", "status",
 ] as const;
 export type SiteSlug = (typeof SITE_SLUGS)[number];
 
@@ -59,6 +59,11 @@ export const SITE_PAGES: Record<SiteSlug, { en: Copy; ro: Copy; legal: boolean; 
     legal: false,
     en: { title: "Documentation", description: "How to use OCTOM One: follow-ups, contacts, pipeline, CSV import and export, team workspace, the AI assistant and your account." },
     ro: { title: "Documentație", description: "Cum folosești OCTOM One: follow-up-uri, contacte, pipeline, import și export CSV, spațiul de echipă, asistentul AI și contul tău." },
+  },
+  roadmap: {
+    legal: false,
+    en: { title: "Roadmap", description: "What OCTOM One shipped recently and what is under discussion, with no dates and no promises. Tell us what would help you most." },
+    ro: { title: "Roadmap", description: "Ce a livrat OCTOM One recent și ce se discută, fără date și fără promisiuni. Spune-ne ce te-ar ajuta cel mai mult." },
   },
   status: {
     legal: false,
