@@ -1,4 +1,4 @@
-import Mascot from "@/components/mascot";
+import Mark from "@/components/mark";
 
 /**
  * Octom wordmark: rounded letters (Nunito), solid colours, no gradients.
@@ -19,7 +19,7 @@ export function Logo({
       style={{ fontFamily: "var(--font-nunito), var(--font-inter), system-ui, sans-serif" }}
       aria-label="OCTOM One"
     >
-      {mark && <Mascot className="h-8 w-8 shrink-0" />}
+      {mark && <Mark className="h-8 w-8 shrink-0" />}
       <span aria-hidden="true" className="inline-flex items-baseline gap-[0.3em]">
         <span className={light ? "text-white" : "text-ink"}>octom</span>
         <span className={light ? "text-indigo-300" : "text-brand"}>One</span>

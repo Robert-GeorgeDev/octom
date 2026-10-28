@@ -1,7 +1,7 @@
 "use client";
 
 import { Lock, Check } from "lucide-react";
-import Mascot from "@/components/mascot";
+import Mark from "@/components/mark";
 import { useLanguage } from "@/components/language-provider";
 
 /**
@@ -57,7 +57,7 @@ export default function HeroDemo() {
             </ul>
           </div>
           <div className="dr">
-            <div className="emp"><Mascot className="" />{t("lp.demo.empty")}</div>
+            <div className="emp"><Mark className="" />{t("lp.demo.empty")}</div>
             <div className="dc">
               <div className="lb">{t("lp.demo.draft")}</div>
               <div className="who">{t("lp.demo.for")} Andrei Pop</div>

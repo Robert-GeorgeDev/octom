@@ -268,9 +268,9 @@ html { scrollbar-width: thin; scrollbar-color: #0b1026 #eef2f7; }
 .lp .ftc b{font-weight:600;color:#fff}
 .lp .ftc a{color:#98A1C4}
 .lp .ftc a:hover{color:#fff}
-.lp .wave{transform-box:fill-box;transform-origin:0% 90%;animation:lp-wave 3.6s ease-in-out infinite}
+.lp .wave{transform-box:fill-box;transform-origin:50% 50%;animation:lp-spin 40s linear infinite}
 @keyframes lp-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes lp-wave{0%,55%,100%{transform:rotate(0)}10%{transform:rotate(-16deg)}22%{transform:rotate(10deg)}34%{transform:rotate(-13deg)}46%{transform:rotate(7deg)}}
+@keyframes lp-spin{to{transform:rotate(360deg)}}
 @keyframes lp-float{from{transform:translateY(0)}to{transform:translateY(-9px)}}
 @keyframes lp-c3{0%,40%{opacity:1}44%,94%{opacity:0}98%,100%{opacity:1}}
 @keyframes lp-c2{0%,40%{opacity:0}46%,92%{opacity:1}97%,100%{opacity:0}}

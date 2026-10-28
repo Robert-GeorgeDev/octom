@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RequireAuth from "@/components/require-auth";
 import AuthShell, { AuthTitle, authButton, authError, authInputDark, authLabel } from "@/components/auth-shell";
-import Mascot from "@/components/mascot";
+import Mark from "@/components/mark";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
@@ -39,7 +39,7 @@ function OnboardingForm() {
 
   return (
     <AuthShell>
-      <Mascot className="mx-auto mb-4 h-16 w-16" />
+      <Mark className="mx-auto mb-4 h-16 w-16" />
       <AuthTitle>{t("onb.title")}</AuthTitle>
       <p className="mt-3 text-center text-slate-300">{t("onb.sub")}</p>
 
