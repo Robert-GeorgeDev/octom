@@ -7,7 +7,7 @@ import { useLanguage } from "@/components/language-provider";
 // Public pages that exist in Romanian under /ro/...
 const LOCALIZED = new Set([
   "/", "/privacy", "/terms", "/cookies", "/refunds", "/accessibility", "/subprocessors",
-  "/security", "/company", "/contact", "/docs", "/roadmap", "/status",
+  "/security", "/company", "/contact", "/demo", "/docs", "/roadmap", "/status",
 ]);
 
 /** "/privacy" becomes "/ro/privacy" for a Romanian reader. Other links are left alone. */
