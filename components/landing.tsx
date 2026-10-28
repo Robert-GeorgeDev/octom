@@ -52,6 +52,7 @@ const freeFeatures: Key[] = ["plans.free.f1", "plans.free.f2", "plans.free.f3", 
 const faq: { q: Key; a: Key }[] = [
   { q: "land.q0", a: "land.a0" }, { q: "land.q1", a: "land.a1" }, { q: "land.q2", a: "land.a2" }, { q: "land.q3", a: "land.a3" },
   { q: "land.q4", a: "land.a4" }, { q: "land.q5", a: "land.a5" }, { q: "land.q6", a: "land.a6" },
+  { q: "land.q7", a: "land.a7" }, { q: "land.q8", a: "land.a8" },
 ];
 
 const tick = <Check className="tk" strokeWidth={2.8} aria-hidden="true" />;

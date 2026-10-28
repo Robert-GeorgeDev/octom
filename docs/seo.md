@@ -8,7 +8,7 @@
 | Canonical + language twins | Each page points at itself (canonical) and at its English/Romanian twin (hreflang), so Google shows the right language. English at `/page`, Romanian at `/ro/page`. |
 | Sitemap | `/sitemap.xml` lists every page in both languages with hreflang and a real "last changed" date. |
 | robots.txt | Open to search engines and to AI search crawlers (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, Applebot-Extended). The app address (`one.octom.eu`) is closed to all crawlers. |
-| Structured data (schema.org) | Organization, WebSite, SoftwareApplication (free during beta), FAQPage (7 questions, both languages), BreadcrumbList. No ratings or reviews, because there are none yet. |
+| Structured data (schema.org) | Organization, WebSite, SoftwareApplication (free during beta), FAQPage (9 questions, both languages), SoftwareSourceCode (the public repository), BreadcrumbList. No ratings or reviews, because there are none yet. |
 | GEO / AEO (AI assistants) | `/llms.txt` (short index) and `/llms-full.txt` (all facts, FAQ and audience pages). The home page starts its FAQ with "What is OCTOM One?" so assistants can quote a direct answer. |
 | Social previews | A 1200x630 image per language (`/opengraph-image`, `/ro/opengraph-image`) plus Open Graph and Twitter tags on every page. |
 | IndexNow | `public/<key>.txt` proves ownership. After each change to the site, the "IndexNow" GitHub workflow sends all sitemap URLs to Bing, Yandex and others (about 4 minutes after the push, to let the deployment finish). |
@@ -24,7 +24,7 @@
 
 ## What helps most after launch
 
-- Real content: one useful page per question people actually search (for example "how to follow up with a lead", "CRM for freelancers in Romania"). The four audience pages are the template.
+- Real content: one useful page per question people actually search. The eight audience pages and the eight Romanian articles are the template; the last two (follow-up cadence, weekly review) were added on 2026-10-28. Next candidates: a comparison with spreadsheets in English, and an article on writing to a client who went quiet.
 - Links from outside: GitHub README, a Product Hunt or similar listing, Romanian startup directories, LinkedIn page, guest posts. Search engines and AI assistants trust what others link to.
 - Real reviews from beta testers, with permission. Add them to the page and then, only then, to the structured data.
 - When a page's text changes, update `PRODUCT_UPDATED` in `app/sitemap.ts`.

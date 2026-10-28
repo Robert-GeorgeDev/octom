@@ -30,6 +30,10 @@ export const enLand = {
   "land.a5": "It's stored in the EU, and you can export or delete it anytime. Workspaces are isolated at the database level. See the Privacy Policy for details.",
   "land.q6": "Can I leave and take my data?",
   "land.a6": "Yes. Export your contacts as CSV at any time and delete your account from the Account page.",
+  "land.q7": "Can I try it without an account?",
+  "land.a7": "Yes. The demo page works without an account or a card. It uses example contacts, and nothing you do there is saved.",
+  "land.q8": "Is it open source, and can I host it myself?",
+  "land.a8": "Yes. The core is public under the AGPL-3.0 license, and the repository has a step-by-step self-hosting guide. You can also just use the hosted version, which is free during beta.",
 
 };
 
@@ -65,5 +69,9 @@ export const roLand: Record<keyof typeof enLand, string> = {
   "land.a5": "Datele sunt stocate în UE și le poți exporta sau șterge oricând. Spațiile de lucru sunt izolate la nivel de bază de date. Detalii în Politica de confidențialitate.",
   "land.q6": "Pot pleca și să-mi iau datele?",
   "land.a6": "Da. Îți exporți contactele ca CSV oricând și îți ștergi contul din pagina Cont.",
+  "land.q7": "Pot să-l încerc fără cont?",
+  "land.a7": "Da. Pagina demo funcționează fără cont și fără card. Folosește contacte-exemplu, iar nimic din ce faci acolo nu se salvează.",
+  "land.q8": "Este open-source și îl pot găzdui singur?",
+  "land.a8": "Da. Nucleul este public sub licența AGPL-3.0, iar depozitul are un ghid de găzduire proprie, pas cu pas. Poți folosi și versiunea găzduită, gratuită în beta.",
 
 };
