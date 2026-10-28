@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // The blog exists in Romanian only, so these entries have no language twin.
     { url: `${SITE_URL}${roPath("/blog")}`, lastModified: PRODUCT_UPDATED, changeFrequency: "weekly", priority: 0.7 },
     ...ARTICLES.map((a): Entry => ({ url: `${SITE_URL}${roPath(`/blog/${a.slug}`)}`, lastModified: a.updated, changeFrequency: "monthly", priority: 0.6 })),
+    ...both("/demo", PRODUCT_UPDATED, "monthly", 0.8),
     ...TOOL_SLUGS.flatMap((s) => both(`/tools/${s}`, PRODUCT_UPDATED, "monthly", 0.7)),
     ...both("/docs", PRODUCT_UPDATED, "monthly", 0.7),
     ...both("/roadmap", PRODUCT_UPDATED, "monthly", 0.4),

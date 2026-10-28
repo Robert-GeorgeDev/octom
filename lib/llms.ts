@@ -5,6 +5,7 @@ import { PAGES } from "@/lib/seo-pages";
 import { ARTICLES } from "@/lib/articles";
 import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
 import { TOOL_SLUGS, toolCopy } from "@/lib/tools";
+import { DEMO_COPY } from "@/lib/demo";
 import { roPath } from "@/lib/seo";
 
 // Plain-text descriptions of the site for AI assistants (the llms.txt convention).
@@ -39,6 +40,7 @@ export function llmsTxt(): string {
     "## Product",
     `- [OCTOM One home (English)](${url("/")}): what it is, how it works, pricing and FAQ`,
     `- [OCTOM One acasă (română)](${SITE_URL}${roPath("/")}): aceeași pagină, în română`,
+    `- [Live demo](${url("/demo")}): ${DEMO_COPY.en.desc}`,
     "",
     "## Who it is for",
     ...PAGES.map((p) => `- [${p.en.h1}](${url(`/for/${p.slug}`)}): ${p.en.desc}`),
