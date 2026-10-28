@@ -140,8 +140,8 @@ function DataView() {
     downloadCsv(
       `${BRAND_SLUG}-contacts-template.csv`,
       buildCsv([
-        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next, "Marketing manager", "brightagency.example", "Cluj-Napoca", "LinkedIn", "client; priority"],
-        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", "", "", "", "", "", ""],
+        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next, "Marketing manager", "brightagency.example", "Cluj-Napoca", "LinkedIn", "client; priority", "1500", "EUR"],
+        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", "", "", "", "", "", "", "", ""],
       ])
     );
   }
@@ -209,6 +209,90 @@ function DataView() {
   }
 
   async function handleExtra(kind: "followups" | "activity") {
+    if (!orgId) return;
+    setExporting(true);
+    setExportFailed(false);
+    try {
+      const contacts = await fetchPages<ContactRow>((from, to) =>
+        supabase
+          .from("contacts")
+          .select("id, first_name, last_name, company, email, phone, status, notes")
+          .eq("organization_id", orgId)
+          .order("created_at", { ascending: true })
+          .order("id", { ascending: true })
+          .range(from, to)
+      );
+      const who = new Map(
+        contacts.map((c) => [c.id, [`${c.first_name} ${c.last_name}`.trim(), c.email]])
+      );
+
+      if (kind === "followups") {
+        type F = {
+          contact_id: string;
+          due_date: string;
+          due_time: string | null;
+          priority: string;
+          note: string;
+          status: string;
+          completed_at: string | null;
+        };
+        const rows = await fetchPages<F>((from, to) =>
+          supabase
+            .from("follow_ups")
+            .select("contact_id, due_date, due_time, priority, note, status, completed_at")
+            .eq("organization_id", orgId)
+            .order("due_date", { ascending: true })
+            .order("id", { ascending: true })
+            .range(from, to)
+        );
+        downloadCsv(
+          `${BRAND_SLUG}-follow-ups-${todayISO()}.csv`,
+          buildTable(
+            ["contact_name", "contact_email", "due_date", "due_time", "priority", "status", "completed_at", "note"],
+            rows.map((r) => [
+              who.get(r.contact_id)?.[0] ?? "",
+              who.get(r.contact_id)?.[1] ?? "",
+              r.due_date,
+              r.due_time ?? "",
+              r.priority,
+              r.status,
+              r.completed_at ?? "",
+              r.note,
+            ])
+          )
+        );
+      } else {
+        type A = { contact_id: string; type: string; description: string; created_at: string };
+        const rows = await fetchPages<A>((from, to) =>
+          supabase
+            .from("activities")
+            .select("contact_id, type, description, created_at")
+            .eq("organization_id", orgId)
+            .order("created_at", { ascending: true })
+            .order("id", { ascending: true })
+            .range(from, to)
+        );
+        downloadCsv(
+          `${BRAND_SLUG}-activity-${todayISO()}.csv`,
+          buildTable(
+            ["contact_name", "contact_email", "created_at", "type", "description"],
+            rows.map((r) => [
+              who.get(r.contact_id)?.[0] ?? "",
+              who.get(r.contact_id)?.[1] ?? "",
+              r.created_at,
+              r.type,
+              r.description,
+            ])
+          )
+        );
+      }
+    } catch {
+      setExportFailed(true);
+    }
+    setExporting(false);
+  }
+
+  async function handleExport() {
     if (!orgId) return;
     setExporting(true);
     setExportFailed(false);
