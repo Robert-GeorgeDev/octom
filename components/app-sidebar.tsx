@@ -7,7 +7,7 @@ import {
   Home, Users, LayoutGrid, Sparkles, UserPlus, Database,
   UserCircle, Plus, ChevronDown, PanelLeftClose, PanelLeftOpen, Briefcase, LogOut,
 } from "lucide-react";
-import Mascot from "@/components/mascot";
+import Mark from "@/components/mark";
 import LanguageSwitcher from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
@@ -116,7 +116,7 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
         collapsed ? "w-[76px]" : "w-[272px]"
       }`}
     >
-      {/* Header: mascot, workspace, collapse toggle */}
+      {/* Header: mark, workspace, collapse toggle */}
       <div className={`flex items-center gap-2 px-4 pb-3 pt-4 ${collapsed ? "flex-col" : ""}`}>
         <Link
           href="/dashboard"
@@ -124,7 +124,7 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
           className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl p-1 transition-colors hover:bg-slate-50"
         >
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-navy shadow-soft transition-transform duration-300 group-hover:scale-105">
-            <Mascot className="h-7 w-7" />
+            <Mark className="h-7 w-7" />
           </span>
           <span className={`min-w-0 overflow-hidden transition-all duration-300 ${collapsed ? "w-0 opacity-0" : "w-full opacity-100"}`}>
             <span className="block truncate text-sm font-extrabold leading-tight text-ink">{workspace || BRAND}</span>

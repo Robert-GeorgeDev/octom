@@ -6,7 +6,7 @@ import {
   Sun, Trash2, UserPlus, User, Users, type LucideIcon,
 } from "lucide-react";
 import Logo from "@/components/logo";
-import Mascot from "@/components/mascot";
+import Mark from "@/components/mark";
 import LanguageSwitcher from "@/components/language-switcher";
 import HeroDemo from "@/components/hero-demo";
 import ScrollProgress from "@/components/scroll-progress";
@@ -106,7 +106,7 @@ export default function Home() {
               </div>
             </div>
             <div className="hm" aria-hidden="true">
-              <Mascot wave />
+              <Mark wave />
               <span className="bubble">{t("lp.hero.bubble")}</span>
             </div>
           </div>
@@ -355,7 +355,7 @@ export default function Home() {
                 <span>{t("lp.final.note")}</span>
               </div>
             </div>
-            <div className="bigm" aria-hidden="true"><Mascot wave /></div>
+            <div className="bigm" aria-hidden="true"><Mark wave /></div>
           </div>
         </section>
       </main>
