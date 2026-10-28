@@ -33,7 +33,7 @@ export const TOOLS: Record<ToolSlug, { en: ToolCopy; ro: ToolCopy }> = {
     },
     ro: {
       title: "Generator de mesaje de follow-up",
-      desc: "Generator gratuit de mesaje de follow-up: alegi o situație, adaugi un nume și primești un mesaj calm, gata de editat, în română sau engleză. Nimic nu se salvează sau trimite.",
+      desc: "Generator gratuit de mesaje de follow-up: alegi o situație, adaugi un nume și primești un mesaj calm, gata de editat, în română sau engleză. Nimic nu se salvează.",
       h1: "Generator de mesaje de follow-up",
       intro:
         "Alege o situație, adaugă un nume și primești un mesaj scurt și politicos, pe care îl editezi și îl trimiți tu. Rulează în browserul tău: nimic din ce scrii nu se salvează sau trimite nicăieri.",
