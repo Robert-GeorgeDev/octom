@@ -9,6 +9,9 @@ import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import AccountMenu from "@/components/account-menu";
 import FeedbackButton from "@/components/feedback-button";
+import CommandPalette, { SearchButton } from "@/components/command-palette";
+import InstallPrompt from "@/components/install-prompt";
+import { ToastProvider } from "@/components/toast";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
@@ -52,6 +55,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
+    <ToastProvider>
     <div className="relative isolate min-h-screen overflow-x-clip bg-[#EEF1FA]">
       {/* Soft blurred backdrop in the brand colours. Panels on top use frosted glass. */}
       <div
@@ -70,6 +74,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-white px-4 py-3 md:hidden">
         <Link href="/dashboard" aria-label={BRAND}><Logo /></Link>
         <div className="flex items-center gap-3">
+          <SearchButton className="grid h-11 w-11 place-items-center rounded-xl text-slate-600" />
           <Link href="/assistant" aria-label={t("nav.assistant")} className="grid h-11 w-11 place-items-center rounded-xl text-slate-600">
             <Sparkles className="h-5 w-5" aria-hidden="true" />
           </Link>
@@ -83,6 +88,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="pointer-events-none sticky top-0 z-40 hidden h-0 md:block">
           <div className="mx-auto flex w-full max-w-[1400px] justify-end px-5 pt-4">
             <div className="pointer-events-auto flex items-center gap-3">
+              <SearchButton className="grid h-10 w-10 place-items-center rounded-full border border-white/80 bg-white/60 text-slate-700 transition hover:bg-white hover:text-brand" />
               <FeedbackButton />
               <AccountMenu />
             </div>
@@ -109,6 +115,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {tab("/account", t("nav.account"), UserCircle)}
         </div>
       </nav>
+      <CommandPalette />
+      <InstallPrompt />
     </div>
+    </ToastProvider>
   );
 }

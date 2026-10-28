@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { addDays, formatDate, todayISO } from "@/lib/dates";
-import { isCadenceId, nextStep, totalSteps } from "@/lib/cadences";
+import { isCadenceId, totalSteps } from "@/lib/cadences";
 import { daysLabel } from "@/lib/priority";
-import { completeFollowUp } from "@/lib/cadence-run";
+import { completeFollowUp, undoCompleteFollowUp } from "@/lib/cadence-run";
+import { useToast } from "@/components/toast";
 import type { Key } from "@/lib/dictionaries";
 import { useLanguage } from "@/components/language-provider";
 import type { FollowUp } from "@/types/followup";
@@ -40,7 +41,7 @@ export default function FollowUpCard({
   const [customDate, setCustomDate] = useState(item.due_date);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [info, setInfo] = useState("");
+  const toast = useToast();
 
   async function run(action: () => PromiseLike<{ error: unknown }>) {
     setBusy(true);
@@ -58,13 +59,25 @@ export default function FollowUpCard({
   async function complete() {
     setBusy(true);
     setError("");
-    setInfo("");
     try {
-      const result = await completeFollowUp(item);
-      if (result === "done-next-failed") setError(t("cad.nextFailed"));
-      else if (result === "done-next-scheduled" && isCadenceId(item.cadence) && item.cadence_step !== null) {
-        const gap = nextStep(item.cadence, item.cadence_step)?.gapDays ?? 0;
-        setInfo(t("cad.scheduled").replace("{days}", daysLabel(gap, lang === "ro" ? "ro" : "en")));
+      const out = await completeFollowUp(item);
+      if (out.result !== "already-done") {
+        const message =
+          out.result === "done-next-failed"
+            ? t("cad.nextFailed")
+            : out.result === "done-next-scheduled"
+              ? t("cad.scheduled").replace("{days}", daysLabel(out.nextGapDays ?? 0, lang === "ro" ? "ro" : "en"))
+              : t("toast.done");
+        // The card disappears once the list reloads, so the message and Undo live in a toast.
+        toast.show({
+          message,
+          actionLabel: t("toast.undo"),
+          onAction: async () => {
+            const ok = await undoCompleteFollowUp(item, out.nextId);
+            toast.show({ message: ok ? t("toast.undone") : t("toast.undoFailed") });
+            onChanged();
+          },
+        });
       }
       setMode("none");
       onChanged();
@@ -142,11 +155,6 @@ export default function FollowUpCard({
       {error && (
         <p role="alert" className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-overdue">
           {error}
-        </p>
-      )}
-      {info && (
-        <p role="status" className="mt-3 rounded-xl bg-brand-soft px-3 py-2 text-sm text-brand">
-          {info}
         </p>
       )}
 
