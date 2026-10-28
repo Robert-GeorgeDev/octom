@@ -1,5 +1,6 @@
 "use client";
 
+import { PipelineSkeleton } from "@/components/skeleton";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import RequireAuth from "@/components/require-auth";
@@ -64,7 +65,7 @@ function PipelineView() {
       <h1 className="text-4xl font-semibold tracking-tight">{t("pipe.title")}</h1>
       <p className="mt-2 text-lg text-slate-500">{t("pipe.subtitle")}</p>
       {error && <p role="alert" className="mt-3 text-sm text-overdue">{error}</p>}
-      {cards === null && !error && <p className="mt-6 text-slate-600">{t("common.loading")}</p>}
+      {cards === null && !error && <PipelineSkeleton />}
 
       {cards !== null && (
         <div className="mt-6 flex snap-x gap-3 overflow-x-auto pb-4">

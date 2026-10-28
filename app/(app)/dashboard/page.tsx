@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Clock, Plus, Sparkles, Trophy, Users } from "lucide-react";
 import RequireAuth from "@/components/require-auth";
-import LoadingScreen from "@/components/loading-screen";
+import { DashboardSkeleton } from "@/components/skeleton";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
@@ -273,9 +273,7 @@ function DashboardView() {
       )}
 
       {followUps === null && !error && (
-        <div className="mt-8">
-          <LoadingScreen />
-        </div>
+        <DashboardSkeleton />
       )}
 
       {followUps !== null && (
