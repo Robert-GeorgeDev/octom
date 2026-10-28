@@ -171,3 +171,30 @@ describe("sitemap.txt", () => {
     for (const l of lines) expect(l).toMatch(/^https:\/\/octom\.eu\//);
   });
 });
+
+describe("audience pages", () => {
+  it("has unique slugs and the four newest ones", () => {
+    const slugs = PAGES.map((p) => p.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const s of ["translators", "designers", "photographers", "accountants"]) expect(slugs).toContain(s);
+  });
+
+  it("keeps the brand voice: no exclamation marks, no hype, no invented numbers", () => {
+    const banned = /revolution|game-changer|supercharge|seamless|\b10x\b|\b100%|\bAI magic\b/i;
+    for (const p of PAGES) {
+      for (const c of [p.en, p.ro]) {
+        const text = JSON.stringify(c);
+        expect(text, p.slug).not.toContain("!");
+        expect(text, p.slug).not.toMatch(banned);
+      }
+    }
+  });
+
+  it("lists every audience page in the sitemap in both languages", () => {
+    const urls = sitemap().map((e) => e.url);
+    for (const p of PAGES) {
+      expect(urls).toContain(`${SITE_URL}/for/${p.slug}`);
+      expect(urls).toContain(`${SITE_URL}/ro/for/${p.slug}`);
+    }
+  });
+});
