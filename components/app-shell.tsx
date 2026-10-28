@@ -11,6 +11,7 @@ import AccountMenu from "@/components/account-menu";
 import FeedbackButton from "@/components/feedback-button";
 import CommandPalette, { SearchButton } from "@/components/command-palette";
 import InstallPrompt from "@/components/install-prompt";
+import ServiceWorker from "@/components/service-worker";
 import { ToastProvider } from "@/components/toast";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
@@ -117,6 +118,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
       <CommandPalette />
       <InstallPrompt />
+      <ServiceWorker />
     </div>
     </ToastProvider>
   );

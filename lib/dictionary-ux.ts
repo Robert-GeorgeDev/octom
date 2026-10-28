@@ -15,6 +15,8 @@ export const enUx = {
   "install.text": "It opens like an app, straight from your home screen.",
   "install.button": "Install",
   "install.later": "Not now",
+  "install.ios": "On iPhone: tap Share, then Add to Home Screen.",
+  "install.gotit": "Got it",
 } as const;
 
 export const roUx: Record<keyof typeof enUx, string> = {
@@ -34,4 +36,6 @@ export const roUx: Record<keyof typeof enUx, string> = {
   "install.text": "Se deschide ca o aplicație, direct de pe ecranul principal.",
   "install.button": "Instalează",
   "install.later": "Nu acum",
+  "install.ios": "Pe iPhone: apasă Partajează, apoi Adaugă pe ecranul principal.",
+  "install.gotit": "Am înțeles",
 };

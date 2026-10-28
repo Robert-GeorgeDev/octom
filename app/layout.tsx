@@ -28,6 +28,8 @@ export const metadata: Metadata = {
     alternateLocale: ["ro_RO"],
   },
   applicationName: "OCTOM One",
+  appleWebApp: { capable: true, title: "OCTOM One", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
   category: "business",
   // Lets search engines and AI assistants show full snippets and large images.
   robots: {
