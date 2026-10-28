@@ -4,6 +4,7 @@ import JsonLd from "@/components/json-ld";
 import LanguageSwitcher from "@/components/language-switcher";
 import { LangScope } from "@/components/language-provider";
 import { PAGES, type SeoPage } from "@/lib/seo-pages";
+import { TOOL_SLUGS, toolCopy } from "@/lib/tools";
 import { localizedPath, pageMetadata, type Lang } from "@/lib/seo";
 import { breadcrumbLd, faqLd, graph, softwareLd } from "@/lib/jsonld";
 import { SITE_URL } from "@/lib/site";
@@ -97,6 +98,16 @@ export default function ForPage({ page, lang }: { page: SeoPage; lang: Lang }) {
               <li key={p.slug}>
                 <Link href={localizedPath(`/for/${p.slug}`, lang)} className="text-brand hover:underline">
                   {p[lang].h1}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm font-medium text-gray-900">{lang === "ro" ? "Instrumente gratuite" : "Free tools"}</p>
+          <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            {TOOL_SLUGS.map((s) => (
+              <li key={s}>
+                <Link href={localizedPath(`/tools/${s}`, lang)} className="text-brand hover:underline">
+                  {toolCopy(s, lang).h1}
                 </Link>
               </li>
             ))}
