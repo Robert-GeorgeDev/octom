@@ -9,6 +9,7 @@ import {
 import ActivityTimeline from "@/components/activity-timeline";
 import AiAssistant from "@/components/ai-assistant";
 import MessageTemplates from "@/components/message-templates";
+import type { TemplateId } from "@/lib/templates";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import { useAuth } from "@/components/auth-provider";
 import { useLanguage } from "@/components/language-provider";
@@ -153,7 +154,7 @@ export const CONTACT_TABS = ["activity", "followups", "notes", "templates", "ai"
 export type ContactTab = (typeof CONTACT_TABS)[number];
 
 export default function ContactDetail({
-  id, orgId, variant, onDeleted, onOpenFull, initialTab,
+  id, orgId, variant, onDeleted, onOpenFull, initialTab, initialTemplate,
 }: {
   id: string;
   orgId: string;
@@ -162,6 +163,8 @@ export default function ContactDetail({
   onOpenFull?: string;
   /** Tab to open first, for example "templates" when coming from the Today page. */
   initialTab?: ContactTab;
+  /** Message template to preselect on the Templates tab. */
+  initialTemplate?: TemplateId;
 }) {
   const { t, lang } = useLanguage();
   const { user } = useAuth();
@@ -495,7 +498,7 @@ export default function ContactDetail({
 
             {tab === "notes" && <NotesTab contact={contact} onSave={(v) => patch({ notes: v })} t={t} />}
 
-            {tab === "templates" && <MessageTemplates contact={contact} onUse={(kind) => logActivity(kind, "")} />}
+            {tab === "templates" && <MessageTemplates contact={contact} initialId={initialTemplate} onUse={(kind) => logActivity(kind, "")} />}
 
             {tab === "ai" && <AiAssistant contactId={id} email={contact.email} />}
           </div>

@@ -14,6 +14,7 @@ import { notifyContactsChanged } from "@/hooks/use-contact-counts";
 import { supabase } from "@/lib/supabase";
 import { todayISO } from "@/lib/dates";
 import { daysLabel, rankToday, type Reason } from "@/lib/priority";
+import { isCadenceId, templateFor } from "@/lib/cadences";
 import type { Key } from "@/lib/dictionaries";
 
 type ContactRow = { id: string; status: string; updated_at: string };
@@ -113,7 +114,7 @@ function TodayView() {
                 <>
                   <ReasonChips reasons={f.reasons} />
                   <Link
-                    href={`/contacts/${f.contact_id}?tab=templates`}
+                    href={`/contacts/${f.contact_id}?tab=templates${isCadenceId(f.cadence) && f.cadence_step !== null ? `&template=${templateFor(f.cadence, f.cadence_step)}` : ""}`}
                     className="mt-3 inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-brand/30 bg-brand-soft px-3 text-sm font-semibold text-brand transition hover:bg-brand hover:text-white"
                   >
                     <PenLine className="h-4 w-4" aria-hidden="true" />

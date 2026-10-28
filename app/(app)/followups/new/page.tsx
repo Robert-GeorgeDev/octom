@@ -9,6 +9,7 @@ import { useOrgId } from "@/hooks/use-org-id";
 import { useAuth } from "@/components/auth-provider";
 import { supabase } from "@/lib/supabase";
 import { addDays, todayISO } from "@/lib/dates";
+import { CADENCE_IDS, CADENCES, dayMarks, isCadenceId, type CadenceId } from "@/lib/cadences";
 import type { Key } from "@/lib/dictionaries";
 import { PRIORITIES, type Priority } from "@/types/followup";
 
@@ -29,6 +30,7 @@ function NewFollowUpForm() {
   const [dueTime, setDueTime] = useState("");
   const [priority, setPriority] = useState<Priority>("Normal");
   const [note, setNote] = useState("");
+  const [cadence, setCadence] = useState<CadenceId | "">("");
   const [members, setMembers] = useState<{ user_id: string; email: string }[]>([]);
   const [assignee, setAssignee] = useState("");
   const [error, setError] = useState("");
@@ -89,6 +91,7 @@ function NewFollowUpForm() {
       priority,
       note: note.trim(),
       ...(assignee ? { assigned_to: assignee } : {}),
+      ...(cadence ? { cadence, cadence_step: 1 } : {}),
     });
     if (failure) {
       setError(t("common.error"));
@@ -212,6 +215,38 @@ function NewFollowUpForm() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label htmlFor="cadence" className="block text-sm font-medium">
+            {t("cad.label")}
+          </label>
+          <select
+            id="cadence"
+            value={cadence}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "") {
+                setCadence("");
+              } else if (isCadenceId(v)) {
+                setCadence(v);
+                setDueDate(addDays(todayISO(), CADENCES[v].first));
+              }
+            }}
+            className={inputClass}
+          >
+            <option value="">{t("cad.none")}</option>
+            {CADENCE_IDS.map((c) => (
+              <option key={c} value={c}>
+                {t(("cad.name." + c) as Key)}
+              </option>
+            ))}
+          </select>
+          {cadence && (
+            <p className="mt-1.5 text-xs text-slate-500">
+              {t("cad.days").replace("{list}", dayMarks(cadence).join(", "))}. {t("cad.hint")}
+            </p>
+          )}
         </div>
 
         <div>
