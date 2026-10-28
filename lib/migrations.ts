@@ -11,4 +11,5 @@ export const REQUIRED_MIGRATIONS = [
   "remove-plans",
   "migration-tracking",
   "follow-up-cadences",
+  "follow-up-cadences-strict",
 ] as const;
