@@ -12,4 +12,5 @@ export const REQUIRED_MIGRATIONS = [
   "migration-tracking",
   "follow-up-cadences",
   "follow-up-cadences-strict",
+  "deal-value",
 ] as const;

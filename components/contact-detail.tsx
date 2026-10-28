@@ -4,11 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowUpRight, Building2, Check, Globe, Mail, MapPin, MessageCircle, MoreHorizontal, Pencil,
-  Phone, Plus, Tag, Trash2, X, Briefcase, Compass, AtSign, PhoneCall,
+  Phone, Plus, Tag, Trash2, X, Briefcase, Coins, Compass, AtSign, PhoneCall,
 } from "lucide-react";
 import ActivityTimeline from "@/components/activity-timeline";
 import AiAssistant from "@/components/ai-assistant";
 import MessageTemplates from "@/components/message-templates";
+import { dealOf, formatMoney, parseDeal, DEAL_CURRENCIES, type DealCurrency } from "@/lib/deal";
 import type { TemplateId } from "@/lib/templates";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import { useAuth } from "@/components/auth-provider";
@@ -139,6 +140,115 @@ function DetailRow({
               }}
               aria-label={`${label}: ${placeholder}`}
               className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-slate-400 opacity-0 transition hover:bg-slate-100 hover:text-ink focus:opacity-100 group-hover/row:opacity-100"
+            >
+              <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- estimated value: an amount and a currency, saved together ---------- */
+function DealRow({
+  contact, locale, defaultCurrency, onSave, t,
+}: {
+  contact: Contact;
+  locale: string;
+  defaultCurrency: DealCurrency;
+  onSave: (value: number | null, currency: DealCurrency | null) => Promise<boolean>;
+  t: (k: Key) => string;
+}) {
+  const current = dealOf(contact);
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState("");
+  const [currency, setCurrency] = useState<DealCurrency>(defaultCurrency);
+  const [invalid, setInvalid] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  function start() {
+    setText(current ? String(current.value) : "");
+    setCurrency(current?.currency ?? defaultCurrency);
+    setInvalid(false);
+    setEditing(true);
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (saving) return;
+    const parsed = parseDeal(text, currency);
+    if (!parsed.ok) {
+      setInvalid(true);
+      return;
+    }
+    setSaving(true);
+    const ok = await onSave(parsed.value, parsed.currency);
+    setSaving(false);
+    if (ok) setEditing(false);
+  }
+
+  return (
+    <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-3 py-1.5 text-sm">
+      <span className="flex items-center gap-2 pt-1.5 text-slate-500">
+        <Coins className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+        <span className="truncate">{t("deal.label")}</span>
+      </span>
+      {editing ? (
+        <form onSubmit={submit} className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <input
+              autoFocus
+              inputMode="decimal"
+              value={text}
+              maxLength={16}
+              disabled={saving}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setEditing(false);
+              }}
+              aria-label={t("deal.amount")}
+              aria-invalid={invalid}
+              className="min-w-0 flex-1 rounded-lg border border-brand/40 bg-white px-2.5 py-1.5 text-sm outline-none ring-2 ring-brand/15"
+            />
+            <select
+              value={currency}
+              disabled={saving}
+              onChange={(e) => setCurrency(e.target.value as DealCurrency)}
+              aria-label={t("deal.currency")}
+              className="rounded-lg border border-line bg-white px-2 py-1.5 text-sm"
+            >
+              {DEAL_CURRENCIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+          {invalid && <p role="alert" className="mt-1 text-xs text-overdue">{t("deal.invalid")}</p>}
+          <div className="mt-2 flex items-center gap-2">
+            <button type="submit" disabled={saving} className="rounded-lg bg-ink px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-60">
+              {t("deal.save")}
+            </button>
+            <button type="button" disabled={saving} onClick={() => setEditing(false)} className="rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100">
+              {t("deal.cancel")}
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-slate-500">{t("deal.hint")}</p>
+        </form>
+      ) : (
+        <div className="flex min-w-0 items-center gap-1 pt-0.5">
+          {current ? (
+            <span className="min-w-0 truncate font-medium text-ink">{formatMoney(current.value, current.currency, locale)}</span>
+          ) : (
+            <button type="button" onClick={start} className="truncate text-left text-slate-400 hover:text-brand">
+              {t("crm.add")}
+            </button>
+          )}
+          {current && (
+            <button
+              type="button"
+              onClick={start}
+              aria-label={t("deal.edit")}
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-slate-400 hover:bg-slate-100 hover:text-ink"
             >
               <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
@@ -515,6 +625,13 @@ export default function ContactDetail({
             {detail("website", t("crm.website"), Globe, { href: web || undefined, display: websiteLabel(contact.website) })}
             {detail("location", t("crm.location"), MapPin)}
             {detail("source", t("crm.source"), Compass)}
+            <DealRow
+              contact={contact}
+              locale={locale}
+              defaultCurrency={lang === "ro" ? "RON" : "EUR"}
+              onSave={(value, cur) => patch({ deal_value: value, deal_currency: cur })}
+              t={t}
+            />
           </div>
 
           <h2 className="mt-7 text-xs font-bold uppercase tracking-wide text-slate-400">{t("crm.tags")}</h2>

@@ -26,6 +26,9 @@ export type Contact = {
   job_title?: string | null;
   source?: string | null;
   tags?: string[] | null;
+  // Estimated value (supabase/migrations/20261028_03_deal-value.sql). Both set, or both empty.
+  deal_value?: number | null;
+  deal_currency?: string | null;
   created_at?: string;
   assigned_to?: string | null;
 };

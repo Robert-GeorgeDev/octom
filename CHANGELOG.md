@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Estimated value on a contact: an amount and a currency (RON, EUR or USD) on the contact page, shown on each pipeline card, with a total per currency at the top of each pipeline column (currencies are never converted or mixed). It is the person's own estimate. CSV export and import have two new columns, `deal_value` and `deal_currency`. Needs `supabase/migrations/20261028_03_deal-value.sql`; until it is run, pipeline and export keep working without the value.
 - Self-hosting guide (`docs/self-hosting.md`): database order checked on an empty PostgreSQL 16, Auth settings, environment variables, what to replace before going public, and what is not verified. Fixed: `supabase/baseline.sql` called two helper functions (`set_updated_at`, `protect_immutable_columns`) it did not define, so a new empty project failed; both are now defined there, with a test.
 - Demo without an account (`/demo`, `/ro/demo`): the Today page on made-up contacts, using the real ordering, reasons, cadences, Undo and messages to start from. Everything stays in the browser, nothing is saved or sent, and a reload starts over. Linked from the landing footer, in the sitemap and in llms.txt.
 - New logo: the octopus is replaced by a mark of eight rounded dashes in a wheel (violet and blue). It is used in the header, sidebar, loading screen, landing hero, social preview image, favicon and installed-app icons.

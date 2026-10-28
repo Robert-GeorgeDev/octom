@@ -9,8 +9,17 @@ import { useOrgId } from "@/hooks/use-org-id";
 import { supabase } from "@/lib/supabase";
 import type { Key } from "@/lib/dictionaries";
 import { STATUSES, type Status } from "@/types/contact";
+import { dealOf, formatMoney, totalsByCurrency } from "@/lib/deal";
 
-type Card = { id: string; first_name: string; last_name: string; company: string; status: Status };
+type Card = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  company: string;
+  status: Status;
+  deal_value?: number | string | null;
+  deal_currency?: string | null;
+};
 
 const dot: Record<string, string> = {
   New: "bg-slate-400",
@@ -23,7 +32,8 @@ const dot: Record<string, string> = {
 };
 
 function PipelineView() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const locale = lang === "ro" ? "ro-RO" : "en-GB";
   const orgId = useOrgId();
   const [cards, setCards] = useState<Card[] | null>(null);
   const [error, setError] = useState("");
@@ -31,17 +41,21 @@ function PipelineView() {
 
   const load = useCallback(async () => {
     if (!orgId) return;
-    const { data, error: failure } = await supabase
-      .from("contacts")
-      .select("id, first_name, last_name, company, status")
-      .eq("organization_id", orgId)
-      .order("updated_at", { ascending: false })
-      .limit(500);
+    const query = (columns: string) =>
+      supabase
+        .from("contacts")
+        .select(columns)
+        .eq("organization_id", orgId)
+        .order("updated_at", { ascending: false })
+        .limit(500);
+    let { data, error: failure } = await query("id, first_name, last_name, company, status, deal_value, deal_currency");
+    // Without the estimated-value columns (database not updated yet) the pipeline still loads.
+    if (failure) ({ data, error: failure } = await query("id, first_name, last_name, company, status"));
     if (failure) {
       setError(t("common.error"));
       return;
     }
-    setCards((data ?? []) as Card[]);
+    setCards((data ?? []) as unknown as Card[]);
   }, [orgId, t]);
 
   useEffect(() => {
@@ -86,6 +100,13 @@ function PipelineView() {
                   {label(status)}
                   <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{inCol.length}</span>
                 </h2>
+                {totalsByCurrency(inCol).length > 0 && (
+                  <p className="mt-1 px-1 text-xs text-slate-500" title={t("deal.total")}>
+                    {totalsByCurrency(inCol)
+                      .map((x) => formatMoney(x.total, x.currency, locale))
+                      .join(" · ")}
+                  </p>
+                )}
                 <ul className="mt-3 space-y-2">
                   {inCol.length === 0 && <li className="py-4 text-center text-xs text-slate-400">{t("pipe.empty")}</li>}
                   {inCol.map((c) => (
@@ -100,6 +121,11 @@ function PipelineView() {
                         {`${c.first_name} ${c.last_name}`.trim()}
                       </Link>
                       {c.company && <p className="text-xs text-slate-600">{c.company}</p>}
+                      {dealOf(c) && (
+                        <p className="mt-0.5 text-xs font-semibold text-slate-700">
+                          {formatMoney(dealOf(c)!.value, dealOf(c)!.currency, locale)}
+                        </p>
+                      )}
                       <select
                         aria-label={t("pipe.moveTo")}
                         value={c.status}

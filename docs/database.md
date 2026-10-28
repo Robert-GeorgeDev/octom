@@ -39,4 +39,6 @@ Rules worth knowing:
 
 `supabase/inspect-product-metrics.sql` is read-only. It counts sign-ups per week, how far new people get (workspace, first contact, first follow-up, first finished follow-up, came back on a second day), weekly active people and which cadences are used. It uses only data the app already stores for the service, adds no tracking code, and the results contain counts, never names or emails. Run each query in the Supabase SQL Editor.
 
+`contacts.deal_value` and `deal_currency` (estimated value) belong together too: both empty, or an amount above 0 up to one billion and RON, EUR or USD (`20261028_03`). The app only adds amounts up per currency, never converts.
+
 `follow_ups.cadence` and `cadence_step` belong together: both empty, or a cadence name and a step from 1 to 10 (`20261028_01` and `20261028_02`).
