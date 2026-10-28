@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}${roPath("/blog")}`, lastModified: PRODUCT_UPDATED, changeFrequency: "weekly", priority: 0.7 },
     ...ARTICLES.map((a): Entry => ({ url: `${SITE_URL}${roPath(`/blog/${a.slug}`)}`, lastModified: a.updated, changeFrequency: "monthly", priority: 0.6 })),
     ...both("/docs", PRODUCT_UPDATED, "monthly", 0.7),
+    ...both("/roadmap", PRODUCT_UPDATED, "monthly", 0.4),
     ...both("/contact", PRODUCT_UPDATED, "yearly", 0.5),
     ...SITE_SLUGS.filter((s) => SITE_PAGES[s].legal).flatMap((s) => both(`/${s}`, LEGAL.updated, "yearly", 0.3)),
   ];

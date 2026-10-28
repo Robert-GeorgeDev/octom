@@ -4,6 +4,7 @@ import LegalDoc from "@/components/legal-doc";
 import ContactForm from "@/components/contact-form";
 import DocsView from "@/components/docs-view";
 import StatusView from "@/components/status-view";
+import RoadmapView from "@/components/roadmap-view";
 import JsonLd from "@/components/json-ld";
 import { LangScope } from "@/components/language-provider";
 import { LEGAL_SLUGS, loadLegalDoc } from "@/lib/legal-content";
@@ -35,6 +36,7 @@ export function SitePageRoute({ slug, lang }: { slug: SiteSlug; lang: Lang }) {
     );
   } else if (slug === "contact") body = <ContactForm />;
   else if (slug === "docs") body = <DocsView />;
+  else if (slug === "roadmap") body = <RoadmapView />;
   else body = <StatusView />;
 
   return (
