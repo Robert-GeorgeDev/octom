@@ -51,13 +51,15 @@ function NewFollowUpForm() {
           setLoadFailed(true);
           return;
         }
-        setContacts(
-          (data ?? []).map((c) => ({
-            id: c.id as string,
-            name: `${c.first_name ?? ""} ${c.last_name ?? ""}`.trim(),
-            company: (c.company ?? "") as string,
-          }))
-        );
+        const options = (data ?? []).map((c) => ({
+          id: c.id as string,
+          name: `${c.first_name ?? ""} ${c.last_name ?? ""}`.trim(),
+          company: (c.company ?? "") as string,
+        }));
+        setContacts(options);
+        // Coming from the weekly review: the contact is already chosen.
+        const wanted = new URLSearchParams(window.location.search).get("contact");
+        if (wanted && options.some((o) => o.id === wanted)) setContactId(wanted);
       });
     return () => {
       cancelled = true;
