@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Self-hosting guide (`docs/self-hosting.md`): database order checked on an empty PostgreSQL 16, Auth settings, environment variables, what to replace before going public, and what is not verified. Fixed: `supabase/baseline.sql` called two helper functions (`set_updated_at`, `protect_immutable_columns`) it did not define, so a new empty project failed; both are now defined there, with a test.
 - Demo without an account (`/demo`, `/ro/demo`): the Today page on made-up contacts, using the real ordering, reasons, cadences, Undo and messages to start from. Everything stays in the browser, nothing is saved or sent, and a reload starts over. Linked from the landing footer, in the sitemap and in llms.txt.
 - New logo: the octopus is replaced by a mark of eight rounded dashes in a wheel (violet and blue). It is used in the header, sidebar, loading screen, landing hero, social preview image, favicon and installed-app icons.
 - Two free tools that need no account and run in the browser (nothing typed is stored or sent): a follow-up message generator (`/tools/follow-up-message-generator`, seven situations, Romanian or English) and a calculator for what clients who go quiet cost you (`/tools/forgotten-client-cost`; it only multiplies the three numbers you enter, no built-in averages). Both exist in English and Romanian, with sitemap entries and links from the audience pages. Also fixed: Romanian readers are now sent to `/ro/roadmap` and the Romanian tool pages from links on public pages.

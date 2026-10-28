@@ -58,12 +58,14 @@ The database is hosted in the EU (Frankfurt). Some providers (hosting, email, pa
 1. Install Node.js 22 or newer.
 2. `npm ci`
 3. Put your Supabase project URL and public key in `lib/supabase-config.ts`. Copy `.env.example` to `.env.local` and fill in your own server-side values.
-4. In your Supabase SQL editor run the files listed in [supabase/README.md](supabase/README.md), starting with `baseline.sql`.
+4. In your Supabase SQL editor run the files in the order given in [docs/self-hosting.md](docs/self-hosting.md).
 5. `npm run dev` and open http://localhost:3000
 
 Run the unit tests with `npm test` and the end-to-end tests with `npm run test:e2e`.
 
 The database structure is published as `supabase/baseline.sql` and described in [docs/database.md](docs/database.md). How the pieces fit together is in [docs/architecture.md](docs/architecture.md).
+
+Step by step, including database order, Auth settings and what to replace before going public: [docs/self-hosting.md](docs/self-hosting.md).
 
 ## Project layout
 
