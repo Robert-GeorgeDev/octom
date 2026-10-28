@@ -3,6 +3,7 @@
 ## Unreleased
 
 - New logo: the octopus is replaced by a mark of eight rounded dashes in a wheel (violet and blue). It is used in the header, sidebar, loading screen, landing hero, social preview image, favicon and installed-app icons.
+- New "Today" page (first item in the menu and on the phone bar): the follow-ups that are due or late, in a clear order, each with the reasons it is there (overdue by N days, proposal sent, high priority, quiet for weeks) and a Write button that opens the contact on the Templates tab. The order is explained on the page itself.
 - Message templates: a new "Templates" tab on every contact with seven ready messages in Romanian and English (after a proposal, late proposal, invoice due, gone quiet, after a meeting, no answer to a call, ask for feedback). You edit the text, then copy it or open it in WhatsApp or your email app; nothing is sent automatically. The WhatsApp link now also understands Romanian numbers written as 07xx and puts the message in the chat.
 - Loading states now show a soft shimmering skeleton of the page (dashboard, contacts, pipeline, contact page, activity) instead of a floating logo and the word "Loading"; screen readers still hear "Loading".
 - www.octom.eu now redirects to octom.eu (same path), so search engines see one copy of every page and the sitemap host matches.

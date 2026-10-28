@@ -149,14 +149,19 @@ function DetailRow({
 }
 
 /* ---------- main component ---------- */
+export const CONTACT_TABS = ["activity", "followups", "notes", "templates", "ai"] as const;
+export type ContactTab = (typeof CONTACT_TABS)[number];
+
 export default function ContactDetail({
-  id, orgId, variant, onDeleted, onOpenFull,
+  id, orgId, variant, onDeleted, onOpenFull, initialTab,
 }: {
   id: string;
   orgId: string;
   variant: "page" | "drawer";
   onDeleted: () => void;
   onOpenFull?: string;
+  /** Tab to open first, for example "templates" when coming from the Today page. */
+  initialTab?: ContactTab;
 }) {
   const { t, lang } = useLanguage();
   const { user } = useAuth();
@@ -166,7 +171,7 @@ export default function ContactDetail({
   const [contact, setContact] = useState<Contact | null | undefined>(undefined);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<"activity" | "followups" | "notes" | "templates" | "ai">("activity");
+  const [tab, setTab] = useState<ContactTab>(initialTab ?? "activity");
   const [menu, setMenu] = useState(false);
   const [version, setVersion] = useState(0);
   const [lastContacted, setLastContacted] = useState<string | null>(null);
@@ -188,10 +193,10 @@ export default function ContactDetail({
 
   useEffect(() => {
     setContact(undefined);
-    setTab("activity");
+    setTab(initialTab ?? "activity");
     setError("");
     load();
-  }, [load]);
+  }, [load, initialTab]);
 
   useEffect(() => {
     let cancelled = false;

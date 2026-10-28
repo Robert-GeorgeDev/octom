@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, LayoutGrid, Plus, Users, UserCircle, Sparkles } from "lucide-react";
+import { Sun, LayoutGrid, Plus, Users, UserCircle, Sparkles } from "lucide-react";
 import Logo from "@/components/logo";
 import AppSidebar from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
@@ -96,7 +96,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Phone bottom bar */}
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white md:hidden" aria-label="Main">
         <div className="mx-auto grid max-w-md grid-cols-5 items-end px-2 pb-2 pt-1">
-          {tab("/dashboard", t("nav.dashboard"), LayoutDashboard)}
+          {tab("/today", t("nav.today"), Sun)}
           {tab("/contacts", t("nav.contacts"), Users)}
           <Link
             href="/followups/new"
