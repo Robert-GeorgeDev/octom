@@ -165,6 +165,34 @@ alter table public.ai_usage add constraint ai_usage_kind_check CHECK ((char_leng
 alter table public.ai_usage add constraint ai_usage_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
 
 -- ===== Functions =====
+-- Trigger helper used by the updated_at triggers below. It was missing from the first export of this
+-- file, so a new empty project failed at the first trigger. Safe to run again.
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SET search_path TO ''
+AS $function$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$function$;
+
+-- Same note as above: this helper (also defined in hardening.sql) was missing from the first export.
+CREATE OR REPLACE FUNCTION public.protect_immutable_columns()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SET search_path TO ''
+AS $function$
+begin
+  if new.organization_id is distinct from old.organization_id
+     or (new.created_by is distinct from old.created_by and new.created_by is not null) then
+    raise exception 'immutable columns cannot be changed' using errcode = '42501';
+  end if;
+  return new;
+end
+$function$;
+
 CREATE OR REPLACE FUNCTION public.accept_invitation(invite_token text)
  RETURNS uuid
  LANGUAGE plpgsql
