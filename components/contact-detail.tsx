@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import ActivityTimeline from "@/components/activity-timeline";
 import AiAssistant from "@/components/ai-assistant";
+import MessageTemplates from "@/components/message-templates";
 import FollowUpCard, { type Group } from "@/components/followup-card";
 import { useAuth } from "@/components/auth-provider";
 import { useLanguage } from "@/components/language-provider";
@@ -165,7 +166,7 @@ export default function ContactDetail({
   const [contact, setContact] = useState<Contact | null | undefined>(undefined);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<"activity" | "followups" | "notes" | "ai">("activity");
+  const [tab, setTab] = useState<"activity" | "followups" | "notes" | "templates" | "ai">("activity");
   const [menu, setMenu] = useState(false);
   const [version, setVersion] = useState(0);
   const [lastContacted, setLastContacted] = useState<string | null>(null);
@@ -327,6 +328,7 @@ export default function ContactDetail({
     { id: "activity", label: t("activity.title") },
     { id: "followups", label: t("profile.followUps"), count: open.length },
     { id: "notes", label: t("profile.notes") },
+    { id: "templates", label: t("tpl.tab") },
     { id: "ai", label: t("crm.tab.ai") },
   ];
 
@@ -487,6 +489,8 @@ export default function ContactDetail({
             )}
 
             {tab === "notes" && <NotesTab contact={contact} onSave={(v) => patch({ notes: v })} t={t} />}
+
+            {tab === "templates" && <MessageTemplates contact={contact} onUse={(kind) => logActivity(kind, "")} />}
 
             {tab === "ai" && <AiAssistant contactId={id} email={contact.email} />}
           </div>

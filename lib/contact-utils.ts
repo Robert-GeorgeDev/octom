@@ -42,11 +42,27 @@ export function websiteLabel(raw: string | null | undefined): string {
   return (raw ?? "").trim().replace(/^https?:\/\//i, "").replace(/\/$/, "");
 }
 
-/** wa.me link from a phone number. Needs international digits; returns "" otherwise. */
-export function whatsappHref(phone: string | null | undefined): string {
-  const digits = (phone ?? "").replace(/[^\d]/g, "");
-  if (digits.length < 8) return "";
-  return `https://wa.me/${digits}`;
+/**
+ * Digits for a wa.me link. A leading + or 00 is international already; a single
+ * leading 0 is a national number and is treated as Romanian (+40). Returns ""
+ * when the number is too short to be usable.
+ */
+export function whatsappDigits(phone: string | null | undefined): string {
+  const v = (phone ?? "").trim().replace(/\(0\)/g, "");
+  const plus = v.startsWith("+");
+  let digits = v.replace(/[^\d]/g, "");
+  if (!plus) {
+    if (digits.startsWith("00")) digits = digits.slice(2);
+    else if (digits.startsWith("0")) digits = "40" + digits.slice(1);
+  }
+  return digits.length >= 8 && digits.length <= 15 ? digits : "";
+}
+
+/** wa.me link, optionally with the message already typed in. Returns "" if the number is unusable. */
+export function whatsappHref(phone: string | null | undefined, text?: string): string {
+  const digits = whatsappDigits(phone);
+  if (!digits) return "";
+  return `https://wa.me/${digits}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 }
 
 export function relativeTime(iso: string, locale: string): string {
