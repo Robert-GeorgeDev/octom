@@ -1,5 +1,6 @@
 "use client";
 
+import { DetailSkeleton } from "@/components/skeleton";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
@@ -28,7 +29,7 @@ function ProfileView() {
         {orgId ? (
           <ContactDetail id={id} orgId={orgId} variant="page" onDeleted={() => router.replace("/contacts")} />
         ) : (
-          <p className="text-slate-600">{t("common.loading")}</p>
+          <DetailSkeleton />
         )}
       </div>
     </main>

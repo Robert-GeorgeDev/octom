@@ -1,5 +1,6 @@
 "use client";
 
+import { ListSkeleton } from "@/components/skeleton";
 import { useEffect, useState } from "react";
 import { CalendarCheck, CalendarClock, CalendarPlus, CheckCircle2, Mail, MessageCircle, Phone, StickyNote, Users, Flag } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -120,7 +121,7 @@ export default function ActivityTimeline({
           {t("activity.loadError")}
         </p>
       )}
-      {!failed && items === null && <p className="mt-3 text-sm text-slate-600">{t("common.loading")}</p>}
+      {!failed && items === null && <ListSkeleton rows={2} />}
       {items && items.length === 0 && <p className="mt-3 text-sm text-slate-600">{t("activity.empty")}</p>}
 
       <ol className="mt-1">

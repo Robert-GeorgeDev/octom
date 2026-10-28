@@ -3,6 +3,7 @@
 ## Unreleased
 
 - New logo: the octopus is replaced by a mark of eight rounded dashes in a wheel (violet and blue). It is used in the header, sidebar, loading screen, landing hero, social preview image, favicon and installed-app icons.
+- Loading states now show a soft shimmering skeleton of the page (dashboard, contacts, pipeline, contact page, activity) instead of a floating logo and the word "Loading"; screen readers still hear "Loading".
 - www.octom.eu now redirects to octom.eu (same path), so search engines see one copy of every page and the sitemap host matches.
 - Search and AI visibility: every public page now exists in English and Romanian (`/ro/...`) with its own title, description, canonical address and hreflang twin; legal, docs and contact pages are rendered in the right language on the server. Audience pages (`/for/...`) have problems, steps and real FAQs. Structured data (Organization, WebSite, SoftwareApplication, FAQPage, BreadcrumbList), `/llms.txt` and `/llms-full.txt` for AI assistants, robots.txt that welcomes AI search crawlers, a sitemap with hreflang and stable dates, a Romanian social preview image, IndexNow for Bing and others, optional Search Console and Bing verification codes. See `docs/seo.md`.
 - Database changes are now tracked: new files in `supabase/migrations/`, a small `app_migrations` table, and `/api/health` reports `"schema": true` when every required change is applied (false or null otherwise, details only in the server log). A test keeps the file list and the app's list in sync.

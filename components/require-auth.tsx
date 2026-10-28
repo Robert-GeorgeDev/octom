@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
-import LoadingScreen from "@/components/loading-screen";
+import { DashboardSkeleton } from "@/components/skeleton";
 import { useLanguage } from "@/components/language-provider";
 import { supabase } from "@/lib/supabase";
 
@@ -61,7 +61,7 @@ export default function RequireAuth({
   }
 
   if (loading || !user || !ready) {
-    return <LoadingScreen />;
+    return <main className="px-5 pb-10 pt-8"><DashboardSkeleton /></main>;
   }
 
   return <>{children}</>;

@@ -1,5 +1,6 @@
 "use client";
 
+import { ListSkeleton } from "@/components/skeleton";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -185,7 +186,7 @@ function ContactsView() {
         </>
       )}
 
-      {contacts === null && !error && <p className="mt-8 text-slate-600">{t("common.loading")}</p>}
+      {contacts === null && !error && <ListSkeleton />}
 
       {contacts && contacts.length === 0 && !showForm && (
         <div className="mt-10 rounded-2xl border border-dashed border-line bg-white/70 p-10 text-center">
