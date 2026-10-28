@@ -25,12 +25,14 @@ const btnOff =
 export default function MessageTemplates({
   contact,
   onUse,
+  initialId,
 }: {
+  initialId?: TemplateId;
   contact: { first_name: string; email: string; phone: string };
   onUse: (kind: "email" | "message") => void;
 }) {
   const { t, lang: uiLang } = useLanguage();
-  const [id, setId] = useState<TemplateId>("offer");
+  const [id, setId] = useState<TemplateId>(initialId ?? "offer");
   const [lang, setLang] = useState<TemplateLang>(uiLang === "ro" ? "ro" : "en");
   const [edited, setEdited] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);

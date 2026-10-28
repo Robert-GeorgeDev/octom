@@ -9,6 +9,7 @@ import RequireAuth from "@/components/require-auth";
 import ContactDetail, { CONTACT_TABS, type ContactTab } from "@/components/contact-detail";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
+import { TEMPLATE_IDS } from "@/lib/templates";
 
 function ProfileView() {
   const { t } = useLanguage();
@@ -18,6 +19,8 @@ function ProfileView() {
   const orgId = useOrgId();
   const wanted = useSearchParams().get("tab");
   const initialTab = CONTACT_TABS.find((x): x is ContactTab => x === wanted);
+  const wantedTemplate = useSearchParams().get("template");
+  const initialTemplate = TEMPLATE_IDS.find((x) => x === wantedTemplate);
 
   return (
     <main className="mx-auto max-w-6xl px-5 pb-10 pt-8">
@@ -30,7 +33,7 @@ function ProfileView() {
       </Link>
       <div className="mt-4">
         {orgId ? (
-          <ContactDetail id={id} orgId={orgId} variant="page" initialTab={initialTab} onDeleted={() => router.replace("/contacts")} />
+          <ContactDetail id={id} orgId={orgId} variant="page" initialTab={initialTab} initialTemplate={initialTemplate} onDeleted={() => router.replace("/contacts")} />
         ) : (
           <DetailSkeleton />
         )}

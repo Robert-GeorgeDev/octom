@@ -1,0 +1,31 @@
+export const enCadences = {
+  "cad.label": "Cadence (optional)",
+  "cad.none": "No cadence, just this follow-up",
+  "cad.hint": "When you finish a step, the next one is scheduled for you. You can stop at any time.",
+  "cad.days": "Days {list} after you start",
+  "cad.name.offer": "After a proposal",
+  "cad.name.quiet": "Pick up a quiet contact",
+  "cad.name.invoice": "Unpaid invoice",
+  "cad.name.meeting": "After a meeting",
+  "cad.chip": "Cadence: {name} · step {n} of {total}",
+  "cad.stop": "Stop cadence",
+  "cad.stopped": "Cadence stopped. This follow-up stays.",
+  "cad.nextFailed": "Marked as done, but the next step could not be scheduled. Add it by hand.",
+  "cad.scheduled": "Done. The next step is scheduled in {days}.",
+} as const;
+
+export const roCadences: Record<keyof typeof enCadences, string> = {
+  "cad.label": "Cadență (opțional)",
+  "cad.none": "Fără cadență, doar acest follow-up",
+  "cad.hint": "Când termini un pas, următorul se programează singur. Poți opri oricând.",
+  "cad.days": "Zilele {list} după ce începi",
+  "cad.name.offer": "După o ofertă",
+  "cad.name.quiet": "Reia un contact care a tăcut",
+  "cad.name.invoice": "Factură neplătită",
+  "cad.name.meeting": "După o întâlnire",
+  "cad.chip": "Cadență: {name} · pasul {n} din {total}",
+  "cad.stop": "Oprește cadența",
+  "cad.stopped": "Cadența s-a oprit. Acest follow-up rămâne.",
+  "cad.nextFailed": "Marcat ca gata, dar următorul pas nu a putut fi programat. Adaugă-l manual.",
+  "cad.scheduled": "Gata. Următorul pas e programat peste {days}.",
+};

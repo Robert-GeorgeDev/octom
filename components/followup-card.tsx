@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { addDays, formatDate, todayISO } from "@/lib/dates";
+import { isCadenceId, nextStep, totalSteps } from "@/lib/cadences";
+import { daysLabel } from "@/lib/priority";
+import { completeFollowUp } from "@/lib/cadence-run";
+import type { Key } from "@/lib/dictionaries";
 import { useLanguage } from "@/components/language-provider";
 import type { FollowUp } from "@/types/followup";
 
@@ -36,6 +40,7 @@ export default function FollowUpCard({
   const [customDate, setCustomDate] = useState(item.due_date);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   async function run(action: () => PromiseLike<{ error: unknown }>) {
     setBusy(true);
@@ -50,12 +55,28 @@ export default function FollowUpCard({
     setBusy(false);
   }
 
-  function complete() {
+  async function complete() {
+    setBusy(true);
+    setError("");
+    setInfo("");
+    try {
+      const result = await completeFollowUp(item);
+      if (result === "done-next-failed") setError(t("cad.nextFailed"));
+      else if (result === "done-next-scheduled" && isCadenceId(item.cadence) && item.cadence_step !== null) {
+        const gap = nextStep(item.cadence, item.cadence_step)?.gapDays ?? 0;
+        setInfo(t("cad.scheduled").replace("{days}", daysLabel(gap, lang === "ro" ? "ro" : "en")));
+      }
+      setMode("none");
+      onChanged();
+    } catch {
+      setError(t("common.error"));
+    }
+    setBusy(false);
+  }
+
+  function stopCadence() {
     run(() =>
-      supabase
-        .from("follow_ups")
-        .update({ status: "done", completed_at: new Date().toISOString() })
-        .eq("id", item.id)
+      supabase.from("follow_ups").update({ cadence: null, cadence_step: null }).eq("id", item.id)
     );
   }
 
@@ -89,6 +110,24 @@ export default function FollowUpCard({
             {item.company && <span className="truncate text-sm font-normal text-slate-500">· {item.company}</span>}
           </p>
           {item.note && <p className="mt-1 line-clamp-2 text-sm text-slate-600">{item.note}</p>}
+          {isCadenceId(item.cadence) && item.cadence_step !== null && (
+            <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-brand">
+              <span>
+                {t("cad.chip")
+                  .replace("{name}", t(`cad.name.${item.cadence}` as Key))
+                  .replace("{n}", String(item.cadence_step))
+                  .replace("{total}", String(totalSteps(item.cadence)))}
+              </span>
+              <button
+                type="button"
+                onClick={stopCadence}
+                disabled={busy}
+                className="text-slate-500 underline-offset-2 hover:text-ink hover:underline disabled:opacity-60"
+              >
+                {t("cad.stop")}
+              </button>
+            </p>
+          )}
           {extra}
           {item.priority === "High" && (
             <p className="mt-1 text-xs font-semibold text-overdue">{t("card.high")}</p>
@@ -103,6 +142,11 @@ export default function FollowUpCard({
       {error && (
         <p role="alert" className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-overdue">
           {error}
+        </p>
+      )}
+      {info && (
+        <p role="status" className="mt-3 rounded-xl bg-brand-soft px-3 py-2 text-sm text-brand">
+          {info}
         </p>
       )}
 

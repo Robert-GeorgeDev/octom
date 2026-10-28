@@ -18,6 +18,7 @@ import { enFeedback, roFeedback } from "@/lib/dictionary-feedback";
 import { enAddForm, roAddForm } from "@/lib/dictionary-addform";
 import { enTemplates, roTemplates } from "@/lib/dictionary-templates";
 import { enToday, roToday } from "@/lib/dictionary-today";
+import { enCadences, roCadences } from "@/lib/dictionary-cadences";
 
 const enBase = {
   "nav.dashboard": "Dashboard",
@@ -97,7 +98,7 @@ const enBase = {
   "card.confirmDelete": "Delete this follow-up?",
 };
 
-const en = { ...enBase, ...enMore, ...enActivity, ...enData, ...enAi, ...enLegal, ...enPlans, ...enAccount, ...enLand, ...enTeam, ...enSite, ...enLp, ...enAssistant, ...enHelp, ...enCrm, ...enStart, ...enFeedback, ...enAddForm, ...enTemplates, ...enToday };
+const en = { ...enBase, ...enMore, ...enActivity, ...enData, ...enAi, ...enLegal, ...enPlans, ...enAccount, ...enLand, ...enTeam, ...enSite, ...enLp, ...enAssistant, ...enHelp, ...enCrm, ...enStart, ...enFeedback, ...enAddForm, ...enTemplates, ...enToday, ...enCadences };
 export type Key = keyof typeof en;
 
 const roBase: Record<keyof typeof enBase, string> = {
@@ -178,7 +179,7 @@ const roBase: Record<keyof typeof enBase, string> = {
   "card.confirmDelete": "Ștergi acest follow-up?",
 };
 
-const ro: Record<Key, string> = { ...roBase, ...roMore, ...roActivity, ...roData, ...roAi, ...roLegal, ...roPlans, ...roAccount, ...roLand, ...roTeam, ...roSite, ...roLp, ...roAssistant, ...roHelp, ...roCrm, ...roStart, ...roFeedback, ...roAddForm, ...roTemplates, ...roToday };
+const ro: Record<Key, string> = { ...roBase, ...roMore, ...roActivity, ...roData, ...roAi, ...roLegal, ...roPlans, ...roAccount, ...roLand, ...roTeam, ...roSite, ...roLp, ...roAssistant, ...roHelp, ...roCrm, ...roStart, ...roFeedback, ...roAddForm, ...roTemplates, ...roToday, ...roCadences };
 
 export const dictionaries: Record<"en" | "ro", Record<Key, string>> = { en, ro };
 
