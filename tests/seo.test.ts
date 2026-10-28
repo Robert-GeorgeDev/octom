@@ -106,9 +106,9 @@ describe("structured data", () => {
     expect(crumbs.itemListElement.map((i) => i.item)).toEqual([`${SITE_URL}/ro`, `${SITE_URL}/ro/security`]);
   });
 
-  it("has seven home page questions in both languages", () => {
+  it("has nine home page questions in both languages", () => {
     for (const d of [dictionaries.en, dictionaries.ro] as Record<string, string>[]) {
-      for (let n = 0; n <= 6; n++) {
+      for (let n = 0; n <= 8; n++) {
         expect(d[`land.q${n}`]?.trim(), `q${n}`).toBeTruthy();
         expect(d[`land.a${n}`]?.trim(), `a${n}`).toBeTruthy();
       }

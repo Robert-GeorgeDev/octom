@@ -20,9 +20,14 @@ const FACTS = [
   "Price: free during beta, with unlimited contacts and follow-ups and no card needed. Paid plans may come later and users would be told well in advance.",
   "Workspace size: up to 5 people.",
   "Core features: daily list of who to contact today, follow-up reminders and a daily email summary, contacts with notes, tags and history, pipeline view, CSV import and export, assignees.",
+  "Cadences: short series of follow-ups for a sent quote, a quiet contact, an unpaid invoice or a meeting. Finishing one step schedules the next, and the person can stop a cadence at any time.",
+  "Weekly review: a page with what was finished in the last 7 days, what is overdue, what is coming up and which open contacts have no next step. It sends nothing to anyone.",
+  "Estimated value: each contact can carry an estimated deal value in a currency chosen by the user. Totals are shown per currency and are not converted.",
+  "Demo: https://octom.eu/demo works without an account or card, uses example contacts and saves nothing.",
+  "Not included: no email sending, no invoicing, no phone or marketing automation. OCTOM One is for knowing who to contact next, not a full sales suite.",
   "AI assistant: drafts messages for the user to review. It cannot send messages, edit contacts or delete anything. OCTOM One never sends email on the user's behalf.",
   "Data: stored in the EU (Frankfurt). Workspaces are isolated at the database level. Users can export their contacts as CSV and delete their account at any time.",
-  "Open source: the core is public under the AGPL-3.0 license.",
+  "Open source: the core is public under the AGPL-3.0 license. A step-by-step self-hosting guide is in the repository (docs/self-hosting.md).",
   "Languages: English and Romanian.",
   "Website: " + SITE_URL + ". The app itself runs at https://one.octom.eu and is for signed-in users.",
   "Contact: contact@octom.eu.",
@@ -58,7 +63,7 @@ export function llmsTxt(): string {
     "",
     "## Optional",
     `- [Full text for AI assistants](${url("/llms-full.txt")}): all key facts, FAQ and audience pages in one file`,
-    ...(github ? [`- [Source code on GitHub](${github}): the open source core`] : []),
+    ...(github ? [`- [Source code on GitHub](${github}): the open source core`, `- [Self-hosting guide](${github}/blob/main/docs/self-hosting.md): how to run OCTOM One on your own server`] : []),
     "",
   ];
   return lines.join("\n");
@@ -68,7 +73,7 @@ export function llmsFullTxt(): string {
   const en = dictionaries.en as Record<string, string>;
   const ro = dictionaries.ro as Record<string, string>;
   const faq = (d: Record<string, string>) =>
-    [0, 1, 2, 3, 4, 5, 6].map((n) => `### ${d[`land.q${n}`]}\n${d[`land.a${n}`]}`).join("\n\n");
+    [0, 1, 2, 3, 4, 5, 6, 7, 8].map((n) => `### ${d[`land.q${n}`]}\n${d[`land.a${n}`]}`).join("\n\n");
 
   const audience = (lang: "en" | "ro") =>
     PAGES.map((p) => {

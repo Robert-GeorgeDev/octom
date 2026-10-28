@@ -18,9 +18,13 @@ const features: Record<Lang, string[]> = {
     "Daily list of who to contact today",
     "Follow-up reminders and a daily email summary",
     "Contacts with notes, tags and history",
-    "Pipeline view",
+    "Pipeline view with an estimated value per contact",
+    "Follow-up cadences for quotes, invoices and quiet contacts",
+    "Weekly review of what was finished, what is overdue and what is next",
     "AI assistant that drafts messages for you to review",
     "CSV import and export",
+    "Demo that works without an account",
+    "Open source and self-hostable",
     "Shared workspace for up to 5 people",
     "English and Romanian interface",
   ],
@@ -28,9 +32,13 @@ const features: Record<Lang, string[]> = {
     "Listă zilnică cu cine contactezi azi",
     "Mementouri pentru follow-up și rezumat zilnic pe email",
     "Contacte cu notițe, etichete și istoric",
-    "Vedere de tip pipeline",
+    "Vedere de tip pipeline, cu valoare estimată pe contact",
+    "Cadențe de follow-up pentru oferte, facturi și contacte care au tăcut",
+    "Recapitulare săptămânală: ce ai încheiat, ce e întârziat, ce urmează",
     "Asistent AI care scrie mesaje pe care le verifici tu",
     "Import și export CSV",
+    "Demo care funcționează fără cont",
+    "Open-source și poate fi găzduit de tine",
     "Spațiu de lucru comun pentru până la 5 persoane",
     "Interfață în română și engleză",
   ],
@@ -75,6 +83,24 @@ export function softwareLd(lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: lang === "ro" ? "Gratuit în perioada beta" : "Free during beta" },
     featureList: features[lang],
     license: "https://www.gnu.org/licenses/agpl-3.0.html",
+    softwareHelp: { "@type": "CreativeWork", url: `${SITE_URL}${localizedPath("/docs", lang)}` },
+    publisher: { "@id": ORG_ID },
+  };
+}
+
+/** The public source code. Only included when the repository address is set. */
+export function sourceCodeLd() {
+  const repo = SOCIAL_LINKS.github;
+  if (!repo) return null;
+  return {
+    "@type": "SoftwareSourceCode",
+    "@id": `${SITE_URL}/#source`,
+    name: `${SITE_NAME} source code`,
+    codeRepository: repo,
+    programmingLanguage: "TypeScript",
+    license: "https://www.gnu.org/licenses/agpl-3.0.html",
+    runtimePlatform: "Node.js",
+    targetProduct: { "@id": `${SITE_URL}/#software` },
     publisher: { "@id": ORG_ID },
   };
 }

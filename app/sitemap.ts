@@ -9,7 +9,7 @@ import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
 
 // Date of the last real change to the product pages. Update it when their text changes:
 // search engines ignore a date that changes on every visit.
-const PRODUCT_UPDATED = "2026-10-22";
+const PRODUCT_UPDATED = "2026-10-28";
 
 type Entry = MetadataRoute.Sitemap[number];
 

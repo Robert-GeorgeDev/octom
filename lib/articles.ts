@@ -441,6 +441,133 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+  {
+    slug: "cadenta-follow-up",
+    keyword: "cadență follow-up",
+    title: "Cadență de follow-up: câte mesaje și la ce interval",
+    desc: "O cadență de follow-up este o serie scurtă de mesaje, la zile stabilite dinainte. Vezi cum o alegi pentru o ofertă, o factură sau un client care a tăcut.",
+    h1: "Cadență de follow-up: câte mesaje și la ce interval",
+    published: "2026-10-28",
+    updated: "2026-10-28",
+    intro:
+      "Un singur follow-up rezolvă rar situația, iar zece mesaje la rând sperie clientul. O cadență este varianta de mijloc: o serie scurtă de mesaje, la zile stabilite dinainte, care se oprește când omul răspunde. Nu mai decizi de fiecare dată dacă să scrii și când, ci urmezi un plan simplu.",
+    blocks: [
+      {
+        h2: "Ce este o cadență",
+        p: [
+          "O cadență are trei lucruri: un număr mic de pași, un interval între ei și un mesaj potrivit pentru fiecare pas. Ideea este să nu depinzi de memorie sau de cheful din ziua respectivă. Dacă omul răspunde, seria se oprește.",
+        ],
+      },
+      {
+        h2: "Trei cadențe de pornit",
+        ul: [
+          "După o ofertă: primul mesaj după 3 zile, al doilea după încă 4 (ziua 7), ultimul după încă 7 (ziua 14).",
+          "Client care a tăcut: un mesaj după o zi de la hotărârea de a reveni, apoi la 7 zile și la 14 zile.",
+          "Factură neplătită: primul mesaj după o zi de la scadență, apoi la 3 zile și la 7 zile, cu un ton care devine mai clar, dar rămâne politicos.",
+        ],
+      },
+      {
+        h2: "Cum alegi intervalele",
+        ol: [
+          "Pornește de la cât de urgent e pentru el, nu pentru tine. O factură are un termen, o ofertă mare are nevoie de timp.",
+          "Lasă mai mult spațiu între pași pe măsură ce seria înaintează. Primul mesaj poate veni repede, ultimul poate aștepta.",
+          "Nu trece de trei-patru pași. După aceea, tăcerea este și ea un răspuns.",
+          "Schimbă mesajul la fiecare pas: o întrebare, apoi o variantă mai ușoară a propunerii, apoi o închidere politicoasă.",
+        ],
+      },
+      {
+        h2: "Când oprești seria",
+        ul: [
+          "Omul a răspuns, chiar și cu „nu acum”.",
+          "Proiectul s-a închis, câștigat sau pierdut.",
+          "Ai ajuns la ultimul pas. Treci mai departe și revii peste câteva luni cu un motiv nou.",
+        ],
+      },
+      {
+        h2: "Cum o ții într-un loc, fără să uiți",
+        p: [
+          "Într-o foaie de calcul trebuie să calculezi singur fiecare dată. În OCTOM One alegi cadența pentru un contact, iar la fiecare pas terminat se programează automat următorul, cu un mesaj de la care poți porni. Poți opri seria oricând, iar când închizi contactul ca Câștigat sau Pierdut, se oprește singură. Asistentul doar redactează, nimic nu se trimite fără tine.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Câte follow-up-uri sunt prea multe?",
+        a: "Trei-patru, cu pauze tot mai mari între ele. După ultimul mesaj, lasă ușa deschisă și treci mai departe.",
+      },
+      {
+        q: "Este în regulă să trimit același mesaj de fiecare dată?",
+        a: "Nu. Fiecare pas ar trebui să aducă ceva nou: o întrebare, o variantă mai simplă, un termen sau o închidere politicoasă.",
+      },
+      {
+        q: "Ce fac dacă răspunde după ce am încheiat seria?",
+        a: "Răspunde-i normal și reia discuția. O cadență este un instrument de organizare, nu o regulă care te obligă să ignori un răspuns întârziat.",
+      },
+    ],
+  },
+  {
+    slug: "recapitulare-saptamanala-clienti",
+    keyword: "recapitulare săptămânală clienți",
+    title: "Recapitulare săptămânală cu clienții: 10 minute, vinerea",
+    desc: "O recapitulare scurtă la sfârșitul săptămânii te ajută să vezi ce ai încheiat, ce e întârziat și cui nu i-ai programat nimic. Iată cum o faci în 10 minute.",
+    h1: "Recapitulare săptămânală cu clienții: 10 minute, vinerea",
+    published: "2026-10-28",
+    updated: "2026-10-28",
+    intro:
+      "Peste săptămână rezolvi ce e urgent. Tocmai de aceea unele conversații rămân pe dinafară: o ofertă fără răspuns, un client căruia nu i-ai mai scris de o lună. O recapitulare de 10 minute, o dată pe săptămână, le scoate la suprafață înainte să se piardă.",
+    blocks: [
+      {
+        h2: "Cele patru întrebări",
+        ol: [
+          "Ce am încheiat în ultimele 7 zile?",
+          "Ce este întârziat acum?",
+          "Ce urmează în următoarele 7 zile?",
+          "Care contacte deschise nu au niciun pas următor?",
+        ],
+      },
+      {
+        h2: "Cum arată o recapitulare în 10 minute",
+        ul: [
+          "Minutele 1–2: te uiți la ce ai încheiat. Contează, pentru că arată că ai progresat chiar dacă săptămâna a părut haotică.",
+          "Minutele 3–5: treci prin ce e întârziat. Scrii, amâni cu o dată nouă sau închizi ce nu mai are sens.",
+          "Minutele 6–8: te uiți la săptămâna următoare și vezi dacă e prea încărcată sau prea goală.",
+          "Minutele 9–10: alegi contactele fără pas următor și programezi câte un follow-up pentru fiecare.",
+        ],
+      },
+      {
+        h2: "Contactele fără pas următor",
+        p: [
+          "Este cea mai valoroasă parte. Un contact deschis, fără dată de revenire, depinde doar de norocul că ți-l amintești. Pentru fiecare, alege între trei variante: programezi un mesaj, îl închizi sau decizi că aștepți un semnal de la el și pui o dată de verificare.",
+        ],
+      },
+      {
+        h2: "Valoarea estimată, fără iluzii",
+        p: [
+          "Dacă îți notezi o sumă estimată pe fiecare contact, recapitularea poate arăta cât este în joc. Sunt estimările tale, nu venituri sigure, iar sumele în monede diferite nu trebuie amestecate. Folosește cifra ca să alegi pe cine suni primul, nu ca să îți faci planuri financiare.",
+        ],
+      },
+      {
+        h2: "Cum o faci în OCTOM One",
+        p: [
+          "Pagina Recapitulare săptămânală din OCTOM One afișează cele patru numere, lista întârziatelor, ce urmează și contactele fără pas următor, cu un buton de programare pentru fiecare. Este o privire înapoi și înainte: nu trimite nimic nimănui.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Când este cel mai bun moment pentru recapitulare?",
+        a: "Vineri după-amiază sau luni dimineață, în funcție de ce te ajută: vinerea închizi săptămâna, lunea o planifici.",
+      },
+      {
+        q: "Cât ar trebui să dureze?",
+        a: "Zece minute sunt de ajuns dacă ții evidența la zi. Dacă îți ia mai mult, înseamnă că ai prea multe contacte deschise fără pas următor.",
+      },
+      {
+        q: "Trebuie să notez valoarea fiecărui client?",
+        a: "Nu. Este opțională. Dacă o notezi, tratează-o ca pe o estimare personală și nu aduna sume în monede diferite.",
+      },
+    ],
+  },
 ];
 
 export function articleBySlug(slug: string): Article | undefined {
