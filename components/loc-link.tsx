@@ -7,14 +7,14 @@ import { useLanguage } from "@/components/language-provider";
 // Public pages that exist in Romanian under /ro/...
 const LOCALIZED = new Set([
   "/", "/privacy", "/terms", "/cookies", "/refunds", "/accessibility", "/subprocessors",
-  "/security", "/company", "/contact", "/docs", "/status",
+  "/security", "/company", "/contact", "/docs", "/roadmap", "/status",
 ]);
 
 /** "/privacy" becomes "/ro/privacy" for a Romanian reader. Other links are left alone. */
 export function localizeHref(href: string, lang: "en" | "ro"): string {
   if (lang !== "ro") return href;
   const path = href.split(/[?#]/)[0];
-  if (!(LOCALIZED.has(path) || path.startsWith("/for/"))) return href;
+  if (!(LOCALIZED.has(path) || path.startsWith("/for/") || path.startsWith("/tools/"))) return href;
   const rest = href.slice(path.length);
   return (path === "/" ? "/ro" : `/ro${path}`) + rest;
 }

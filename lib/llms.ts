@@ -4,6 +4,7 @@ import { dictionaries } from "@/lib/dictionaries";
 import { PAGES } from "@/lib/seo-pages";
 import { ARTICLES } from "@/lib/articles";
 import { SITE_PAGES, SITE_SLUGS } from "@/lib/site-pages";
+import { TOOL_SLUGS, toolCopy } from "@/lib/tools";
 import { roPath } from "@/lib/seo";
 
 // Plain-text descriptions of the site for AI assistants (the llms.txt convention).
@@ -41,6 +42,9 @@ export function llmsTxt(): string {
     "",
     "## Who it is for",
     ...PAGES.map((p) => `- [${p.en.h1}](${url(`/for/${p.slug}`)}): ${p.en.desc}`),
+    "",
+    "## Free tools (no account needed)",
+    ...TOOL_SLUGS.map((s) => `- [${toolCopy(s, "en").h1}](${url(`/tools/${s}`)}): ${toolCopy(s, "en").desc}`),
     "",
     "## Articles (Romanian)",
     ...ARTICLES.map((a) => `- [${a.h1}](${SITE_URL}${roPath(`/blog/${a.slug}`)}): ${a.desc}`),
