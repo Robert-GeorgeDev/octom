@@ -9,6 +9,14 @@ type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{
 const STORE = "octom.install-dismissed";
 const QUIET_DAYS = 30;
 
+/** Safari on iPhone and iPad has no install button for web apps: the person adds it by hand. */
+function needsIosHint(): boolean {
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  return ios && !standalone;
+}
+
 function recentlyDismissed(): boolean {
   try {
     const at = Number(localStorage.getItem(STORE));
@@ -25,12 +33,14 @@ function recentlyDismissed(): boolean {
 export default function InstallPrompt() {
   const { t } = useLanguage();
   const [event, setEvent] = useState<InstallEvent | null>(null);
+  const [iosHint, setIosHint] = useState(false);
 
   useEffect(() => {
     const onPrompt = (e: Event) => {
       e.preventDefault();
       if (!recentlyDismissed()) setEvent(e as InstallEvent);
     };
+    if (needsIosHint() && !recentlyDismissed()) setIosHint(true);
     const onInstalled = () => setEvent(null);
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
@@ -40,7 +50,7 @@ export default function InstallPrompt() {
     };
   }, []);
 
-  if (!event) return null;
+  if (!event && !iosHint) return null;
 
   function later() {
     try {
@@ -49,6 +59,7 @@ export default function InstallPrompt() {
       /* storage unavailable: it will simply show again next visit */
     }
     setEvent(null);
+    setIosHint(false);
   }
 
   async function install() {
@@ -71,14 +82,16 @@ export default function InstallPrompt() {
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold">{t("install.title")}</p>
-        <p className="text-xs text-slate-500">{t("install.text")}</p>
+        <p className="text-xs text-slate-500">{t(iosHint ? "install.ios" : "install.text")}</p>
       </div>
       <div className="flex shrink-0 flex-col gap-1">
-        <button type="button" onClick={install} className="rounded-lg bg-brand px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-dark">
-          {t("install.button")}
-        </button>
+        {!iosHint && (
+          <button type="button" onClick={install} className="rounded-lg bg-brand px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-dark">
+            {t("install.button")}
+          </button>
+        )}
         <button type="button" onClick={later} className="rounded-lg px-3 py-1 text-xs font-semibold text-slate-500 hover:text-ink">
-          {t("install.later")}
+          {t(iosHint ? "install.gotit" : "install.later")}
         </button>
       </div>
     </section>

@@ -5,7 +5,17 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "OCTOM One",
     short_name: "OCTOM One",
     description: "Know who to contact today.",
-    start_url: "/dashboard",
+    // The id keeps the identity of apps installed before the start page changed.
+    id: "/dashboard",
+    start_url: "/today",
+    scope: "/",
+    lang: "en",
+    categories: ["business", "productivity"],
+    shortcuts: [
+      { name: "Today", url: "/today", icons: [{ src: "/icon-192.png", sizes: "192x192", type: "image/png" }] },
+      { name: "Pipeline", url: "/pipeline", icons: [{ src: "/icon-192.png", sizes: "192x192", type: "image/png" }] },
+      { name: "Weekly review", url: "/review", icons: [{ src: "/icon-192.png", sizes: "192x192", type: "image/png" }] },
+    ],
     display: "standalone",
     background_color: "#0B1026",
     theme_color: "#0B1026",
