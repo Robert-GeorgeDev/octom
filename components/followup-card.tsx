@@ -23,10 +23,13 @@ export default function FollowUpCard({
   item,
   group,
   onChanged,
+  extra,
 }: {
   item: FollowUp;
   group: Group;
   onChanged: () => void;
+  /** Optional extra content under the name (for example the reasons on the Today page). */
+  extra?: React.ReactNode;
 }) {
   const { t, lang } = useLanguage();
   const [mode, setMode] = useState<"none" | "snooze" | "custom">("none");
@@ -86,6 +89,7 @@ export default function FollowUpCard({
             {item.company && <span className="truncate text-sm font-normal text-slate-500">· {item.company}</span>}
           </p>
           {item.note && <p className="mt-1 line-clamp-2 text-sm text-slate-600">{item.note}</p>}
+          {extra}
           {item.priority === "High" && (
             <p className="mt-1 text-xs font-semibold text-overdue">{t("card.high")}</p>
           )}

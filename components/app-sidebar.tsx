@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  Home, Users, LayoutGrid, Sparkles, UserPlus, Database,
+  Home, Sun, Users, LayoutGrid, Sparkles, UserPlus, Database,
   UserCircle, Plus, ChevronDown, PanelLeftClose, PanelLeftOpen, Briefcase, LogOut,
 } from "lucide-react";
 import Mark from "@/components/mark";
@@ -62,6 +62,7 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
   const under = (base: string) => (p: string) => p === base || p.startsWith(base + "/");
 
   const entries: Entry[] = [
+    { id: "today", label: t("nav.today"), Icon: Sun, href: "/today", matches: under("/today") },
     { id: "home", label: t("nav.dashboard"), Icon: Home, href: "/dashboard", matches: under("/dashboard") },
     {
       id: "contacts", label: t("nav.contacts"), Icon: Users, href: "/contacts", matches: under("/contacts"),
