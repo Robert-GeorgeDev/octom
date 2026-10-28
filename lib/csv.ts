@@ -1,5 +1,6 @@
 import Papa from "papaparse";
 import { STATUSES, type Status } from "@/types/contact";
+import { parseDeal, type DealCurrency } from "@/lib/deal";
 
 export const CSV_COLUMNS = [
   "first_name",
@@ -15,6 +16,8 @@ export const CSV_COLUMNS = [
   "location",
   "source",
   "tags",
+  "deal_value",
+  "deal_currency",
 ] as const;
 
 export const MAX_ROWS = 500;
@@ -53,6 +56,8 @@ const ALIASES: Record<string, string[]> = {
   location: ["location", "city", "oras", "oraș", "locatie", "locație", "address", "adresa", "adresă", "country", "tara", "țara"],
   source: ["source", "sursa", "sursă"],
   tags: ["tags", "tag", "labels", "label", "etichete", "eticheta", "etichetă", "group membership"],
+  deal_value: ["deal value", "estimated value", "value", "valoare", "valoare estimata", "valoare estimată"],
+  deal_currency: ["deal currency", "currency", "moneda", "monedă", "valuta", "valută"],
 };
 
 const ALIAS_TO_FIELD = new Map<string, string>();
@@ -101,6 +106,8 @@ export type ImportContact = {
   location: string;
   source: string;
   tags: string[];
+  deal_value: number | null;
+  deal_currency: DealCurrency | null;
 };
 
 export type ImportRow = {
@@ -205,6 +212,10 @@ export function parseContactsCsv(text: string): ParseResult {
       else rowIssues.push({ row, code: "status_invalid" });
     }
 
+    // An estimated value needs an amount above 0 and a currency (RON, EUR or USD).
+    const deal = parseDeal(get("deal_value"), get("deal_currency"));
+    if (!deal.ok) rowIssues.push({ row, code: "value_invalid" });
+
     let nextFollowup: string | null = null;
     const dateRaw = get("next_followup");
     if (dateRaw) {
@@ -234,6 +245,8 @@ export function parseContactsCsv(text: string): ParseResult {
         location: get("location"),
         source: get("source"),
         tags,
+        deal_value: deal.ok ? deal.value : null,
+        deal_currency: deal.ok ? deal.currency : null,
       },
       nextFollowup,
     });

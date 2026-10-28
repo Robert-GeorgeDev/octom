@@ -5,7 +5,7 @@ export const enData = {
 
   "data.importTitle": "Import contacts",
   "data.importHelp": "Upload a CSV file with a header row. Only a first name (or a single name column) is required. Column names from Google Contacts, LinkedIn and Excel are recognised, in English and Romanian. Save the file as “CSV UTF-8” so accents are read correctly. Maximum 500 rows and 1 MB.",
-  "data.columns": "Columns: first_name, last_name, company, email, phone, status, notes, next_followup (YYYY-MM-DD or DD.MM.YYYY), job_title, website, location, source, tags (separated by ;).",
+  "data.columns": "Columns: first_name, last_name, company, email, phone, status, notes, next_followup (YYYY-MM-DD or DD.MM.YYYY), job_title, website, location, source, tags (separated by ;), deal_value and deal_currency (RON, EUR or USD).",
   "data.downloadTemplate": "Download CSV template",
   "data.chooseFile": "Choose CSV file",
 
@@ -53,6 +53,7 @@ export const enData = {
   "data.rowerr.too_long": "is too long.",
   "data.rowerr.email_invalid": "email is not valid.",
   "data.rowerr.status_invalid": "status is not valid.",
+  "data.rowerr.value_invalid": "deal_value needs an amount above 0 and deal_currency needs RON, EUR or USD.",
   "data.rowerr.date_invalid": "next_followup must be a real date like 2026-10-15.",
 };
 
@@ -63,7 +64,7 @@ export const roData: Record<keyof typeof enData, string> = {
 
   "data.importTitle": "Importă contacte",
   "data.importHelp": "Încarcă un fișier CSV cu un rând de antet. Doar prenumele (sau o singură coloană cu numele) este obligatoriu. Recunoaștem numele de coloane din Google Contacts, LinkedIn și Excel, în română și engleză. Salvează fișierul ca „CSV UTF-8”, ca diacriticele să fie citite corect. Maximum 500 de rânduri și 1 MB.",
-  "data.columns": "Coloane: first_name, last_name, company, email, phone, status, notes, next_followup (AAAA-LL-ZZ sau ZZ.LL.AAAA), job_title, website, location, source, tags (separate prin ;).",
+  "data.columns": "Coloane: first_name, last_name, company, email, phone, status, notes, next_followup (AAAA-LL-ZZ sau ZZ.LL.AAAA), job_title, website, location, source, tags (separate prin ;), deal_value și deal_currency (RON, EUR sau USD).",
   "data.downloadTemplate": "Descarcă șablonul CSV",
   "data.chooseFile": "Alege fișier CSV",
 
@@ -111,5 +112,6 @@ export const roData: Record<keyof typeof enData, string> = {
   "data.rowerr.too_long": "este prea lung.",
   "data.rowerr.email_invalid": "emailul nu este valid.",
   "data.rowerr.status_invalid": "statusul nu este valid.",
+  "data.rowerr.value_invalid": "deal_value cere o sumă mai mare ca 0, iar deal_currency cere RON, EUR sau USD.",
   "data.rowerr.date_invalid": "next_followup trebuie să fie o dată reală, ca 2026-10-15.",
 };

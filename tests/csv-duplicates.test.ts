@@ -3,7 +3,7 @@ import { findDuplicates, type ImportRow } from "@/lib/csv";
 
 const row = (n: number, email: string, phone = ""): ImportRow => ({
   row: n,
-  contact: { first_name: "A", last_name: "B", company: "", email, phone, status: "New", notes: "", job_title: "", website: "", location: "", source: "", tags: [] },
+  contact: { first_name: "A", last_name: "B", company: "", email, phone, status: "New", notes: "", job_title: "", website: "", location: "", source: "", tags: [], deal_value: null, deal_currency: null },
   nextFollowup: null,
 });
 

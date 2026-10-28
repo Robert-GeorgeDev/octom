@@ -39,6 +39,8 @@ type ContactRow = {
   location?: string | null;
   source?: string | null;
   tags?: string[] | null;
+  deal_value?: number | string | null;
+  deal_currency?: string | null;
 };
 
 type FollowUpRow = { contact_id: string; due_date: string };
@@ -138,8 +140,8 @@ function DataView() {
     downloadCsv(
       `${BRAND_SLUG}-contacts-template.csv`,
       buildCsv([
-        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next, "Marketing manager", "brightagency.example", "Cluj-Napoca", "LinkedIn", "client; priority"],
-        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", "", "", "", "", "", ""],
+        ["Maria", "Ionescu", "Bright Agency", "maria@example.com", "+40 700 000 000", "Contacted", "Asked for a call this week", next, "Marketing manager", "brightagency.example", "Cluj-Napoca", "LinkedIn", "client; priority", "1500", "EUR"],
+        ["Andrei", "Pop", "Studio Nord", "andrei@example.com", "", "New", "", "", "", "", "", "", "", "", ""],
       ])
     );
   }
@@ -162,7 +164,7 @@ function DataView() {
 
         const { error: contactError } = await supabase.from("contacts").insert(
           chunk.map(({ id, r }) => {
-            const { job_title, website, location, source, tags, ...base } = r.contact;
+            const { job_title, website, location, source, tags, deal_value, deal_currency, ...base } = r.contact;
             return {
               id,
               organization_id: orgId,
@@ -174,6 +176,7 @@ function DataView() {
               ...(location ? { location } : {}),
               ...(source ? { source } : {}),
               ...(tags.length > 0 ? { tags } : {}),
+              ...(deal_value !== null && deal_currency ? { deal_value, deal_currency } : {}),
             };
           })
         );
@@ -294,15 +297,25 @@ function DataView() {
     setExporting(true);
     setExportFailed(false);
     try {
-      const contacts = await fetchPages<ContactRow>((from, to) =>
-        supabase
-          .from("contacts")
-          .select("id, first_name, last_name, company, email, phone, status, notes, job_title, website, location, source, tags")
-          .eq("organization_id", orgId)
-          .order("created_at", { ascending: true })
-          .order("id", { ascending: true })
-          .range(from, to)
-      );
+      const base = "id, first_name, last_name, company, email, phone, status, notes, job_title, website, location, source, tags";
+      const loadContacts = (columns: string) =>
+        fetchPages<ContactRow>(async (from, to) => {
+          const r = await supabase
+            .from("contacts")
+            .select(columns)
+            .eq("organization_id", orgId)
+            .order("created_at", { ascending: true })
+            .order("id", { ascending: true })
+            .range(from, to);
+          return { data: r.data as unknown as ContactRow[] | null, error: r.error };
+        });
+      // Without the estimated-value columns (database not updated yet) the export still works.
+      let contacts: ContactRow[];
+      try {
+        contacts = await loadContacts(`${base}, deal_value, deal_currency`);
+      } catch {
+        contacts = await loadContacts(base);
+      }
 
       const followUps = await fetchPages<FollowUpRow>((from, to) =>
         supabase
@@ -337,6 +350,8 @@ function DataView() {
             c.location ?? "",
             c.source ?? "",
             (c.tags ?? []).join("; "),
+            c.deal_value !== null && c.deal_value !== undefined && c.deal_currency ? String(c.deal_value) : "",
+            c.deal_value !== null && c.deal_value !== undefined && c.deal_currency ? c.deal_currency : "",
           ])
         )
       );

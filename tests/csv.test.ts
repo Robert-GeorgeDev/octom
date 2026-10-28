@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildCsv, parseContactsCsv } from "@/lib/csv";
 
 const HEADER =
-  "first_name,last_name,company,email,phone,status,notes,next_followup,job_title,website,location,source,tags";
+  "first_name,last_name,company,email,phone,status,notes,next_followup,job_title,website,location,source,tags,deal_value,deal_currency";
 
 describe("parseContactsCsv", () => {
   it("parses a valid file", () => {
