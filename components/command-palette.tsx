@@ -83,6 +83,7 @@ export default function CommandPalette() {
       { id: "today", label: t("nav.today"), href: "/today", keywords: "today azi" },
       { id: "dash", label: t("nav.dashboard"), href: "/dashboard", keywords: "dashboard panou home" },
       { id: "contacts", label: t("nav.contacts"), href: "/contacts", keywords: "contacts contacte clienti" },
+      { id: "review", label: t("review.link"), href: "/review", keywords: "review weekly recap recapitulare saptamanal" },
       { id: "pipeline", label: t("nav.pipeline"), href: "/pipeline", keywords: "pipeline" },
       { id: "assistant", label: t("nav.assistant"), href: "/assistant", keywords: "assistant asistent ai" },
       { id: "new", label: t("nav.addFollowUp"), href: "/followups/new", keywords: "new add follow-up adauga nou" },

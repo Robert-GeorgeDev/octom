@@ -163,7 +163,12 @@ function TodayView() {
               {render(ranked.slice(TOP), TOP)}
             </>
           )}
-          <details className="mt-10 rounded-2xl border border-line bg-white/60 p-4 text-sm text-slate-600">
+          <p className="mt-8 text-sm">
+            <Link href="/review" className="font-semibold text-brand hover:underline">
+              {t("review.link")}
+            </Link>
+          </p>
+          <details className="mt-4 rounded-2xl border border-line bg-white/60 p-4 text-sm text-slate-600">
             <summary className="cursor-pointer font-semibold text-ink">{t("today.how")}</summary>
             <p className="mt-2">{t("today.howText")}</p>
           </details>

@@ -12,7 +12,7 @@ export const SITE_HOSTS = ["octom.eu", "www.octom.eu"];
 // Pages that belong to the app (first path segment).
 const APP_SEGMENTS = new Set([
   "dashboard", "today", "contacts", "followups", "data", "account", "onboarding",
-  "pipeline", "team", "assistant", "login", "signup", "forgot-password",
+  "pipeline", "review", "team", "assistant", "login", "signup", "forgot-password",
   "reset-password", "join",
 ]);
 
