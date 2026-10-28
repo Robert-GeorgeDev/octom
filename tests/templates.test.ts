@@ -68,7 +68,7 @@ describe("whatsapp link", () => {
   it("adds the message text, encoded", () => {
     expect(whatsappHref("0722123456")).toBe("https://wa.me/40722123456");
     expect(whatsappHref("0722123456", "Bună, Ana & Ion")).toBe(
-      "https://wa.me/40722123456?text=B%C4%83n%C4%83%2C%20Ana%20%26%20Ion"
+      "https://wa.me/40722123456?text=Bun%C4%83%2C%20Ana%20%26%20Ion"
     );
     expect(whatsappHref("abc", "x")).toBe("");
   });
