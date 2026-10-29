@@ -32,37 +32,37 @@ function Row() {
   );
 }
 
-/** Dashboard: next-up tiles, three number cards and a short list. */
+/** Dashboard: four number cards, a chart panel and a short table. */
 export function DashboardSkeleton() {
   return (
-    <Frame className="mt-6 space-y-6">
-      <section className={card}>
-        <Sk className="h-5 w-32 rounded-full" />
-        <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="rounded-3xl bg-white/70 p-4">
-              <Sk className="h-3 w-16 rounded-full" />
-              <Sk className="mt-4 h-5 w-3/4 rounded-full" />
-              <Sk className="mt-2 h-3 w-1/2 rounded-full" />
-              <Sk className="mt-6 h-9 w-full rounded-full" />
+    <Frame className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="min-w-0 space-y-5">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="rounded-[28px] bg-white p-5 shadow-soft">
+              <Sk className="h-11 w-11 rounded-2xl" />
+              <Sk className="mt-5 h-3 w-16 rounded-full" />
+              <Sk className="mt-3 h-8 w-14 rounded-xl" />
             </div>
           ))}
         </div>
-      </section>
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className={card}>
-            <Sk className="h-3 w-20 rounded-full" />
-            <Sk className="mt-4 h-9 w-14 rounded-xl" />
-          </div>
-        ))}
+        <section className="rounded-[28px] bg-white p-5 shadow-soft sm:p-6">
+          <Sk className="h-5 w-40 rounded-full" />
+          <Sk className="mt-5 h-48 w-full rounded-2xl" />
+        </section>
+        <section className="space-y-3 rounded-[28px] bg-white p-5 shadow-soft sm:p-6">
+          <Sk className="h-5 w-28 rounded-full" />
+          <Row />
+          <Row />
+          <Row />
+        </section>
       </div>
-      <section className={`${card} space-y-3`}>
-        <Sk className="h-5 w-40 rounded-full" />
-        <Row />
-        <Row />
-        <Row />
-      </section>
+      <div className="min-w-0 space-y-5">
+        <section className="rounded-[28px] bg-white p-5 shadow-soft sm:p-6">
+          <Sk className="h-5 w-36 rounded-full" />
+          <Sk className="mx-auto mt-5 h-44 w-44 rounded-full" />
+        </section>
+      </div>
     </Frame>
   );
 }
