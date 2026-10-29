@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sun, LayoutGrid, Plus, Users, UserCircle, Sparkles } from "lucide-react";
@@ -16,28 +16,9 @@ import { ToastProvider } from "@/components/toast";
 import { useLanguage } from "@/components/language-provider";
 import { BRAND } from "@/lib/brand";
 
-const STORE = "octom.sidebar";
-
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
   const { t } = useLanguage();
-
-  // Desktop sidebar: expanded or icon rail. The choice is remembered on this device.
-  const [collapsed, setCollapsed] = useState(false);
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORE);
-      if (saved === "1" || saved === "0") setCollapsed(saved === "1");
-      else setCollapsed(window.innerWidth < 1024);
-    } catch {
-      /* storage unavailable: keep default */
-    }
-  }, []);
-  const toggle = () =>
-    setCollapsed((v) => {
-      try { localStorage.setItem(STORE, v ? "0" : "1"); } catch { /* ignore */ }
-      return !v;
-    });
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
@@ -57,18 +38,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <ToastProvider>
-    <div className="relative isolate min-h-screen overflow-x-clip bg-[#EEF1FA]">
-      {/* Soft blurred backdrop in the brand colours. Panels on top use frosted glass. */}
+    <div className="relative isolate min-h-screen overflow-x-clip bg-[#F4F5FA]">
+      {/* Soft backdrop in the brand colours. */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(60% 50% at 8% 0%, rgba(165,180,252,.55), transparent 70%), radial-gradient(50% 45% at 100% 10%, rgba(196,181,253,.45), transparent 70%), radial-gradient(55% 50% at 90% 100%, rgba(125,211,252,.45), transparent 70%), radial-gradient(45% 40% at 20% 100%, rgba(199,210,254,.5), transparent 70%)",
+            "radial-gradient(45% 40% at 100% 0%, rgba(165,180,252,.35), transparent 70%), radial-gradient(40% 35% at 0% 100%, rgba(125,211,252,.25), transparent 70%)",
         }}
       />
       <Suspense fallback={null}>
-        <AppSidebar collapsed={collapsed} onToggle={toggle} />
+        <AppSidebar />
       </Suspense>
 
       {/* Phone top bar */}
@@ -84,7 +65,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className={`pb-24 transition-[padding] duration-300 ease-[cubic-bezier(.4,0,.2,1)] md:pb-0 ${collapsed ? "md:pl-[76px]" : "md:pl-[272px]"}`}>
+      <div className="pb-24 md:pb-0 md:pl-[108px]">
         {/* Desktop and laptop only: account menu, top right */}
         <div className="pointer-events-none sticky top-0 z-40 hidden h-0 md:block">
           <div className="mx-auto flex w-full max-w-[1400px] justify-end px-5 pt-4">

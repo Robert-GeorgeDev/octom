@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Home, Sun, Users, LayoutGrid, Sparkles, UserPlus, Database,
-  UserCircle, Plus, ChevronDown, PanelLeftClose, PanelLeftOpen, Briefcase, LogOut,
+  UserCircle, Plus, ChevronDown, Menu, Globe, Briefcase, LogOut,
 } from "lucide-react";
 import Mark from "@/components/mark";
-import LanguageSwitcher from "@/components/language-switcher";
 import { useLanguage } from "@/components/language-provider";
 import { useOrgId } from "@/hooks/use-org-id";
 import { useContactCounts } from "@/hooks/use-contact-counts";
@@ -34,11 +33,14 @@ const dotFor: Record<string, string> = {
   Qualified: "bg-sky-400",
   "Proposal Sent": "bg-amber-400",
   Negotiation: "bg-orange-400",
-  Won: "bg-emerald-500",
+  Won: "bg-emerald-400",
   Lost: "bg-red-400",
 };
 
-export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+/** The menu closes by itself this long after the pointer leaves it. */
+const CLOSE_DELAY_MS = 250;
+
+export default function AppSidebar() {
   const { t, lang, setLang } = useLanguage();
   const router = useRouter();
   const pathname = usePathname() ?? "";
@@ -48,6 +50,49 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
   const counts = useContactCounts(orgId);
   const [workspace, setWorkspace] = useState("");
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({});
+
+  // A narrow icon rail that opens while the pointer or keyboard focus is on it, and closes by
+  // itself shortly after both have left. The burger button opens it on touch screens.
+  const [open, setOpen] = useState(false);
+  const box = useRef<HTMLElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelClose = () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+  };
+  // When the menu opened, so that a tap on the burger right after a hover does not close it again.
+  const openedAt = useRef(0);
+  const openRef = useRef(false);
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
+  const openNow = () => {
+    cancelClose();
+    if (!openRef.current) {
+      openRef.current = true;
+      openedAt.current = Date.now();
+    }
+    setOpen(true);
+  };
+  const closeSoon = () => {
+    cancelClose();
+    timer.current = setTimeout(() => setOpen(false), CLOSE_DELAY_MS);
+  };
+  useEffect(() => cancelClose, []);
+  // Going to another page closes the menu.
+  useEffect(() => {
+    cancelClose();
+    setOpen(false);
+  }, [pathname, activeStatus]);
+  // A tap or click anywhere else closes it (touch screens have no "pointer left").
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: PointerEvent) => {
+      if (box.current && !box.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", away);
+    return () => document.removeEventListener("pointerdown", away);
+  }, [open]);
 
   useEffect(() => {
     if (!orgId) return;
@@ -99,197 +144,148 @@ export default function AppSidebar({ collapsed, onToggle }: { collapsed: boolean
   const expanded = (e: Entry) => openIds[e.id] ?? e.matches(pathname);
   const toggleGroup = (e: Entry) => setOpenIds((s) => ({ ...s, [e.id]: !expanded(e) }));
 
-  const rowBase =
-    "group/row relative flex min-h-[40px] w-full items-center gap-3 rounded-xl text-sm font-semibold transition-colors duration-200";
-  const rowTone = (active: boolean) =>
-    active ? "bg-brand-soft text-brand" : "text-slate-600 hover:bg-slate-100 hover:text-ink";
-
-  const indicator = (active: boolean) => (
-    <span
-      aria-hidden="true"
-      className={`absolute -left-3 top-2 bottom-2 w-[3px] rounded-r-full bg-brand transition-all duration-300 ${active ? "opacity-100" : "scale-y-0 opacity-0"}`}
-    />
-  );
+  // The icon sits at the same place whether the menu is open or closed, so nothing jumps.
+  const row = "relative flex h-11 min-w-0 items-center gap-3 rounded-full px-3 text-sm font-semibold transition-colors duration-200";
+  const tone = (active: boolean) => (active ? "bg-white text-navy" : "text-white/65 hover:bg-white/10 hover:text-white");
+  const label = `min-w-0 flex-1 truncate whitespace-nowrap text-left transition-opacity duration-200 ${open ? "opacity-100" : "opacity-0"}`;
 
   return (
-    <aside
-      className={`fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-line bg-white transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)] md:flex ${
-        collapsed ? "w-[76px]" : "w-[272px]"
-      }`}
-    >
-      {/* Header: mark, workspace, collapse toggle */}
-      <div className={`flex items-center gap-2 px-4 pb-3 pt-4 ${collapsed ? "flex-col" : ""}`}>
-        <Link
-          href="/dashboard"
-          aria-label={BRAND}
-          className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl p-1 transition-colors hover:bg-slate-50"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-navy shadow-soft transition-transform duration-300 group-hover:scale-105">
-            <Mark className="h-7 w-7" />
-          </span>
-          <span className={`min-w-0 overflow-hidden transition-all duration-300 ${collapsed ? "w-0 opacity-0" : "w-full opacity-100"}`}>
-            <span className="block truncate text-sm font-extrabold leading-tight text-ink">{workspace || BRAND}</span>
-            <span className="block truncate text-xs text-slate-500">{BRAND}</span>
-          </span>
-        </Link>
+    <>
+      <Link
+        href="/dashboard"
+        aria-label={BRAND}
+        className="fixed left-5 top-5 z-30 hidden h-16 w-16 place-items-center rounded-full bg-navy shadow-lift transition-transform duration-300 hover:scale-105 md:grid"
+      >
+        <Mark className="h-9 w-9" />
+      </Link>
+
+      <aside
+        ref={box}
+        onMouseEnter={openNow}
+        onMouseLeave={closeSoon}
+        onFocus={(e) => {
+          // Only keyboard focus opens it; a mouse click or a tap is handled by hover and the burger.
+          if (e.target.matches(":focus-visible")) openNow();
+        }}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closeSoon();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false);
+        }}
+        className={`fixed bottom-5 left-5 top-[96px] z-30 hidden flex-col rounded-[32px] bg-navy p-2.5 shadow-lift transition-[width] duration-300 ease-[cubic-bezier(.4,0,.2,1)] md:flex ${
+          open ? "w-[248px]" : "w-16"
+        }`}
+      >
         <button
           type="button"
-          onClick={onToggle}
-          aria-label={collapsed ? t("crm.expandMenu") : t("crm.collapseMenu")}
-          aria-expanded={!collapsed}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-ink"
+          onClick={() => (open && Date.now() - openedAt.current > 500 ? setOpen(false) : openNow())}
+          aria-label={open ? t("crm.collapseMenu") : t("crm.expandMenu")}
+          aria-expanded={open}
+          className={`${row} w-full text-white/65 hover:bg-white/10 hover:text-white`}
         >
-          {collapsed ? <PanelLeftOpen className="h-[18px] w-[18px]" aria-hidden="true" /> : <PanelLeftClose className="h-[18px] w-[18px]" aria-hidden="true" />}
+          <Menu className="h-5 w-5 shrink-0" aria-hidden="true" />
+          <span className={`${label} text-white`}>{workspace || BRAND}</span>
         </button>
-      </div>
 
-      <div className="px-4">
-        <Link
-          href="/followups/new"
-          aria-label={t("nav.addFollowUp")}
-          className={`flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#3B82F6] text-sm font-semibold text-white shadow-soft transition duration-200 hover:brightness-110 active:scale-[.98]`}
-        >
-          <Plus className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
-          <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}`}>{t("nav.addFollowUp")}</span>
-        </Link>
-      </div>
-
-      {/* Navigation. Overflow is only clipped when expanded so hover flyouts can show in the rail. */}
-      <nav
-        aria-label="Main"
-        className={`mt-4 flex-1 space-y-0.5 px-4 pb-4 ${collapsed ? "overflow-visible" : "overflow-y-auto"}`}
-      >
-        {entries.map((e) => {
-          const active = e.matches(pathname);
-          const isOpen = !collapsed && expanded(e);
-          const parentHref = e.href ?? e.children?.[0]?.href ?? "#";
-          const label = (
-            <span className={`flex-1 truncate text-left transition-all duration-300 ${collapsed ? "w-0 flex-none opacity-0" : "opacity-100"}`}>{e.label}</span>
-          );
-
-          return (
-            <div key={e.id} className="group/flyout relative">
-              {e.children && !collapsed ? (
-                <button
-                  type="button"
-                  onClick={() => toggleGroup(e)}
-                  aria-expanded={isOpen}
-                  className={`${rowBase} px-3 ${rowTone(active && !isOpen)} ${active && isOpen ? "text-ink" : ""}`}
-                >
-                  {indicator(active)}
-                  <e.Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                  {label}
-                  <ChevronDown aria-hidden="true" className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
-                </button>
-              ) : (
-                <Link
-                  href={parentHref}
-                  aria-label={e.label}
-                  aria-current={active && !e.children ? "page" : undefined}
-                  className={`${rowBase} ${collapsed ? "justify-center px-0" : "px-3"} ${rowTone(active)}`}
-                >
-                  {indicator(active)}
-                  <e.Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                  {!collapsed && label}
-                </Link>
-              )}
-
-              {/* Expanded submenu: height animates with grid rows */}
-              {e.children && !collapsed && (
-                <div
-                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-                  aria-hidden={!isOpen}
-                >
-                  <div className="overflow-hidden">
-                    <ul className="ml-[22px] mt-1 space-y-0.5 border-l border-line pb-1 pl-3">
-                      {e.children.map((c, i) => {
-                        const on = childActive(c);
-                        const LeafIcon = leafIcon[c.href];
-                        return (
-                          <li
-                            key={c.href}
-                            style={{ transitionDelay: isOpen ? `${i * 25}ms` : "0ms" }}
-                            className={`transition-all duration-300 ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"}`}
-                          >
-                            <Link
-                              href={c.href}
-                              tabIndex={isOpen ? 0 : -1}
-                              aria-current={on ? "page" : undefined}
-                              className={`flex min-h-[34px] items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-semibold transition-colors duration-200 ${
-                                on ? "bg-slate-100 text-ink" : "text-slate-600 hover:bg-slate-50 hover:text-ink"
-                              }`}
-                            >
-                              {c.dot ? <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} aria-hidden="true" /> : LeafIcon ? <LeafIcon className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" /> : null}
-                              <span className="flex-1 truncate">{c.label}</span>
-                              {c.count !== undefined && <span className="text-xs font-medium tabular-nums text-slate-400">{c.count}</span>}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
+        <nav aria-label="Main" className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto overflow-x-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {entries.map((e) => {
+            const active = e.matches(pathname);
+            const isOpen = open && expanded(e);
+            const parentHref = e.href ?? e.children?.[0]?.href ?? "#";
+            return (
+              <div key={e.id}>
+                <div className="flex items-center gap-1">
+                  <Link
+                    href={parentHref}
+                    aria-label={e.label}
+                    aria-current={active && !e.children ? "page" : undefined}
+                    className={`${row} flex-1 ${tone(active && !isOpen)} ${active && isOpen ? "text-white" : ""}`}
+                  >
+                    <e.Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                    <span className={label}>{e.label}</span>
+                  </Link>
+                  {e.children && open && (
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(e)}
+                      aria-expanded={isOpen}
+                      aria-label={e.label}
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white"
+                    >
+                      <ChevronDown aria-hidden="true" className={`h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                    </button>
+                  )}
                 </div>
-              )}
 
-              {/* Rail mode: hover flyout with the label and the submenu */}
-              {collapsed && (
-                <div
-                  className="pointer-events-none invisible absolute left-full top-0 z-50 pl-3 opacity-0 transition-all duration-200 group-focus-within/flyout:pointer-events-auto group-focus-within/flyout:visible group-focus-within/flyout:opacity-100 group-hover/flyout:pointer-events-auto group-hover/flyout:visible group-hover/flyout:opacity-100"
-                >
-                  <div className="min-w-[180px] -translate-x-1 rounded-xl border border-line bg-white p-1.5 shadow-lift transition-transform duration-200 group-hover/flyout:translate-x-0 group-focus-within/flyout:translate-x-0">
-                    {e.children ? (
-                      <>
-                        <p className="px-2.5 pb-1 pt-1.5 text-xs font-bold uppercase tracking-wide text-slate-400">{e.label}</p>
-                        {e.children.map((c) => (
-                          <Link
-                            key={c.href}
-                            href={c.href}
-                            className={`flex min-h-[34px] items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-semibold ${childActive(c) ? "bg-slate-100 text-ink" : "text-slate-600 hover:bg-slate-50 hover:text-ink"}`}
-                          >
-                            {c.dot && <span className={`h-2 w-2 rounded-full ${c.dot}`} aria-hidden="true" />}
-                            <span className="flex-1 whitespace-nowrap">{c.label}</span>
-                            {c.count !== undefined && <span className="text-xs text-slate-400">{c.count}</span>}
-                          </Link>
-                        ))}
-                      </>
-                    ) : (
-                      <p className="whitespace-nowrap px-2.5 py-1.5 text-[13px] font-semibold text-ink">{e.label}</p>
-                    )}
+                {e.children && (
+                  <div
+                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                    aria-hidden={!isOpen}
+                  >
+                    <div className="overflow-hidden">
+                      <ul className="ml-[26px] mt-1 space-y-0.5 border-l border-white/15 pb-1 pl-3">
+                        {e.children.map((c) => {
+                          const on = childActive(c);
+                          const LeafIcon = leafIcon[c.href];
+                          return (
+                            <li key={c.href}>
+                              <Link
+                                href={c.href}
+                                tabIndex={isOpen ? 0 : -1}
+                                aria-current={on ? "page" : undefined}
+                                className={`flex min-h-[34px] items-center gap-2.5 rounded-full px-3 text-[13px] font-semibold transition-colors duration-200 ${
+                                  on ? "bg-white/15 text-white" : "text-white/60 hover:bg-white/10 hover:text-white"
+                                }`}
+                              >
+                                {c.dot ? <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot}`} aria-hidden="true" /> : LeafIcon ? <LeafIcon className="h-4 w-4 shrink-0 text-white/40" aria-hidden="true" /> : null}
+                                <span className="flex-1 truncate whitespace-nowrap">{c.label}</span>
+                                {c.count !== undefined && <span className="text-xs font-medium tabular-nums text-white/40">{c.count}</span>}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </nav>
+                )}
+              </div>
+            );
+          })}
+        </nav>
 
-      <div className={`border-t border-line p-4 ${collapsed ? "flex flex-col items-center gap-3" : "flex items-center justify-between gap-2"}`}>
-        {collapsed ? (
+        <div className="mt-2 space-y-1">
+          <Link
+            href="/followups/new"
+            aria-label={t("nav.addFollowUp")}
+            className={`${row} bg-gradient-to-br from-[#6366F1] to-[#3B82F6] text-white hover:brightness-110`}
+          >
+            <Plus className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span className={label}>{t("nav.addFollowUp")}</span>
+          </Link>
           <button
             type="button"
             onClick={() => setLang(lang === "en" ? "ro" : "en")}
             aria-label="Language"
-            title={lang === "en" ? "Română" : "English"}
-            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-xs font-bold uppercase text-slate-600 transition hover:bg-slate-100 hover:text-ink"
+            className={`${row} w-full text-white/65 hover:bg-white/10 hover:text-white`}
           >
-            {lang}
+            <Globe className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span className={label}>{lang === "en" ? "Română" : "English"}</span>
           </button>
-        ) : (
-          <LanguageSwitcher />
-        )}
-        <button
-          type="button"
-          onClick={async () => {
-            await supabase.auth.signOut();
-            router.replace("/");
-          }}
-          aria-label={t("nav.signOut")}
-          title={t("nav.signOut")}
-          className="grid h-9 w-9 place-items-center rounded-lg text-slate-500 transition hover:bg-red-50 hover:text-overdue"
-        >
-          <LogOut className="h-[18px] w-[18px]" aria-hidden="true" />
-        </button>
-      </div>
-    </aside>
+          <button
+            type="button"
+            onClick={async () => {
+              await supabase.auth.signOut();
+              router.replace("/");
+            }}
+            aria-label={t("nav.signOut")}
+            className={`${row} w-full text-white/65 hover:bg-red-500/20 hover:text-red-200`}
+          >
+            <LogOut className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span className={label}>{t("nav.signOut")}</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
