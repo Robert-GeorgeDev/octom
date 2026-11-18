@@ -1,4 +1,4 @@
-// Trimite formularele de newsletter către Brevo (dublă confirmare activată în Brevo).
+// Trimite înscrierile pe lista de lansare către serverul propriu OCTOM.
 (function () {
   var cfg = window.OCTOM_CONFIG || {};
 
@@ -23,7 +23,7 @@
       if (consent && !consent.checked) { setMsg(form, "Bifează acordul ca să te putem înscrie.", "err"); consent.focus(); return; }
       if (form.email_address_check && form.email_address_check.value) { return; }
 
-      if (!cfg.BREVO_FORM_URL) {
+      if (!cfg.LISTA_ENDPOINT) {
         setMsg(form, "Înscrierile se deschid în curând. Revino peste câteva zile.", "err");
         return;
       }
@@ -31,12 +31,20 @@
       var btn = form.querySelector("button[type=submit]");
       if (btn) { btn.disabled = true; btn.textContent = "Se trimite…"; }
 
-      var data = new FormData(form);
-      data.set("EMAIL", email);
-      data.set("locale", "ro");
+      var payload = {
+        email: email,
+        prenume: form.FIRSTNAME ? form.FIRSTNAME.value.trim() : "",
+        tip_activitate: form.TIP_ACTIVITATE ? form.TIP_ACTIVITATE.value : "",
+        acord: true
+      };
 
-      fetch(cfg.BREVO_FORM_URL, { method: "POST", body: data, mode: "no-cors" })
-        .then(function () {
+      fetch(cfg.LISTA_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          if (!res.ok) { throw new Error("status " + res.status); }
           form.reset();
           setMsg(form, "Mulțumim! Ți-am trimis un email de confirmare. Apasă linkul din el ca să finalizezi înscrierea.", "ok");
           if (window.plausible) { try { window.plausible("Newsletter"); } catch (e) {} }
