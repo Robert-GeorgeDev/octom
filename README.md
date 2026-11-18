@@ -1,84 +1,28 @@
-# Octom
+# OCTOM — site de prezentare
 
-**Know who to contact today.**
+Site static pentru octom.eu: pagina de lansare OCTOM KYC, formularul de newsletter și resursele gratuite.
 
-[![CI](https://github.com/Robert-GeorgeDev/octom/actions/workflows/ci.yml/badge.svg)](https://github.com/Robert-GeorgeDev/octom/actions/workflows/ci.yml)
-[![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+## Structură
 
-Octom is a deliberately simple CRM built around follow-ups, not a sales suite.
-You add a contact and the date of the next follow-up. Every morning you open one
-list that shows who to contact today, with the context and a draft message ready.
+- `index.html` — pagina principală, cu formularul de înscriere și testul „Ești obligat?”
+- `resurse/checklist-amlr.html` — checklist gratuit (lead magnet), se poate printa ca PDF
+- `confidentialitate.html` — politica de confidențialitate pentru newsletter
+- `confirmare.html` — pagina afișată după confirmarea emailului (setată ca redirect în Brevo)
+- `assets/config.js` — **singurul fișier de configurat**: adresa formularului Brevo și emailul de contact
+- `assets/form.js` — trimiterea formularelor și testul interactiv
+- `assets/style.css` — stiluri
 
-It is made for freelancers, consultants, small agencies and small B2B teams who
-need clarity more than features.
+## Configurare Brevo (o singură dată)
 
-## Why Octom
+1. Creează cont gratuit pe brevo.com.
+2. Contacte → Atribute: adaugă atributul `TIP_ACTIVITATE` (tip Text).
+3. Contacte → Formulare → Creează formular de înscriere:
+   - câmpuri: EMAIL, FIRSTNAME, TIP_ACTIVITATE;
+   - activează **dubla confirmare** (double opt-in);
+   - pune ca pagină de redirect după confirmare: `https://octom.eu/confirmare.html`.
+4. Partajează → Cod HTML: copiază adresa din `action="https://….sibforms.com/serve/…"`.
+5. Lipește adresa în `assets/config.js`, la `BREVO_FORM_URL`.
 
-- **One daily list.** The product is the "Today" view, not a dashboard of charts.
-- **Nothing is sent for you.** The assistant drafts and suggests. You decide and send.
-- **Your data stays yours.** Export contacts, follow-ups and activity as CSV, and delete your account from the app.
-- **Small on purpose.** Fewer features, fewer screens, less to maintain.
+## Publicare
 
-## Features
-
-- Contacts with notes, status and a simple pipeline
-- Follow-ups with due dates, snooze and a daily "Today" list
-- AI assistant for drafting messages, summaries and next steps
-- Shared workspaces with invitations, roles and assigned follow-ups
-- CSV import with preview; CSV export for contacts, follow-ups and activity
-- Optional daily summary email
-- English and Romanian interface
-- Free to use during beta (paid plans may come later)
-
-## Stack
-
-| Area | Technology |
-|---|---|
-| App | Next.js (App Router), React, TypeScript, Tailwind CSS |
-| Data and auth | Supabase: Postgres with row level security, Auth |
-| Email | Resend |
-| AI | OpenAI API |
-| Tests | Vitest, Playwright, SQL security tests |
-| CI | GitHub Actions: tests, build, end-to-end, CodeQL; Dependabot |
-
-## Security in short
-
-- Every table uses row level security. Users only reach the data of their own workspace, and the SQL test in `supabase/tests/security_test.sql` checks isolation between workspaces.
-- The subscriptions table is not used yet (no paid plans); it can only be written with a server key.
-- Billing, AI, contact and account-deletion routes check the signed-in user on the server and have usage limits where abuse is likely.
-- Secrets live only in the hosting environment, never in the repository.
-- To report a vulnerability, see [SECURITY.md](SECURITY.md).
-
-## Privacy
-
-The database is hosted in the EU (Frankfurt). Some providers (hosting, email, payments, AI) may process data outside the EEA; the full list is on the in-app Subprocessors page and in [docs/data-map.md](docs/data-map.md). No advertising trackers are used; anonymous visit statistics load only after the visitor accepts them.
-
-## Run it locally
-
-1. Install Node.js 22 or newer.
-2. `npm ci`
-3. Put your Supabase project URL and public key in `lib/supabase-config.ts`. Copy `.env.example` to `.env.local` and fill in your own server-side values.
-4. In your Supabase SQL editor run the files in the order given in [docs/self-hosting.md](docs/self-hosting.md).
-5. `npm run dev` and open http://localhost:3000
-
-Run the unit tests with `npm test` and the end-to-end tests with `npm run test:e2e`.
-
-The database structure is published as `supabase/baseline.sql` and described in [docs/database.md](docs/database.md). How the pieces fit together is in [docs/architecture.md](docs/architecture.md).
-
-Step by step, including database order, Auth settings and what to replace before going public: [docs/self-hosting.md](docs/self-hosting.md).
-
-## Project layout
-
-- `app/` pages and API routes
-- `components/`, `hooks/`, `lib/` UI, data hooks, dictionaries (EN/RO) and helpers
-- `supabase/` database baseline and patches, security tests, email templates
-- `docs/` architecture, database, data map, incident plan, draft DPA for legal review
-- `tests/`, `e2e/` unit and end-to-end tests
-
-## Contributing
-
-Octom stays small on purpose. Please open an issue to discuss a change before you send a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
-
-## License
-
-GNU Affero General Public License v3.0. See [LICENSE](LICENSE). If you run a modified version as a network service, the AGPL requires you to offer your users the source of your changes.
+Site static, fără build. `vercel.json` dezactivează build-ul Next.js.
