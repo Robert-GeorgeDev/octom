@@ -1,12 +1,10 @@
 // Configurare OCTOM — singurul loc unde trebuie modificat ceva.
 //
-// BREVO_FORM_URL: adresa formularului tău din Brevo.
-// Unde o găsești: Brevo → Contacte → Formulare → (formularul tău) → Partajează
-// → "Cod HTML". În cod caută <form ... action="https://....sibforms.com/serve/...">
-// și copiază aici valoarea din action="...".
-//
-// Cât timp e gol, formularul afișează un mesaj că înscrierile nu sunt încă deschise.
+// LISTA_ENDPOINT: adresa pe serverul nostru unde se salvează înscrierile
+// (de exemplu https://app.octom.eu/api/lista). Se completează când site-ul
+// se mută pe serverul propriu. Cât timp e gol, formularul afișează un mesaj
+// că înscrierile nu sunt încă deschise și nu trimite nimic nicăieri.
 window.OCTOM_CONFIG = {
-  BREVO_FORM_URL: "",
+  LISTA_ENDPOINT: "",
   CONTACT_EMAIL: "contact@octom.eu"
 };
