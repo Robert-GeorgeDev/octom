@@ -1,0 +1,46 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verifică JavaScript
+        run: for f in assets/*.js; do node --check "$f"; done
+      - name: Verifică vercel.json
+        run: node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8'))"
+      - name: Verifică linkurile interne
+        run: |
+          python3 - <<'PY'
+          import re, os, sys
+          bad = []
+          for root, _, files in os.walk('.'):
+              if root.startswith('./.git'):
+                  continue
+              for f in files:
+                  if not f.endswith('.html'):
+                      continue
+                  path = os.path.join(root, f)
+                  html = open(path, encoding='utf-8').read()
+                  for link in re.findall(r'(?:href|src)="(/[^"#]*)"', html):
+                      target = '.' + link
+                      if link.endswith('/'):
+                          target += 'index.html'
+                      if not os.path.exists(target):
+                          bad.append(f'{path}: {link}')
+          if bad:
+              print('\n'.join(bad))
+              sys.exit(1)
+          print('Linkuri interne OK')
+          PY
